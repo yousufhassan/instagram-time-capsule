@@ -1,11 +1,14 @@
 import { sendFile } from "express/lib/response";
 import { PassThrough } from "stream";
 import { ESMap, Map } from "typescript";
+import { database } from "./database";
+// let a = require('mysql');
 
 const { assert } = require('console');
 const express = require('express');
 const app = express();
 const port = 3000;
+let db = new database();
 
 // Start web app
 //Idiomatic expression in express to route and respond to a client request
@@ -32,15 +35,19 @@ function customPrint(message: JSON): void {
 }
 
 
+function getChatTitle(chatData: JSON): string {
+    return chatData['title'];
+}
+
+
 /**
  * Function to retrieve all messages from a given file path.
  * 
  * @param filepath - A string representing the file path to retrieve messages from.
  * @returns An array of JSON, where each JSON represents a message.
  */
-function getAllMessages(filepath: string): JSON[] {
-    let data = require(filepath);
-    let messages = data.messages;
+function getAllMessages(chatData: JSON): JSON[] {
+    let messages = chatData['messages'];
     return messages;
 }
 
@@ -85,19 +92,29 @@ function getConversationByDate(conversationsMap: ESMap<string, JSON[]>,
 }
 
 
-let messages = getAllMessages('./original_data/message_1.json');
+// Function Playground
+let chatData = require('./original_data/message_1.json');
+let messages = getAllMessages(chatData);
 
 let conversationsMap = splitConversationsByDay(messages);
 let temp = getConversationByDate(conversationsMap, "Jan 16 2023")
-console.log(temp);
+// console.log(temp);
+
+// for (let i = 0; i < messages.length - 1; i++) {
+//     assert(messages[i]['timestamp_ms'] > messages[i+1]['timestamp_ms']);
+// }
+
+// messages.forEach(message => {
+//     customPrint(message);
+// });
 
 
-for (let i = 0; i < messages.length - 1; i++) {
-    assert(messages[i]['timestamp_ms'] > messages[i+1]['timestamp_ms']);
-}
+// Database Playground
+db.connectToDB();
+db.addUser("yousuf", "password123");
+// db.getMaxUserID();
+// console.log(db.getMaxUserID());
 
-messages.forEach(message => {
-    customPrint(message);
-});
+
 
 
