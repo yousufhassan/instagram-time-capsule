@@ -1,9 +1,11 @@
 import { database } from "./models/database";
 import * as message from "./services/messages";
 const express = require('express');
+const cors = require('cors');
 const app = express();
+app.use(cors());
 app.use(express.json());
-const port = 3000;
+const port = 8000;
 let db = new database();
 
 
@@ -14,6 +16,10 @@ app.get('/', (req, res) => {        //get requests to the root ("/") will route 
     res.sendFile('./views/index.html', {root: __dirname});      //server responds by sending the index.html file to the client's browser
                                                         //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile 
 });
+
+app.get("/message", (req, res) => {
+    res.json({ message: "Hello from server!" });
+  });
 
 app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
     console.log(`Now listening on port ${port}`); 
@@ -26,7 +32,7 @@ let messages = message.getAllMessages(chatData);
 
 let conversationsMap = message.splitConversationsByDay(messages);
 let temp = message.getConversationByDate(conversationsMap, "Jan 16 2023")
-console.log(temp);
+// console.log(temp);
 
 // for (let i = 0; i < messages.length - 1; i++) {
 //     assert(messages[i]['timestamp_ms'] > messages[i+1]['timestamp_ms']);
