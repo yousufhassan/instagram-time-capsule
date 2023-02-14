@@ -9,25 +9,30 @@ const express = require('express');
 const app = express();
 const port = 3000;
 let db = new database();
+const bcrypt = require("bcrypt");
+app.use(express.json());
+
 
 // Start web app
 //Idiomatic expression in express to route and respond to a client request
-// app.get('/', (req, res) => {        //get requests to the root ("/") will route here
-//     res.sendFile('index.html', {root: __dirname});      //server responds by sending the index.html file to the client's browser
-//                                                         //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile 
-// });
+app.get('/', (req, res) => {        //get requests to the root ("/") will route here
+    res.sendFile('index.html', {root: __dirname});      //server responds by sending the index.html file to the client's browser
+                                                        //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile 
+});
 
-// app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
-//     console.log(`Now listening on port ${port}`); 
-// });
+app.listen(port, () => {            //server starts listening for any attempts from a client to connect at port: {port}
+    console.log(`Now listening on port ${port}`); 
+});
 
 
 function customPrint(message: JSON): void {
     let senderName = message['sender_name'];
     let datetime = new Date(message['timestamp_ms']);
-    let date = datetime.toLocaleString('default', {month: 'short',
-                                                   day: '2-digit', year: 'numeric'});
-    let time = datetime.toLocaleString('default', {hour: 'numeric', minute: '2-digit'});
+    let date = datetime.toLocaleString('default', {
+        month: 'short',
+        day: '2-digit', year: 'numeric'
+    });
+    let time = datetime.toLocaleString('default', { hour: 'numeric', minute: '2-digit' });
 
     let content = message['content'];
 
@@ -83,7 +88,7 @@ function splitConversationsByDay(messages: JSON[]): ESMap<string, JSON[]> {
  *          If no conversation is found for the given date, an empty array is returned.
  */
 function getConversationByDate(conversationsMap: ESMap<string, JSON[]>,
-                               date: string): JSON[] {
+    date: string): JSON[] {
     if (!(conversationsMap.has(date))) {
         console.log('No conversations found for ' + date);
         return [];
@@ -111,10 +116,16 @@ let temp = getConversationByDate(conversationsMap, "Jan 16 2023")
 
 // Database Playground
 db.connectToDB();
-db.addUser("yousuf", "password123");
+// db.addUser("yousuf", "password123");
 // db.getMaxUserID();
 // console.log(db.getMaxUserID());
 
+
+// CREATE USER
+const mysql = require("mysql");
+app.post("/createUser", async (req, res) => {
+    db.createUser(req, res);
+})
 
 
 
