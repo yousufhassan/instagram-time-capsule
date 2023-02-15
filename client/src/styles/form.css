@@ -1,0 +1,26 @@
+.form-section {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 0;
+}
+
+.form-section label {
+    font-size: 14px;
+    font-weight: 600;
+    padding-bottom: 4px;
+}
+
+.form-section input {
+    width: 370px;
+    line-height: 26px;
+    display: flex;
+    padding: 4px 0 4px 12px;
+    font-size: 15px;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgba(192, 190, 190, 0.8);
+}
+
+.form-section input::placeholder {
+    color: #ffffffc0;
+}

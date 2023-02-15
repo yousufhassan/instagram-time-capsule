@@ -1,0 +1,136 @@
+/* General CSS */
+body {
+    background-color: #586E52;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    font-size: 3rem;
+    margin: 8px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin: 8px;
+}
+
+a {
+    color: inherit;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+*, *:focus {
+    outline: 0;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.center {
+    justify-content: center;
+    align-items: center;
+}
+
+.left {
+    justify-content: left;
+    align-items: center;
+}
+
+.right {
+    justify-content: right;
+    align-items: center;
+}
+
+.regular-spacing {
+    margin: 12px 12px;
+}
+
+.regular-h-spacing {
+    margin: 0 12px;
+}
+
+.container {
+    padding: 30px;
+}
+
+.auto-margin {
+    margin: auto;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.sidebar-margin {
+    margin-left: 260px;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+/* Text CSS */
+.regular-text {
+    font-size: 1rem;
+    line-height: 0;
+}
+
+.light-text {
+    font-size: 14px;
+    color: rgba(42, 40, 37, 0.65);
+}
+
+.thin {
+    font-weight: 200;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+.hyperlink {
+    color: #1DA1F2;
+}
+
+
+/* Colours */
+.white-text {
+    color: white;
+}
+
+.white-bg {
+    background-color: white;
+}
+
+.main-sage-text {
+    color: #586E52
+}
+
+.main-sage-bg {
+    background-color: #586E52
+}
+
+.light-sage-text {
+    color: rgba(88, 110, 82, 0.6);
+}
+
+.light-sage-bg {
+    background-color: rgba(88, 110, 82, 0.6);
+}
+
