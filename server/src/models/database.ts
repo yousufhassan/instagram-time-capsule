@@ -44,7 +44,10 @@ export class database {
     async createUser(req, res) {
         // Extract username and hashed password from request body
         const username = req.body.username;
+        console.log(username);
+        
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        console.log(hashedPassword);
 
         // Obtain a connection to the MySQL database
         this.con.getConnection(async (err, connection) => {

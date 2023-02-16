@@ -6,9 +6,6 @@ import Login from "./Login";
 
 function App() {
   return (
-    // <div>
-    //   <SignUp />
-    // </div>
     <div>
       <BrowserRouter>
         <Routes>
