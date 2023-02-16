@@ -14,7 +14,7 @@ function SignUp() {
 
     const navigate = useNavigate();
     const [userAccount, setAccount] = useState<account>({ username: "", password: "" })
-    
+
     const sumbitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         // console.log(account);
@@ -46,19 +46,25 @@ function SignUp() {
                 <form onSubmit={sumbitForm} className="flex-col regular-spacing">
                     <div className="form-section">
                         <label className='main-sage-text' htmlFor="username">Username</label>
-                        <input required minLength={6} name='username' className='light-sage-bg white-text' placeholder='Enter a cool username' type="text"
+                        <input required minLength={6} name='username' className='light-sage-bg white-text'
+                            placeholder='Enter a cool username' type="text"
                             onChange={(e) => onChangeHandler(e.target)} />
                     </div>
                     <div className="form-section">
                         <label className='main-sage-text' htmlFor="password">Password</label>
-                        <input required minLength={8} name='password' className='light-sage-bg white-text' placeholder='Enter a unique password' type="text"
+                        <input required minLength={8} name='password' className='light-sage-bg white-text'
+                            placeholder='Enter a unique password' type="text"
                             onChange={(e) => onChangeHandler(e.target)} />
                     </div>
                     <div className="form-section flex-row center">
-                        <button id='submit-btn' className='btn flex-row center main-sage-bg white-text'>Create account</button>
+                        <button id='submit-btn' className='btn flex-row center main-sage-bg white-text'>
+                            Create account
+                        </button>
                     </div>
                 </form>
-                <p>Already have an account? <Link to="/login" className='no-underline main-sage-text'>Log in</Link></p>
+                <p>Already have an account?
+                    <Link to="/login" className='no-underline main-sage-text'> Log in</Link>
+                </p>
             </div>
         </div >
     )
