@@ -6,19 +6,37 @@ import '../../styles/form.css';
 import '../../styles/button.css';
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
+import Main from '../Home/Home';
 
 
 
 function SignUp() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [user, setUser] = useState(Object());
     const navigate = useNavigate();
+    
+    // TODO: If a user is already logged in, redirect to the home page
+    if (user) {
+        return (
+            <div>
+                <Main />
+            </div>
+        )
+    }
 
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/createUser', { username, password })
+        // const user = { username, password };
+        axios.post('http://localhost:8000/createUser', {username, password})
             .then((response) => {
-                console.log(response.data)
+                // console.log(response);
+                // console.log(response.data)
+                setUser(response.data);
+                console.log(user);
+                
+                
+                localStorage.setItem('user', JSON.stringify(response.data));
                 navigate('/home')
             })
             .catch(function (error) {

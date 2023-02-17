@@ -53,6 +53,9 @@ db.connectToDB();
 // CREATE USER
 app.post("/createUser", async (req, res) => {
     db.createUser(req, res);
+    console.log(res);
+    
+    
 })
 
 // LOGIN USER

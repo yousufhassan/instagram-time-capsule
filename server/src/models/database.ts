@@ -70,7 +70,8 @@ export class database {
                         if (err) throw (err)
                         console.log("--- Created new User ---")
                         console.log("userID = " + result.insertId)
-                        res.sendStatus(201);
+                        // console.log(res);
+                        res.json({username: username, password: hashedPassword})
                     })
                 }
             })
