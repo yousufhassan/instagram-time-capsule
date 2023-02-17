@@ -5,6 +5,7 @@ import './SignUp-Login.css';
 import '../../styles/form.css';
 import '../../styles/button.css';
 import { Link, useNavigate } from "react-router-dom";
+import AppTitle from '../Header/AppTitle';
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -31,7 +32,7 @@ function Login() {
 
     return (
         <div>
-            <div id="app-name">Instagram Time Capsule</div>
+            <AppTitle />
             <div id="form-container" className='flex-col'>
                 <h2 className='main-sage-text'>Log in</h2>
                 <form onSubmit={submitForm} className='flex-col regular-spacing'>
