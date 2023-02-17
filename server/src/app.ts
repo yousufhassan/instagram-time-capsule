@@ -55,5 +55,10 @@ app.post("/createUser", async (req, res) => {
     db.createUser(req, res);
 })
 
+// LOGIN USER
+app.post("/login", async (req, res) => {
+    db.login(req, res);
+})
+
 
 

@@ -1,6 +1,5 @@
-import React, { Component, ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-// import { useState } from 'react';
 import '.././styles/general.css';
 import '.././styles/SignUp-Login.css';
 import '.././styles/form.css';
@@ -14,9 +13,9 @@ function SignUp() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-    const sumbitForm = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        axios.post('http://localhost:8000/createUser', {username, password})
+        axios.post('http://localhost:8000/createUser', { username, password })
             .then((response) => {
                 console.log(response.data)
                 navigate('/home')
@@ -24,7 +23,7 @@ function SignUp() {
             .catch(function (error) {
                 console.log(error);
                 if (error.response.status == 409) {
-                    alert('Username already taken');
+                    alert('Username already taken.');
                 }
             });
     }
@@ -34,7 +33,7 @@ function SignUp() {
             <div id="app-name">Instagram Time Capsule</div>
             <div id="form-container" className='flex-col'>
                 <h2 className='main-sage-text'>Create an account</h2>
-                <form onSubmit={sumbitForm} className="flex-col regular-spacing">
+                <form onSubmit={submitForm} className="flex-col regular-spacing">
                     <div className="form-section">
                         <label className='main-sage-text' htmlFor="username">Username</label>
                         <input required minLength={6} name='username' className='light-sage-bg white-text'

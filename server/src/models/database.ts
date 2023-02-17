@@ -44,10 +44,7 @@ export class database {
     async createUser(req, res) {
         // Extract username and hashed password from request body
         const username = req.body.username;
-        console.log(username);
-        
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        console.log(hashedPassword);
 
         // Obtain a connection to the MySQL database
         this.con.getConnection(async (err, connection) => {
@@ -79,6 +76,37 @@ export class database {
             })
         })
     }
+
+    async login(req, res) {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        this.con.getConnection(async (err, connection) => {
+            if (err) throw (err)
+            const sqlSearch = "Select * from Users where username = ?"
+            const search_query = mysql.format(sqlSearch, [username])
+            await connection.query(search_query, async (err, result) => {
+                connection.release()
+
+                if (err) throw (err)
+                if (result.length == 0) {
+                    console.log("--------> User does not exist")
+                    res.sendStatus(404)
+                }
+                else {
+                    const hashedPassword = result[0].password
+                    //get the hashedPassword from result
+                    if (await bcrypt.compare(password, hashedPassword)) {
+                        console.log("---------> Login Successful")
+                        res.send(`${username} is logged in!`)
+                    }
+                    else {
+                        console.log("---------> Password Incorrect")
+                        res.send("Password incorrect!")
+                        // res.sendStatus(401)
+                    } //end of bcrypt.compare()
+                }//end of User exists i.e. results.length==0
+            }) //end of connection.query()
+        }) //end of db.connection()
+    } //end of app.post()
 }
-
-
