@@ -13,11 +13,11 @@ import Main from '../Home/Home';
 function SignUp() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [user, setUser] = useState(Object());
+    const user = {username: "", password: ""};
     const navigate = useNavigate();
-    
+
     // TODO: If a user is already logged in, redirect to the home page
-    if (user) {
+    if (user.username != "") {
         return (
             <div>
                 <Main />
@@ -28,14 +28,13 @@ function SignUp() {
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // const user = { username, password };
-        axios.post('http://localhost:8000/createUser', {username, password})
+        axios.post('http://localhost:8000/createUser', { username, password })
             .then((response) => {
                 // console.log(response);
-                // console.log(response.data)
-                setUser(response.data);
+                console.log(response.data);
+                user.username = username;
+                user.password = password;
                 console.log(user);
-                
-                
                 localStorage.setItem('user', JSON.stringify(response.data));
                 navigate('/home')
             })
