@@ -7,8 +7,6 @@ import AppTitle from '../Header/AppTitle';
 function Main() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user")!);
-    console.log(user.username);
-    
 
     const handleLogout = () => {
         localStorage.clear();

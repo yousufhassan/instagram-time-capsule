@@ -29,7 +29,7 @@ function Login() {
         e.preventDefault();
         axios.post('http://localhost:8000/login', { username, password })
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 if (response.data === "Password incorrect!") {
                     alert("Incorrect password given.")
                 }

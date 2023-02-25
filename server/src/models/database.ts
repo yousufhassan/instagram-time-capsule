@@ -99,7 +99,8 @@ export class database {
                     //get the hashedPassword from result
                     if (await bcrypt.compare(password, hashedPassword)) {
                         console.log("---------> Login Successful")
-                        res.send(`${username} is logged in!`)
+                        // res.send(`${username} is logged in!`)
+                        res.json({username: username, password: hashedPassword})
                     }
                     else {
                         console.log("---------> Password Incorrect")
