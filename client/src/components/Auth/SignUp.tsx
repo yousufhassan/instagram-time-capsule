@@ -24,8 +24,8 @@ function SignUp() {
     }, []);
 
     
-    // TODO: If a user is already logged in, redirect to the home page
-    if (user != "") {
+    // If a user is already logged in, redirect to the home page
+    if (Object.keys(user).length != 0) {
         navigate('/home')
     }
 
@@ -36,7 +36,7 @@ function SignUp() {
             .then((response) => {
                 // console.log(response);
                 // console.log(response.data);
-                var user = response.data;
+                // var user = response.data;
                 localStorage.setItem('user', JSON.stringify(response.data));
                 navigate('/home')
             })

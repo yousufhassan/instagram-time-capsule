@@ -20,7 +20,7 @@ function Login() {
         }
     }, []);
 
-    // TODO: If a user is already logged in, redirect to the home page
+    // If a user is already logged in, redirect to the home page
     if (Object.keys(user).length != 0) {
         navigate('/home')
     }
@@ -34,6 +34,7 @@ function Login() {
                     alert("Incorrect password given.")
                 }
                 else {
+                    localStorage.setItem('user', JSON.stringify(response.data));
                     navigate('/home')
                 }
             })
