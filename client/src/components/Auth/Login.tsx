@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/general.css';
 import './SignUp-Login.css';
@@ -8,9 +8,22 @@ import { Link, useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
 
 function Login() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    const [user, setUser] = useState("");
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            const foundUser = JSON.parse(loggedInUser);
+            setUser(foundUser);
+        }
+    }, []);
+
+    // TODO: If a user is already logged in, redirect to the home page
+    if (Object.keys(user).length != 0) {
+        navigate('/home')
+    }
 
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,7 +45,7 @@ function Login() {
 
     return (
         <div>
-            <AppTitle />
+            <AppTitle username={user} />
             <div id="form-container" className='flex-col'>
                 <h2 className='main-sage-text'>Log in</h2>
                 <form onSubmit={submitForm} className='flex-col regular-spacing'>

@@ -1,9 +1,9 @@
 import './AppTitle.css';
 
-function AppTitle(props: any) {
-    let username = props.username;
-
-    if (username != null) {
+function AppTitle({username}:{username: string}) {
+    // console.log(username);
+    
+    if (username != "") {
         // A username was passed in
         username += "'s "
     }

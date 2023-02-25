@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/general.css';
 import './SignUp-Login.css';
@@ -11,18 +11,22 @@ import Main from '../Home/Home';
 
 
 function SignUp() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const user = {username: "", password: ""};
-    const navigate = useNavigate();
+    const [user, setUser] = useState("");
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            const foundUser = JSON.parse(loggedInUser);
+            setUser(foundUser);
+        }
+    }, []);
 
+    
     // TODO: If a user is already logged in, redirect to the home page
-    if (user.username != "") {
-        return (
-            <div>
-                <Main />
-            </div>
-        )
+    if (user != "") {
+        navigate('/home')
     }
 
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,10 +35,8 @@ function SignUp() {
         axios.post('http://localhost:8000/createUser', { username, password })
             .then((response) => {
                 // console.log(response);
-                console.log(response.data);
-                user.username = username;
-                user.password = password;
-                console.log(user);
+                // console.log(response.data);
+                var user = response.data;
                 localStorage.setItem('user', JSON.stringify(response.data));
                 navigate('/home')
             })
@@ -48,7 +50,7 @@ function SignUp() {
 
     return (
         <div>
-            <AppTitle />
+            <AppTitle username={user} />
             <div id="form-container" className='flex-col'>
                 <h2 className='main-sage-text'>Create an account</h2>
                 <form onSubmit={submitForm} className="flex-col regular-spacing">
