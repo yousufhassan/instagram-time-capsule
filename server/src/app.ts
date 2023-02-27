@@ -45,11 +45,16 @@ let temp = message.getConversationByDate(conversationsMap, "Jan 16 2023")
 
 // Database Playground
 db.connectToDB();
-// db.addUser("yousuf", "password123");
-// db.getMaxUserID();
-// console.log(db.getMaxUserID());
+let chatOwner = "yousuf"  // Will actually get this from local storage
+let chatTitle = message.getChatTitle(chatData)
+// console.log(chatOwner);
+// console.log(chatTitle);
+db.addChat(chatOwner, chatTitle)
 
 
+
+
+// ---------------------------------------------------------------------------
 // CREATE USER
 app.post("/createUser", async (req, res) => {
     db.createUser(req, res);
