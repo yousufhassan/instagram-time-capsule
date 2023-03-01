@@ -11,12 +11,33 @@ function Main() {
     const handleLogout = () => {
         localStorage.clear();
         navigate('/login');
-      };
+    };
+
+    const addChat = () => {
+        axios.post('http://localhost:8000/addChat', { user })
+            .then((response) => {
+                console.log(response)
+                // if (response.data === "Password incorrect!") {
+                //     alert("Incorrect password given.")
+                // }
+                // else {
+                //     localStorage.setItem('user', JSON.stringify(response.data));
+                //     navigate('/home')
+                // }
+            })
+            .catch(function (error) {
+                console.log(error);
+                // alert('Incorrect username or password.')
+            });
+    }
+
     return (
         <div>
             <div id="header">
-                <AppTitle username={user.username}/>
+                <AppTitle username={user.username} />
                 <button onClick={handleLogout}>Log out</button>
+                <button onClick={addChat}>Add chat</button>
+
             </div>
             <div id="main-container">
                 {/* ConversationPanel Component */}

@@ -112,7 +112,13 @@ export class database {
         }) //end of db.connection()
     } //end of app.post()
 
-    async addChat(chatOwner: string, chatTitle: string) {
+    async uploadData(req, res, chatOwner: string, chatTitle: string) {
+        this.addChat(req, res, chatOwner, chatTitle).then(function (val) {
+            console.log("val: " + val);
+        })
+    }
+
+    async addChat(req, res, chatOwner: string, chatTitle: string) {
         this.con.getConnection(async (err, connection) => {
             if (err) throw (err)
 
@@ -155,11 +161,27 @@ export class database {
                         if (err) throw (err)
                         console.log("-- Added new chat --");
                         console.log("chat_owner: " + chatOwner + ", chat_title: " + chatTitle);
-                        
+
                         // TODO: Figure out what status to send
+                        // console.log(result.insertId);
+
+                        return result.insertId;
+                        // res.json({temp: "asdf"})
                     })
                 })
             })
+        })
+    }
+
+    async addConversation(date: string, conversation: JSON[]) {
+        this.con.getConnection(async (err, connection) => {
+            if (err) throw (err)
+
+            // If this conversation data and conversation already exists in the database
+            // then delete it
+            const conversationSearch = "SELECT * FROM Conversations WHERE date"
+
+            // Add conversation to the database
         })
     }
 }
