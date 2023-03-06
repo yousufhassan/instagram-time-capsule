@@ -165,7 +165,7 @@ export class database {
                         // TODO: Figure out what status to send
                         // console.log(result.insertId);
 
-                        return result.insertId;
+                        return result.insertId
                         // res.json({temp: "asdf"})
                     })
                 })

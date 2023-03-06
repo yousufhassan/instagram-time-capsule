@@ -32,14 +32,16 @@ let messages = message.getAllMessages(chatData);
 
 let conversationsMap = message.splitConversationsByDay(messages);
 let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
-// console.log(temp);
+console.log(temp);
+
+
 
 // for (let i = 0; i < messages.length - 1; i++) {
 //     assert(messages[i]['timestamp_ms'] > messages[i+1]['timestamp_ms']);
 // }
 
-// messages.forEach(message => {
-//     customPrint(message);
+// messages.forEach(message1 => {
+//     message.customPrint(message1);
 // });
 
 
@@ -56,8 +58,8 @@ let chatTitle = message.getChatTitle(chatData)
 app.post("/addChat", async (req, res) => {
 
     // db.uploadData(req, res, chatOwner, chatTitle);
-    db.addChat(req, res, chatOwner, chatTitle)
-    console.log(Object.values(res));
+    db.uploadData(req, res, chatOwner, chatTitle)
+    // console.log(Object.values(res));
     
 })
 
