@@ -146,7 +146,8 @@ export class database {
     }
 
     /**
-     * Deletes a chat with the specified chatTitle.
+     * Deletes a chat with the specified chatTitle. As a side effect, it will also delete all
+     * conversations associated with this chat.
      * 
      * @param connection - The database connection.
      * @param req - The request object.
@@ -156,13 +157,13 @@ export class database {
      * @returns True if the chat was deleted, and an error otherwise.
      * @throws Error if there is an error querying the database.
     */
-    async deleteChat(connection, req, res, chatTitle: string): Promise<boolean> {
+    async deleteChat(connection, req, res, chatOwner: number, chatTitle: string): Promise<boolean> {
         return new Promise(async function (resolve, reject) {
 
-            const findChatSearch = "SELECT * FROM Chats WHERE title = ?"
-            const findChatQuery = mysql.format(findChatSearch, [chatTitle])
+            const findChatSearch = "SELECT * FROM Chats WHERE chat_owner_id = ? and title = ?"
+            const findChatQuery = mysql.format(findChatSearch, [chatOwner, chatTitle])
             await connection.query(findChatQuery, async (err, result) => {
-                if (err) reject(err);
+                if (err) return reject(err);
 
                 if (result.length == 0) {
                     // Chat doesn't exist in database; nothing to delete. 
@@ -172,8 +173,8 @@ export class database {
                 }
                 else {
                     // Chat exists in database, so deleting it.
-                    const deleteChatSearch = "DELETE FROM Chats WHERE title = ?"
-                    const deleteChatQuery = mysql.format(deleteChatSearch, [chatTitle])
+                    const deleteChatSearch = "DELETE FROM Chats WHERE chat_owner_id = ? and title = ?"
+                    const deleteChatQuery = mysql.format(deleteChatSearch, [chatOwner, chatTitle])
                     await connection.query(deleteChatQuery, async (err, result) => {
                         if (err) throw (err)
                         console.log("--- Chat deleted ---");
@@ -202,26 +203,37 @@ export class database {
             const addChatSQL = "INSERT INTO Chats(chat_owner_id, title) VALUES (?,?)";
             const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle]);
             await connection.query(addChatQuery, async (err, result) => {
-                if (err) reject(err);
-
-                console.log("-- Added new chat --");
+                if (err) return reject(err);
 
                 // TODO: Figure out what status to send
                 // console.log(result);
+                console.log("-- Added new chat --");
                 return resolve(result.insertId);
             })
         })
     }
 
-    async addConversation(date: string, conversation: JSON[]) {
-        this.con.getConnection(async (err, connection) => {
-            if (err) throw (err)
+    async addConversation(connection, req, res, chatId: number,
+        date: string, conversation: string): Promise<number> {
+        /**
+         * Note: This conversation should not already exist in the database. There are two cases:
+         * 
+         *      1. This is the first time the conversation is being added. Therefore, it must
+         *         not exist.
+         * 
+         *      2. This conversation existed before, but on re-uploading this chat (and conversation)
+         *         files, the old chat was deleted, and with that the conversations too.
+         */
 
-            // If this conversation data and conversation already exists in the database
-            // then delete it
-            const conversationSearch = "SELECT * FROM Conversations WHERE date"
+        return new Promise(async function (resolve, reject) {
+            const addConversationSQL = "INSERT INTO Conversations(chat_id, conversation_date, messages) VALUES (?,?,?)";
+            const addConversationQuery = mysql.format(addConversationSQL, [chatId, date, conversation]);
+            await connection.query(addConversationQuery, async (err, result) => {
+                if (err) return reject(err);
 
-            // Add conversation to the database
+                console.log("-- Conversation added --");
+                return resolve(result.insertId);
+            })
         })
     }
 }
