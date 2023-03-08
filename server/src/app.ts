@@ -32,7 +32,7 @@ let messages = message.getAllMessages(chatData);
 
 let conversationsMap = message.splitConversationsByDay(messages);
 let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
-console.log(temp);
+// console.log(temp);
 
 
 
@@ -46,7 +46,7 @@ console.log(temp);
 
 
 // Database Playground
-db.connectToDB();
+// db.connectToDB();
 
 // Add chat
 let chatOwner = "yousuf"  // Will actually get this from local storage
@@ -56,11 +56,23 @@ let chatTitle = message.getChatTitle(chatData)
 // db.addChat(chatOwner, chatTitle)
 
 app.post("/addChat", async (req, res) => {
+    db.con.getConnection(async function (err, connection) {
+        if (err) throw (err)
+        db.getUserIdFromUsername(connection, req, res, chatOwner).then(function (chatOwnerId) {
+            console.log("first: " + chatOwnerId);
+            return chatOwnerId;
+        }).then(async function (chatOwnerId) {
+            console.log("second: " + chatOwnerId);
+            await db.deleteChat(connection, req, res, chatTitle)
+            return chatOwnerId
+        }).then(async function (chatOwnerId) {
+            console.log("third: " + chatOwnerId);
+            return db.addChat(connection, req, res, chatOwnerId, chatTitle);
+        }).then(async function (chatId) {
+            console.log("Chat ID: " + chatId);
+        })
+    })
 
-    // db.uploadData(req, res, chatOwner, chatTitle);
-    db.uploadData(req, res, chatOwner, chatTitle)
-    // console.log(Object.values(res));
-    
 })
 
 

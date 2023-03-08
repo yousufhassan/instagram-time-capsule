@@ -78,6 +78,14 @@ export class database {
         })
     }
 
+
+    /**
+     * Performs user login if user with that username and password exists in the database.
+     * @async
+     * @param {Object} req - The HTTP request object containing the user's username and password in the request body.
+     * @param {Object} res - The HTTP response object to send back to the client.
+     * @returns {Promise<void>}
+     */
     async login(req, res) {
         const username = req.body.username;
         const password = req.body.password;
@@ -113,62 +121,94 @@ export class database {
     } //end of app.post()
 
     async uploadData(req, res, chatOwner: string, chatTitle: string) {
-        this.addChat(req, res, chatOwner, chatTitle).then(function (val) {
-            console.log("val: " + val);
+        return null
+    }
+
+
+    /**
+     * Get user ID from username.
+     * 
+     * @param connection - The database connection.
+     * @param req - The request object.
+     * @param res - The response object.
+     * @param username - The username of the user whose ID is to be retrieved.
+     * @returns A promise that resolves to the user ID.
+    */
+    async getUserIdFromUsername(connection, req, res, username: string): Promise<number> {
+        return new Promise(async function (resolve, reject) {
+            const getUserIDSearch = "SELECT user_id FROM Users WHERE username = ?"
+            const getUserIDSQuery = mysql.format(getUserIDSearch, [username])
+            await connection.query(getUserIDSQuery, async (err, result) => {
+                if (err) return reject(err)
+                return resolve(result[0].user_id);
+            })
         })
     }
 
-    async addChat(req, res, chatOwner: string, chatTitle: string) {
-        this.con.getConnection(async (err, connection) => {
-            if (err) throw (err)
+    /**
+     * Deletes a chat with the specified chatTitle.
+     * 
+     * @param connection - The database connection.
+     * @param req - The request object.
+     * @param res - The response object.
+     * @param chatTitle - The title of the chat to be deleted.
+     * 
+     * @returns True if the chat was deleted, and an error otherwise.
+     * @throws Error if there is an error querying the database.
+    */
+    async deleteChat(connection, req, res, chatTitle: string): Promise<boolean> {
+        return new Promise(async function (resolve, reject) {
 
-            // Get the userID of the chatOwner
-            const getUserIDSearch = "SELECT user_id FROM Users WHERE username = ?"
-            const getUserIDSQuery = mysql.format(getUserIDSearch, [chatOwner])
-            await connection.query(getUserIDSQuery, async (err, result) => {
-                if (err) throw (err)
-                // console.log(result[0].user_id);
-                // assert(result.length != 0) // since this user is logged in, they must be in database
-                let userID = result[0].user_id
+            const findChatSearch = "SELECT * FROM Chats WHERE title = ?"
+            const findChatQuery = mysql.format(findChatSearch, [chatTitle])
+            await connection.query(findChatQuery, async (err, result) => {
+                if (err) reject(err);
 
-                // If this chat already exists in the database, delete those
-                // entries along with their corresponding conversations in the
-                // conversations table
-                const findChatSearch = "SELECT * FROM Chats WHERE title = ?"
-                const findChatQuery = mysql.format(findChatSearch, [chatTitle])
-                await connection.query(findChatQuery, async (err, result) => {
-                    if (err) throw (err)
-                    if (result.length == 0) {
-                        console.log("--- Chat does not exist in database ---")
-                        // result.sendStatus(404)
-                    }
-                    else {
-                        // Chat exists in database, so we will delete it
-                        const deleteChatSearch = "DELETE FROM Chats WHERE title = ?"
-                        const deleteChatQuery = mysql.format(deleteChatSearch, [chatTitle])
-                        await connection.query(deleteChatQuery, async (err, result) => {
-                            if (err) throw (err)
-                            console.log("--- Chat deleted ---");
-                            // console.log(result);
-                        })
-                    }
-                    // At this point, this chat (with title: chatTitle) does not exist in the database
-                    // so we will add it now.
-                    const addChatSQL = "INSERT INTO Chats(chat_owner_id, title) VALUES (?,?)"
-                    const addChatQuery = mysql.format(addChatSQL, [userID, chatTitle])
-                    await connection.query(addChatQuery, async (err, result) => {
-                        connection.release();
+                if (result.length == 0) {
+                    // Chat doesn't exist in database; nothing to delete. 
+                    console.log("--- Chat does not exist in database ---")
+                    return resolve(true);
+                    // result.sendStatus(404)
+                }
+                else {
+                    // Chat exists in database, so deleting it.
+                    const deleteChatSearch = "DELETE FROM Chats WHERE title = ?"
+                    const deleteChatQuery = mysql.format(deleteChatSearch, [chatTitle])
+                    await connection.query(deleteChatQuery, async (err, result) => {
                         if (err) throw (err)
-                        console.log("-- Added new chat --");
-                        console.log("chat_owner: " + chatOwner + ", chat_title: " + chatTitle);
-
-                        // TODO: Figure out what status to send
-                        // console.log(result.insertId);
-
-                        return result.insertId
-                        // res.json({temp: "asdf"})
+                        console.log("--- Chat deleted ---");
+                        return resolve(true);
                     })
-                })
+                }
+            })
+        })
+    }
+
+
+    /**
+     * Adds a new chat to the database.
+     * 
+     * @param {Object} connection - The database connection object.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @param {number} chatOwnerID - The ID of the chat owner.
+     * @param {string} chatTitle - The title of the chat.
+     * 
+     * @return {Promise<number>} Returns a promise that resolves with the ID of the newly inserted chat.
+     * @throws {Error} If there is an error during the database query.
+*/
+    async addChat(connection, req, res, chatOwnerID: number, chatTitle: string): Promise<number> {
+        return new Promise(async function (resolve, reject) {
+            const addChatSQL = "INSERT INTO Chats(chat_owner_id, title) VALUES (?,?)";
+            const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle]);
+            await connection.query(addChatQuery, async (err, result) => {
+                if (err) reject(err);
+
+                console.log("-- Added new chat --");
+
+                // TODO: Figure out what status to send
+                // console.log(result);
+                return resolve(result.insertId);
             })
         })
     }
