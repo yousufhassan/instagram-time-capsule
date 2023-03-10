@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../../styles/general.css';
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
+import UploadFile from '../UploadFile/UploadFile';
 
 function Main() {
     const navigate = useNavigate();
@@ -17,13 +18,6 @@ function Main() {
         axios.post('http://localhost:8000/addChat', { user })
             .then((response) => {
                 console.log(response)
-                // if (response.data === "Password incorrect!") {
-                //     alert("Incorrect password given.")
-                // }
-                // else {
-                //     localStorage.setItem('user', JSON.stringify(response.data));
-                //     navigate('/home')
-                // }
             })
             .catch(function (error) {
                 console.log(error);
@@ -31,12 +25,24 @@ function Main() {
             });
     }
 
+
     return (
         <div>
             <div id="header">
                 <AppTitle username={user.username} />
                 <button onClick={handleLogout}>Log out</button>
                 <button onClick={addChat}>Add chat</button>
+                <br />
+                <br />
+                <br />
+                <UploadFile />
+                {/* <div>
+                    <form onSubmit={uploadFiles}>
+                        <label htmlFor="files">Upload files</label>
+                        <input type="file" id="files" name="files" multiple/>
+                        <input type="submit" />
+                    </form>
+                </div> */}
 
             </div>
             <div id="main-container">

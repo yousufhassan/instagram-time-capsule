@@ -2,11 +2,17 @@ import { database } from "./models/database";
 import * as message from "./services/messages";
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer');
 const app = express();
 app.use(cors());
 app.use(express.json());
 const port = 8000;
 let db = new database();
+
+// const fs = require('fs')
+// const { promisify } = require('util')
+
+// const unlinkAsync = promisify(fs.unlink)
 
 
 
@@ -27,11 +33,11 @@ app.listen(port, () => {            //server starts listening for any attempts f
 
 
 // Function Playground
-let chatData = require('../original_data/message_1.json');
-let messages = message.getAllMessages(chatData);
+// let chatData = require('../original_data/message_1.json');
+// let messages = message.getAllMessages(chatData);
 
-let conversationsMap = message.splitConversationsByDay(messages);
-let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
+// let conversationsMap = message.splitConversationsByDay(messages);
+// let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
 // console.log(conversationsMap);
 
 
@@ -48,46 +54,58 @@ let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
 // Database Playground
 // db.connectToDB();
 
-// Add chat
-let chatOwner = "yousuf"  // Will actually get this from local storage
-let chatTitle = message.getChatTitle(chatData)
-// console.log(chatOwner);
-// console.log(chatTitle);
-// db.addChat(chatOwner, chatTitle)
 
-app.post("/addChat", async (req, res) => {
+const storage = multer.diskStorage(
+    {
+        destination: '../uploads',
+        filename: function (req, file, cb) {
+            cb(null, file.originalname.slice(0, -5) + '-' + Date.now() + ".json");
+        }
+    }
+);
+
+const upload = multer({ storage: storage });
+
+app.post("/uploadFiles", upload.array('files'), (req, res) => {
+    let files = req.files;
+    let chatOwner = req.body.user
+
+    // Obtain the chat title to store in the database (only need to do once for each upload)
+    let chatData = require(files[0].path)
+    let chatTitle = message.getChatTitle(chatData)
+
+
     db.con.getConnection(async function (err, connection) {
         if (err) throw (err)
-        db.getUserIdFromUsername(connection, req, res, chatOwner).then(function (chatOwnerId) {
-            console.log("first: " + chatOwnerId);
-            return chatOwnerId;
-        }).then(async function (chatOwnerId) {
-            console.log("second: " + chatOwnerId);
-            // Note: deleteChat will also delete all conversations for that chat.
-            await db.deleteChat(connection, req, res, chatOwnerId, chatTitle)
-            return chatOwnerId
-        }).then(async function (chatOwnerId) {
-            console.log("third: " + chatOwnerId);
-            return db.addChat(connection, req, res, chatOwnerId, chatTitle);
-        }).then(async function (chatId) {
-            console.log("Chat ID: " + chatId);
-            conversationsMap.forEach((conversation, date) => {
-                let conversationId = db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
-                console.log("Conversation ID: " + conversationId);
+
+        // Get the userId of the logged in user
+        db.getUserIdFromUsername(connection, req, res, chatOwner)
+            .then(function (chatOwnerId) {
+                return chatOwnerId;
+            }).then(async function (chatOwnerId) {
+                // If this chat already exists in the database, delete it
+                // Note: deleteChat will also delete all conversations for that chat.
+                await db.deleteChat(connection, req, res, chatOwnerId, chatTitle)
+                return chatOwnerId
+            }).then(async function (chatOwnerId) {
+                // Add this chat to the database
+                return db.addChat(connection, req, res, chatOwnerId, chatTitle);
+            }).then(async function (chatId) {
+                // Get all conversations from this file upload and store in the database
+                files.forEach(file => {
+                    console.log("Chat ID: " + chatId);
+                    let chatData = require(file.path)
+                    let messages = message.getAllMessages(chatData);
+                    let conversationsMap = message.splitConversationsByDay(messages);
+
+                    conversationsMap.forEach((conversation, date) => {
+                        let conversationId = db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
+                        console.log("Conversation ID: " + conversationId);
+                    })
+                });
             })
-        })
     })
-
 })
-
-
-// Add conversation
-// console.log(conversationsMap.keys());
-// conversationsMap.forEach((conversation, date) => {
-//     console.log(date);
-//     console.log(conversation);
-//     // db.addConversation(date, conversation)
-// })
 
 
 
@@ -97,7 +115,7 @@ app.post("/createUser", async (req, res) => {
     db.createUser(req, res);
     console.log(res);
 
-
+    // await unlinkAsync(req.file.path)
 })
 
 // LOGIN USER
@@ -106,4 +124,32 @@ app.post("/login", async (req, res) => {
 })
 
 
+// ADD CHAT
+// let chatOwner = "yousuf"  // Will actually get this from local storage
+// let chatTitle = message.getChatTitle(chatData)
 
+// app.post("/addChat", async (req, res) => {
+//     db.con.getConnection(async function (err, connection) {
+//         if (err) throw (err)
+//         db.getUserIdFromUsername(connection, req, res, chatOwner)
+//             .then(function (chatOwnerId) {
+//                 console.log("first: " + chatOwnerId);
+//                 return chatOwnerId;
+//             }).then(async function (chatOwnerId) {
+//                 console.log("second: " + chatOwnerId);
+//                 // Note: deleteChat will also delete all conversations for that chat.
+//                 await db.deleteChat(connection, req, res, chatOwnerId, chatTitle)
+//                 return chatOwnerId
+//             }).then(async function (chatOwnerId) {
+//                 console.log("third: " + chatOwnerId);
+//                 return db.addChat(connection, req, res, chatOwnerId, chatTitle);
+//             }).then(async function (chatId) {
+//                 console.log("Chat ID: " + chatId);
+//                 conversationsMap.forEach((conversation, date) => {
+//                     let conversationId = db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
+//                     console.log("Conversation ID: " + conversationId);
+//                 })
+//             })
+//     })
+
+// })
