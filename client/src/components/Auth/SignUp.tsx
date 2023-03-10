@@ -6,7 +6,6 @@ import '../../styles/form.css';
 import '../../styles/button.css';
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
-import Main from '../Home/Home';
 
 
 
@@ -25,7 +24,7 @@ function SignUp() {
 
     
     // If a user is already logged in, redirect to the home page
-    if (Object.keys(user).length != 0) {
+    if (Object.keys(user).length !== 0) {
         navigate('/home')
     }
 

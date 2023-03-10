@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+// import React, { useState } from 'react';
+// import axios from 'axios';
 import '../../styles/general.css';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
+import UploadFile from '../UploadFile/UploadFile';
 
 function Main() {
     const navigate = useNavigate();
@@ -11,14 +12,17 @@ function Main() {
     const handleLogout = () => {
         localStorage.clear();
         navigate('/login');
-      };
+    };
+
+
     return (
         <div>
             <div id="header">
-                <AppTitle username={user.username}/>
+                <AppTitle username={user.username} />
                 <button onClick={handleLogout}>Log out</button>
             </div>
             <div id="main-container">
+                <UploadFile />
                 {/* ConversationPanel Component */}
                 {/* ChatPanel Component */}
             </div>
