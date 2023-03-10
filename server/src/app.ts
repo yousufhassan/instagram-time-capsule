@@ -9,10 +9,10 @@ app.use(express.json());
 const port = 8000;
 let db = new database();
 
-// const fs = require('fs')
-// const { promisify } = require('util')
+const fs = require('fs')
+const { promisify } = require('util')
 
-// const unlinkAsync = promisify(fs.unlink)
+const unlinkAsync = promisify(fs.unlink)
 
 
 
@@ -92,16 +92,20 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                 return db.addChat(connection, req, res, chatOwnerId, chatTitle);
             }).then(async function (chatId) {
                 // Get all conversations from this file upload and store in the database
-                files.forEach(file => {
-                    console.log("Chat ID: " + chatId);
+                console.log("Chat ID: " + chatId);
+                files.forEach(async file => {
                     let chatData = require(file.path)
                     let messages = message.getAllMessages(chatData);
                     let conversationsMap = message.splitConversationsByDay(messages);
 
-                    conversationsMap.forEach((conversation, date) => {
-                        let conversationId = db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
+                    conversationsMap.forEach(async (conversation, date) => {
+                        let conversationId = await db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
                         console.log("Conversation ID: " + conversationId);
                     })
+
+                    // Delete file from server
+                    await unlinkAsync(file.path)
+
                 });
             })
     })
@@ -114,8 +118,6 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
 app.post("/createUser", async (req, res) => {
     db.createUser(req, res);
     console.log(res);
-
-    // await unlinkAsync(req.file.path)
 })
 
 // LOGIN USER
@@ -123,33 +125,3 @@ app.post("/login", async (req, res) => {
     db.login(req, res);
 })
 
-
-// ADD CHAT
-// let chatOwner = "yousuf"  // Will actually get this from local storage
-// let chatTitle = message.getChatTitle(chatData)
-
-// app.post("/addChat", async (req, res) => {
-//     db.con.getConnection(async function (err, connection) {
-//         if (err) throw (err)
-//         db.getUserIdFromUsername(connection, req, res, chatOwner)
-//             .then(function (chatOwnerId) {
-//                 console.log("first: " + chatOwnerId);
-//                 return chatOwnerId;
-//             }).then(async function (chatOwnerId) {
-//                 console.log("second: " + chatOwnerId);
-//                 // Note: deleteChat will also delete all conversations for that chat.
-//                 await db.deleteChat(connection, req, res, chatOwnerId, chatTitle)
-//                 return chatOwnerId
-//             }).then(async function (chatOwnerId) {
-//                 console.log("third: " + chatOwnerId);
-//                 return db.addChat(connection, req, res, chatOwnerId, chatTitle);
-//             }).then(async function (chatId) {
-//                 console.log("Chat ID: " + chatId);
-//                 conversationsMap.forEach((conversation, date) => {
-//                     let conversationId = db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
-//                     console.log("Conversation ID: " + conversationId);
-//                 })
-//             })
-//     })
-
-// })
