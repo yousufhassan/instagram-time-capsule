@@ -21,7 +21,7 @@ function Login() {
     }, []);
 
     // If a user is already logged in, redirect to the home page
-    if (Object.keys(user).length != 0) {
+    if (Object.keys(user).length !== 0) {
         navigate('/home')
     }
 
