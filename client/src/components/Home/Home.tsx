@@ -20,12 +20,9 @@ function Main() {
             <div id="header">
                 <AppTitle username={user.username} />
                 <button onClick={handleLogout}>Log out</button>
-                <br />
-                <br />
-                <UploadFile />
-
             </div>
             <div id="main-container">
+                <UploadFile />
                 {/* ConversationPanel Component */}
                 {/* ChatPanel Component */}
             </div>
