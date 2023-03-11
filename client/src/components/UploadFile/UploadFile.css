@@ -19,13 +19,13 @@ input[type="file"] {
   'opsz' 48
 }
 
-#upload-file p {
+#add-conversation p {
     padding-left: 8px;
+    margin-right: 50px;
     font-size: 12px;
 }
 
 /* Modal */
 #modal-container {
-    background-color: red;
-    padding: 30px;
+    padding: 22px 30px;
 }

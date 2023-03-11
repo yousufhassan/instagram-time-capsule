@@ -7,9 +7,10 @@ import ReactModal from 'react-modal';
 
 
 function UploadFile() {
+    // alert('asdf')
     const user = JSON.parse(localStorage.getItem("user")!);
     const [files, setFiles] = useState<any[]>([]);
-    const [modal, setModal] = useState(false);
+    const [filesSelected, setFilesSelected] = useState(false);
 
     const uploadFiles = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -26,54 +27,42 @@ function UploadFile() {
         axios.post('http://localhost:8000/uploadFiles', data,
             { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
-                // console.log("yup");
+                console.log("yup");
                 console.log(response)
+                setFiles([]);
+                setFilesSelected(false);
+
+                // Use the below line of code instead if button is disabling too quick
+                // setTimeout(() => { setFilesSelected(false) }, 2000)
+
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
+    const selectFileHandler = (e: any) => {
+        setFiles(e.target.files)
+        if (e.target.files.length > 0) {
+            setFilesSelected(true);
+        }
+
+
+    }
+
     return (
         <div>
-            <ReactModal isOpen={modal} style={{
-                content: {
-                    position: 'absolute',
-                    top: '0',
-                    left: '0',
-                    right: '0',
-                    bottom: '0',
-                    margin: 'auto',
-                    width: '800px',
-                    height: '800px',
-                    border: '1px solid #ccc',
-                    //   background: '#fff',
-                    overflow: 'auto',
-                    WebkitOverflowScrolling: 'touch',
-                    borderRadius: '4px',
-                    outline: 'none',
-                    padding: '20px'
-                }
-            }}>
-                <div id="modal-container">
-                    <div className="flex-row space-btwn">
-                        <h2>Upload Files</h2>
-                        <button onClick={() => setModal(false)}>Close Modal</button>
-                    </div>
-                </div>
-            </ReactModal>
-            <form onSubmit={uploadFiles}>
-                <label id='upload-file' htmlFor="files" onClick={() => setModal(true)} className='custom-file-upload light-grey-text'>
+            <form name='upload-form' onSubmit={uploadFiles}>
+                <label id='add-conversation' htmlFor='file-upload' className='custom-file-upload light-grey-text'>
                     <span className="material-symbols-outlined">
                         upload_file
                     </span>
                     <p className='no-margin'>
                         Add new conversation
                     </p>
+                    <button id='upload-btn' disabled={!filesSelected}>Upload</button>
                 </label>
-                {/* <button onClick={() => setModal(true)} /> */}
-                {/* <input type="file" id="files" name="files" multiple onChange={() => setModal(true)} /> */}
-                {/* <button id="upload-files-btn">Upload files</button> */}
+                <input type="file" id='file-upload' onChange={selectFileHandler} multiple />
             </form>
         </div>
     )

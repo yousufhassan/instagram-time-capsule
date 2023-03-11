@@ -120,10 +120,6 @@ export class database {
         }) //end of db.connection()
     } //end of app.post()
 
-    async uploadData(req, res, chatOwner: string, chatTitle: string) {
-        return null
-    }
-
 
     /**
      * Get user ID from username.

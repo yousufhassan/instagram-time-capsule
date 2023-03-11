@@ -57,6 +57,10 @@ a {
     justify-content: space-between;
 }
 
+.space-evenly {
+    justify-content: space-evenly;
+}
+
 .regular-spacing {
     margin: 12px 12px;
 }
