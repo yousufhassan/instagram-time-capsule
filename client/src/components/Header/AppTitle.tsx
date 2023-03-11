@@ -5,7 +5,8 @@ function AppTitle({username}:{username: string}) {
     
     if (username !== "") {
         // A username was passed in
-        username += "'s "
+        username = username.charAt(0).toUpperCase() + username.slice(1);
+        username += "'s ";
     }
 
     return (

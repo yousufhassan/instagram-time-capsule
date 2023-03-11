@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/general.css';
 import './UploadFile.css';
-import ReactModal from 'react-modal';
 // import { Link, useNavigate } from "react-router-dom";
 
 
@@ -27,14 +26,11 @@ function UploadFile() {
         axios.post('http://localhost:8000/uploadFiles', data,
             { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
-                console.log("yup");
                 console.log(response)
                 setFiles([]);
                 setFilesSelected(false);
-
                 // Use the below line of code instead if button is disabling too quick
                 // setTimeout(() => { setFilesSelected(false) }, 2000)
-
             })
             .catch(function (error) {
                 console.log(error);
