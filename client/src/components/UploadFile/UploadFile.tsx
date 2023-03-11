@@ -38,6 +38,8 @@ function UploadFile() {
             })
             .catch(function (error) {
                 console.log(error);
+                setFiles([]);
+                setFilesSelected(false);
             });
     }
 
@@ -46,8 +48,9 @@ function UploadFile() {
         if (e.target.files.length > 0) {
             setFilesSelected(true);
         }
-
-
+        else {
+            setFilesSelected(false);
+        }
     }
 
     return (
@@ -60,7 +63,7 @@ function UploadFile() {
                     <p className='no-margin'>
                         Add new conversation
                     </p>
-                    <button id='upload-btn' disabled={!filesSelected}>Upload</button>
+                    <button id='upload-btn' hidden={!filesSelected}>Upload {files.length} files</button>
                 </label>
                 <input type="file" id='file-upload' onChange={selectFileHandler} multiple />
             </form>

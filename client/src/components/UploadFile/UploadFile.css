@@ -21,11 +21,15 @@ input[type="file"] {
 
 #add-conversation p {
     padding-left: 8px;
-    margin-right: 50px;
+    margin-right: 12px;
     font-size: 12px;
 }
 
 /* Modal */
 #modal-container {
     padding: 22px 30px;
+}
+
+#upload-btn {
+    font-size: 12px;
 }
