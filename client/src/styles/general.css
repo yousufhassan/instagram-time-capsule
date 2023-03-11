@@ -53,6 +53,10 @@ a {
     align-items: center;
 }
 
+.space-btwn {
+    justify-content: space-between;
+}
+
 .regular-spacing {
     margin: 12px 12px;
 }

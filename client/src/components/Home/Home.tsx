@@ -17,16 +17,18 @@ function Home() {
 
     return (
         <div>
-            <div id="header" className='flex-row'>
-                <div style={{flex: 1}}>
-                <AppTitle username={user.username} />
+            <div id='page-container' className='flex-col'>
+                <div id="header" className='flex-row'>
+                    <div style={{ flex: 1 }}>
+                        <AppTitle username={user.username} />
+                    </div>
+                    <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
                 </div>
-                <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
-            </div>
-            <div>
-                <MainWindow />
-                {/* ConversationPanel Component */}
-                {/* ChatPanel Component */}
+                <div id='container' className='flex-row center'>
+                    <MainWindow />
+                    {/* ConversationPanel Component */}
+                    {/* ChatPanel Component */}
+                </div>
             </div>
         </div>
     )
