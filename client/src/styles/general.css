@@ -62,7 +62,7 @@ a {
 }
 
 .container {
-    padding: 30px;
+    padding: 20px;
 }
 
 .auto-margin {
@@ -79,6 +79,10 @@ a {
 
 .no-padding {
     padding: 0;
+}
+
+.btn {
+    cursor: pointer;
 }
 
 /* Text CSS */
@@ -134,3 +138,18 @@ a {
     background-color: rgba(88, 110, 82, 0.6);
 }
 
+.light-grey-text {
+    color: #D9D9D9
+}
+
+.light-grey-bg {
+    background-color: #D9D9D9;
+}
+
+.dark-grey-text {
+    color: #342E34;
+}
+
+.dark-grey-bg {
+    background-color: #342E34;
+}

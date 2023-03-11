@@ -1,0 +1,14 @@
+#header {
+    padding-right: 30px;
+}
+
+#logout {
+    border: none;
+    width: 80px;
+}
+
+@media screen and (max-width: 700px){
+    #logout {
+        font-size: 0.8rem;
+    }
+}

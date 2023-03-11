@@ -1,0 +1,40 @@
+#main-container {
+    /* background-color: gray; */
+    margin: auto;
+    margin-top: 30px;
+    max-width: 1200px;
+    width: 95%;
+    height: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#conversation-panel {
+    flex: 3;
+}
+
+#conversation-header {
+    padding: 0px 18px 0 18px;
+    border-bottom: solid;
+    border-color: rgba(0, 0, 0, 0.35);
+    border-bottom-width: 1px;
+    /* background: red; */
+}
+
+#conversation-header h3 {
+    font-size: 1rem;
+    font-weight: lighter;
+}
+
+#conversation-footer {
+    /* background: #432343; */
+    margin-top: auto;
+    border-top: solid;
+    border-color: rgba(0, 0, 0, 0.35);
+    border-top-width: 1px;
+}
+
+#chat-panel {
+    padding: 12px;
+    flex: 7;
+}

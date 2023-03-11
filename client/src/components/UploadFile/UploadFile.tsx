@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/general.css';
+import './UploadFile.css';
 // import { Link, useNavigate } from "react-router-dom";
 
 
@@ -21,7 +22,7 @@ function UploadFile() {
         data.append("user", user.username);
 
         axios.post('http://localhost:8000/uploadFiles', data,
-            { headers: { 'Content-Type': 'multipart/form-data' }})
+            { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 // console.log("yup");
                 console.log(response)
@@ -31,13 +32,19 @@ function UploadFile() {
             });
     }
 
-
     return (
         <div>
             <form onSubmit={uploadFiles}>
-                <label htmlFor="files">Upload files</label>
+                <label id='upload-file' htmlFor="files" className='custom-file-upload light-grey-text'>
+                    <span className="material-symbols-outlined">
+                        upload_file
+                    </span>
+                    <p className='no-margin'>
+                        Add new conversation
+                    </p>
+                </label>
                 <input type="file" id="files" name="files" multiple onChange={(e: any) => setFiles(e.target.files)} />
-                <button id="upload-files-btn">Upload files</button>
+                {/* <button id="upload-files-btn">Upload files</button> */}
             </form>
         </div>
     )

@@ -68,6 +68,8 @@ const upload = multer({ storage: storage });
 
 app.post("/uploadFiles", upload.array('files'), (req, res) => {
     let files = req.files;
+    console.log(files);
+    
     let chatOwner = req.body.user
 
     // Obtain the chat title to store in the database (only need to do once for each upload)

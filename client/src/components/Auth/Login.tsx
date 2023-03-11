@@ -3,7 +3,6 @@ import axios from 'axios';
 import '../../styles/general.css';
 import './SignUp-Login.css';
 import '../../styles/form.css';
-import '../../styles/button.css';
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
 
@@ -46,7 +45,9 @@ function Login() {
 
     return (
         <div>
-            <AppTitle username={user} />
+            <div className='container'>
+                <AppTitle username={user} />
+            </div>
             <div id="form-container" className='flex-col'>
                 <h2 className='main-sage-text'>Log in</h2>
                 <form onSubmit={submitForm} className='flex-col regular-spacing'>

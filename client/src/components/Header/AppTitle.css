@@ -1,12 +1,13 @@
 #app-name {
     margin: 0;
-    width: auto;
-    padding: 50px 0 0 40px;
-    /* height: 58px; */
-
-    /* font-family: 'Inter'; */
+    padding: 20px 20px;
     font-weight: 800;
     font-size: 36px;
-    line-height: 0px;
     color: #FFFFFF;
+}
+
+@media screen and (max-width: 700px){
+    #app-name {
+        font-size: 28px;
+    }
 }
