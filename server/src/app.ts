@@ -103,7 +103,8 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                     let conversationsMap = message.splitConversationsByDay(messages);
 
                     conversationsMap.forEach(async (conversation, date) => {
-                        let conversationId = await db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
+                        let conversationId = await db.addConversation(connection, req, res, chatId,
+                            date, JSON.stringify(conversation), messages.length)
                         console.log("Conversation ID: " + conversationId);
                     })
 

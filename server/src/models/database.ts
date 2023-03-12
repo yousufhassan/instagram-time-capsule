@@ -210,7 +210,7 @@ export class database {
     }
 
     async addConversation(connection, req, res, chatId: number,
-        date: string, conversation: string): Promise<number> {
+        date: string, conversation: string, numMessages: number): Promise<number> {
         /**
          * Note: This conversation should not already exist in the database. There are two cases:
          * 
@@ -222,8 +222,8 @@ export class database {
          */
 
         return new Promise(async function (resolve, reject) {
-            const addConversationSQL = "INSERT INTO Conversations(chat_id, conversation_date, messages) VALUES (?,?,?)";
-            const addConversationQuery = mysql.format(addConversationSQL, [chatId, date, conversation]);
+            const addConversationSQL = "INSERT INTO Conversations(chat_id, conversation_date, messages, num_messages) VALUES (?,?,?,?)";
+            const addConversationQuery = mysql.format(addConversationSQL, [chatId, date, conversation, numMessages]);
             await connection.query(addConversationQuery, async (err, result) => {
                 if (err) return reject(err);
 
@@ -231,5 +231,13 @@ export class database {
                 return resolve(result.insertId);
             })
         })
+    }
+
+    async getAllChats(req, res) {
+        this.con.getConnection(function (err, connection) {
+            if (err) throw err;
+
+
+        });
     }
 }
