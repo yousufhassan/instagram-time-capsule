@@ -5,7 +5,7 @@ import './UploadFile.css';
 // import { Link, useNavigate } from "react-router-dom";
 
 
-function UploadFile() {
+function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
     // alert('asdf')
     const user = JSON.parse(localStorage.getItem("user")!);
     const [files, setFiles] = useState<any[]>([]);
@@ -27,6 +27,7 @@ function UploadFile() {
             { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 console.log(response)
+                chatDataCallback(response.data)
                 setFiles([]);
                 setFilesSelected(false);
                 // Use the below line of code instead if button is disabling too quick

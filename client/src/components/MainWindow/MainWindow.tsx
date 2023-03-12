@@ -7,6 +7,11 @@ import UploadFile from '../UploadFile/UploadFile';
 
 
 function MainWindow() {
+
+    const fileUploadCallback = (chatData: JSON) => {
+        console.log(chatData);
+    }
+    
     return (
         <div>
             <div id="main-container" className='flex-row'>
@@ -20,7 +25,7 @@ function MainWindow() {
                         <div className='conversation-item'>item</div>
                     </div>
                     <div id="conversation-footer">
-                        <UploadFile />
+                        <UploadFile chatDataCallback={fileUploadCallback}/>
                     </div>
                 </div>
                 <div id="chat-panel" className='flex-col light-grey-bg'>
