@@ -54,6 +54,10 @@ app.listen(port, () => {            //server starts listening for any attempts f
 // Database Playground
 // db.connectToDB();
 
+app.get("/getAllChats", async (req, res) => {
+    db.getAllChats(req, res);
+})
+
 
 const storage = multer.diskStorage(
     {
