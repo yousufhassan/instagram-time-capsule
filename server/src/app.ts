@@ -69,7 +69,7 @@ const upload = multer({ storage: storage });
 app.post("/uploadFiles", upload.array('files'), (req, res) => {
     let files = req.files;
     let chatOwner = req.body.user
-    
+
 
     // Obtain the chat title to store in the database (only need to do once for each upload)
     let chatData = require(files[0].path)
@@ -94,9 +94,12 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
             }).then(async function (chatId) {
                 // Get all conversations from this file upload and store in the database
                 console.log("Chat ID: " + chatId);
+                let numMessages = 0;  // Tracks how many messages were sent in this chat
+
                 files.forEach(async file => {
                     let chatData = require(file.path)
                     let messages = message.getAllMessages(chatData);
+                    numMessages += messages.length;
                     let conversationsMap = message.splitConversationsByDay(messages);
 
                     conversationsMap.forEach(async (conversation, date) => {
@@ -105,10 +108,12 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                     })
 
                     // Delete file from server
-                    await unlinkAsync(file.path)
-                    res.json({chatTitle: chatTitle, numMessages: 820})
+                    await unlinkAsync(file.path);
+
                     // res.send()
-                });
+                })
+                // console.log("first: " + numMessages);
+                res.json({ chatTitle: chatTitle, numMessages: numMessages });
             })
     })
 })
