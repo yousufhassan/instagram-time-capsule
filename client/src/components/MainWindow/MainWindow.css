@@ -34,3 +34,42 @@
     padding: 12px;
     flex: 7;
 }
+
+.chat-item-container {
+    padding: 10px;
+}
+
+.chat-item-container:hover {
+    cursor: pointer;
+    background-color: #4A414A;
+}
+
+.chat-item-img {
+    font-weight: 200;
+    margin-right: 4px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* background-color: #512C2C; */
+}
+
+.chat-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 4px 4px 8px;
+}
+
+.chat-item-details h3 {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.chat-item-details p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 100;
+    padding: 4px 0;
+}
