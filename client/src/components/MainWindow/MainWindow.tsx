@@ -13,7 +13,7 @@ function ChatItem({ chatTitle, numMessages }: { chatTitle: string, numMessages: 
     return (
         <div>
             <div className="flex-row center chat-item-container">
-                <span className='flex-row center chat-item-img' style={{backgroundColor: bgColor}}>
+                <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
                 </span>
                 <div className="chat-item-details">
                     <h3 className='no-margin white-text'>{chatTitle}</h3>
@@ -25,13 +25,27 @@ function ChatItem({ chatTitle, numMessages }: { chatTitle: string, numMessages: 
 }
 
 function MainWindow() {
-    const [chatList, setChatList] = useState([]);
+    const initializeChatList = (): JSX.Element[] => {
+        // Make get request to get an array of all chats that this user has
 
-    const fileUploadCallback = (chatData: { chatTitle: string, numMessages: number }) => {
+        // Call setChatList and set it to this array
+
+        // temp code
+        let chatList = [];
+        chatList.push(<ChatItem chatTitle='Jim Halpert' numMessages={3209} />)
+        chatList.push(<ChatItem chatTitle='Pam Beesly' numMessages={850} />)
+        return chatList
+    }
+
+    const addChatToChatList = (chatData: { chatTitle: string, numMessages: number }) => {
         // console.log(chatData.chatTitle);
         // let newChat = <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} />
         // setNewChat(chatData);
     }
+
+    const initialChatList = initializeChatList()
+    const [chatList, setChatList] = useState(initialChatList);
+
 
     return (
         <div>
@@ -41,16 +55,12 @@ function MainWindow() {
                         <h3 className='light-grey-text'>Conversations</h3>
                     </div>
                     <div id="conversation-list">
-                        {/* <ul> */}
-                        <ChatItem chatTitle='Jim Halpert' numMessages={3209} />
-                        <ChatItem chatTitle='Pam Beesly' numMessages={850} />
-                        {/* <li>item1</li> */}
-                        {/* <li>item2</li> */}
-                        {/* <li>item3</li> */}
-                        {/* </ul> */}
+                        <ul>
+                            {chatList}
+                        </ul>
                     </div>
                     <div id="conversation-footer">
-                        <UploadFile chatDataCallback={fileUploadCallback} />
+                        <UploadFile chatDataCallback={addChatToChatList} />
                     </div>
                 </div>
                 <div id="chat-panel" className='flex-col light-grey-bg'>

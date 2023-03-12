@@ -22,6 +22,12 @@
     font-weight: lighter;
 }
 
+#conversation-list ul {
+    margin: 0;
+    /* list-style: none; */
+    padding: 0;
+}
+
 #conversation-footer {
     /* background: #432343; */
     margin-top: auto;
@@ -36,12 +42,16 @@
 }
 
 .chat-item-container {
-    padding: 10px;
+    padding: 10px 10px 10px 18px;
 }
 
 .chat-item-container:hover {
     cursor: pointer;
     background-color: #4A414A;
+}
+
+.chat-item-container:first-of-type {
+    padding-top: 14px;
 }
 
 .chat-item-img {
