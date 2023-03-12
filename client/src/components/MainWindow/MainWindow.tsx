@@ -8,12 +8,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-function ChatItem({ chatId, chatTitle, numMessages }: { chatId: number, chatTitle: string, numMessages: number }) {
+function ChatItem({chatTitle, numMessages }: {chatTitle: string, numMessages: number }) {
     const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];
     const bgColor = colors[Math.floor(Math.random() * colors.length)];
     return (
         <div>
-            <li key={chatId}>
                 <div className="flex-row center chat-item-container">
                     <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
                     </span>
@@ -22,40 +21,42 @@ function ChatItem({ chatId, chatTitle, numMessages }: { chatId: number, chatTitl
                         <p className='thin white-text'>{numMessages} messages</p>
                     </div>
                 </div>
-            </li>
         </div>
     )
 }
 
 function MainWindow() {
-    useEffect(() => {
-        initializeChatList();
-    }, [])
+    const [chatList, setChatList] = useState(Array<JSX.Element>);
+    const [firstRender, setFirstRender] = useState(true)
 
-    const initializeChatList = () => {
-        // Make get request to get an array of all chats that this user has
+    const initializeChatList = async () => {
+
         axios.get('http://localhost:8000/getAllChats')
             .then(response => {
-                let initialChatList = new Array<JSX.Element>();
-                response.data.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
-                    initialChatList.push(<ChatItem chatId={chat.chat_id} chatTitle={chat.title} numMessages={chat.num_messages} />)
-                });
-                
-                setChatList(initialChatList)
+                const initalChatList: Array<JSX.Element> = (response.data).map((chatData: { chat_id: number, title: string, numMessages: number }) =>
+                    <li key={chatData.chat_id}>
+                        <ChatItem chatTitle={chatData.title} numMessages={chatData.numMessages} />
+                    </li>
+                )
+                console.log(initalChatList);
+                setChatList(initalChatList);
+                // return initalChatList;
             })
-            .catch(function (error) {
-                console.log(error);
-            })
+        console.log("reached");
     }
+
+    if (firstRender) {
+        console.log("first render");
+        setFirstRender(false)
+        initializeChatList();
+    }
+
 
     const addChatToChatList = (chatData: { chatTitle: string, numMessages: number }) => {
         // console.log(chatData.chatTitle);
         // let newChat = <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} />
         // setNewChat(chatData);
     }
-
-    const [chatList, setChatList] = useState(Array<JSX.Element>);
-
 
     return (
         <div>
