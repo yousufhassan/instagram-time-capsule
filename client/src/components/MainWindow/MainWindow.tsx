@@ -4,37 +4,48 @@ import '../../styles/general.css';
 import './MainWindow.css';
 // import './Home.css';
 import UploadFile from '../UploadFile/UploadFile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 
-function ChatItem({ chatTitle, numMessages }: { chatTitle: string, numMessages: number }) {
+function ChatItem({ chatId, chatTitle, numMessages }: { chatId: number, chatTitle: string, numMessages: number }) {
     const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];
     const bgColor = colors[Math.floor(Math.random() * colors.length)];
     return (
         <div>
-            <div className="flex-row center chat-item-container">
-                <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
-                </span>
-                <div className="chat-item-details">
-                    <h3 className='no-margin white-text'>{chatTitle}</h3>
-                    <p className='thin white-text'>{numMessages} messages</p>
+            <li key={chatId}>
+                <div className="flex-row center chat-item-container">
+                    <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
+                    </span>
+                    <div className="chat-item-details">
+                        <h3 className='no-margin white-text'>{chatTitle}</h3>
+                        <p className='thin white-text'>{numMessages} messages</p>
+                    </div>
                 </div>
-            </div>
+            </li>
         </div>
     )
 }
 
 function MainWindow() {
-    const initializeChatList = (): JSX.Element[] => {
+    useEffect(() => {
+        initializeChatList();
+    }, [])
+
+    const initializeChatList = () => {
         // Make get request to get an array of all chats that this user has
-
-        // Call setChatList and set it to this array
-
-        // temp code
-        let chatList = [];
-        chatList.push(<ChatItem chatTitle='Jim Halpert' numMessages={3209} />)
-        chatList.push(<ChatItem chatTitle='Pam Beesly' numMessages={850} />)
-        return chatList
+        axios.get('http://localhost:8000/getAllChats')
+            .then(response => {
+                let initialChatList = new Array<JSX.Element>();
+                response.data.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
+                    initialChatList.push(<ChatItem chatId={chat.chat_id} chatTitle={chat.title} numMessages={chat.num_messages} />)
+                });
+                
+                setChatList(initialChatList)
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
 
     const addChatToChatList = (chatData: { chatTitle: string, numMessages: number }) => {
@@ -43,8 +54,7 @@ function MainWindow() {
         // setNewChat(chatData);
     }
 
-    const initialChatList = initializeChatList()
-    const [chatList, setChatList] = useState(initialChatList);
+    const [chatList, setChatList] = useState(Array<JSX.Element>);
 
 
     return (
