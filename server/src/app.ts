@@ -62,8 +62,12 @@ app.post("/getAllChats", (req, res) => {
                 return userId;
             })
             .then(async function (userId) {
-                db.getAllUserChats(connection, req, res, userId);
+                console.log("woohoo");
+                res.send("woohoo");
+
+                // db.getAllUserChats(connection, req, res, userId);
             })
+        connection.release();
     })
 })
 
@@ -127,8 +131,10 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                     // res.send()
                 })
                 // console.log("first: " + numMessages);
-                res.json({ chatTitle: chatTitle, numMessages: numMessages });
+                res.json({ chatId: chatId, chatTitle: chatTitle, numMessages: numMessages });
             })
+        connection.release();
+
     })
 })
 

@@ -75,6 +75,7 @@ export class database {
                     })
                 }
             })
+            connection.release();
         })
     }
 
@@ -117,6 +118,7 @@ export class database {
                     } //end of bcrypt.compare()
                 }//end of User exists i.e. results.length==0
             }) //end of connection.query()
+            connection.release();
         }) //end of db.connection()
     } //end of app.post()
 

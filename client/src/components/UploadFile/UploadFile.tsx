@@ -30,8 +30,6 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
                 chatDataCallback(response.data)
                 setFiles([]);
                 setFilesSelected(false);
-                
-
                 // Use the below line of code instead if button is disabling too quick
                 // setTimeout(() => { setFilesSelected(false) }, 2000)
             })

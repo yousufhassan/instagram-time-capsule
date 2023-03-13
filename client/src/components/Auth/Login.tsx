@@ -27,7 +27,6 @@ function Login() {
     const initializeChatList = async () => {
         axios.post('http://localhost:8000/getAllChats', { username })
             .then(response => {
-                console.log("hellooooo");
                 localStorage.setItem('chatList', JSON.stringify(response.data))
             })
             .catch(function (error) {
