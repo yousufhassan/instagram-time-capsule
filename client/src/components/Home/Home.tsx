@@ -9,6 +9,7 @@ import MainWindow from '../MainWindow/MainWindow';
 function Home() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user")!);
+    const chatList = JSON.parse(localStorage.getItem("chatList")!);
 
     const handleLogout = () => {
         localStorage.clear();
@@ -25,7 +26,7 @@ function Home() {
                     <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
                 </div>
                 <div id='container' className='flex-row center'>
-                    <MainWindow />
+                    <MainWindow rawChatList={chatList}/>
                     {/* ConversationPanel Component */}
                     {/* ChatPanel Component */}
                 </div>

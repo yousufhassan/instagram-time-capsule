@@ -8,49 +8,65 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-function ChatItem({chatTitle, numMessages }: {chatTitle: string, numMessages: number }) {
+function ChatItem({ chatTitle, numMessages }: { chatTitle: string, numMessages: number }) {
     const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];
     const bgColor = colors[Math.floor(Math.random() * colors.length)];
     return (
         <div>
-                <div className="flex-row center chat-item-container">
-                    <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
-                    </span>
-                    <div className="chat-item-details">
-                        <h3 className='no-margin white-text'>{chatTitle}</h3>
-                        <p className='thin white-text'>{numMessages} messages</p>
-                    </div>
+            <div className="flex-row center chat-item-container">
+                <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
+                </span>
+                <div className="chat-item-details">
+                    <h3 className='no-margin white-text'>{chatTitle}</h3>
+                    <p className='thin white-text'>{numMessages} messages</p>
                 </div>
+            </div>
         </div>
     )
 }
 
-function MainWindow() {
-    const [chatList, setChatList] = useState(Array<JSX.Element>);
-    const [firstRender, setFirstRender] = useState(true)
+function MainWindow({ rawChatList }: { rawChatList: any }) {
+    // const [chatList, setChatList] = useState(() => {
 
-    const initializeChatList = async () => {
+    //     const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
+    //         <li key={chatData.chat_id}>
+    //             <ChatItem chatTitle={chatData.title} numMessages={chatData.num_messages} />
+    //         </li>
+    //     )
+    //     return initalChatList;
+    // });
 
-        axios.get('http://localhost:8000/getAllChats')
-            .then(response => {
-                const initalChatList: Array<JSX.Element> = (response.data).map((chatData: { chat_id: number, title: string, numMessages: number }) =>
-                    <li key={chatData.chat_id}>
-                        <ChatItem chatTitle={chatData.title} numMessages={chatData.numMessages} />
-                    </li>
-                )
-                console.log(initalChatList);
-                setChatList(initalChatList);
-                // return initalChatList;
-            })
-        console.log("reached");
-    }
 
-    if (firstRender) {
-        console.log("first render");
-        setFirstRender(false)
-        initializeChatList();
-    }
+    // const [chatList, setChatList] = useState(() => {
 
+    //     const initalChatList = new Array<JSX.Element>();
+    //     rawChatList.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
+    //         initalChatList.push(
+    //             <li key={chat.chat_id}>
+    //                 <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} />
+    //             </li>)
+    //     });
+
+    //     // const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
+    //     // <li key={chatData.chat_id}>
+    //     //     <ChatItem chatTitle={chatData.title} numMessages={chatData.num_messages} />
+    //     // </li>
+    //     // )
+    //     return initalChatList;
+    // });
+
+
+
+    const [chatList, setChatList] = useState(Array<JSX.Element>());
+
+    useEffect(() => {
+        const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
+            <li key={chatData.chat_id}>
+                <ChatItem chatTitle={chatData.title} numMessages={chatData.num_messages} />
+            </li>
+        )
+        setChatList(initalChatList)
+    }, [])
 
     const addChatToChatList = (chatData: { chatTitle: string, numMessages: number }) => {
         // console.log(chatData.chatTitle);
