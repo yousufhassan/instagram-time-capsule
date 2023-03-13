@@ -26,20 +26,17 @@ function ChatItem({ chatTitle, numMessages, bgColor }: { chatTitle: string, numM
 function MainWindow() {
     const [chatList, setChatList] = useState(Array<JSX.Element>());
     const user = JSON.parse(localStorage.getItem("user")!);
-    const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];  // Set of colors for chat img
 
     const initializeChatList = async () => {
         let username = user.username;
         axios.post('http://localhost:8000/getAllChats', { username })
             .then(response => {
-                // localStorage.setItem('chatList', JSON.stringify(response.data))
                 let initialChatList = new Array<JSX.Element>();
                 let rawChatList = response.data;
-                rawChatList.map((chat: { chat_id: number, title: string, num_messages: number }) => {
-                    let bgColor = colors[Math.floor(Math.random() * colors.length)];
+                rawChatList.map((chat: { chat_id: number, title: string, num_messages: number, bg_color: string }) => {
                     initialChatList.push(
                         <li key={chat.chat_id}>
-                            <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} bgColor={bgColor} />
+                            <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} bgColor={chat.bg_color} />
                         </li>
                     )
                 })
@@ -55,22 +52,26 @@ function MainWindow() {
         initializeChatList();
     }, [])
 
-    const addChatToChatList = (chatData: { chatId: number, chatTitle: string, numMessages: number }) => {
+    const addChatToChatList = (chatData: { chatId: number, chatTitle: string, numMessages: number, bgColor: string }) => {
         // Creating new ChatItem component
-        let bgColor = colors[Math.floor(Math.random() * colors.length)];
-        let newChat = <li key={chatData.chatId}> <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} bgColor={bgColor} /></li>
+        // let bgColor = colors[Math.floor(Math.random() * colors.length)];
+        console.log(chatData.bgColor);
+        
+        let newChat = <li key={chatData.chatId}> <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} bgColor={chatData.bgColor} /></li>
 
         let replaceIdx = -1;  // Index of existing chat to replace in chatList
 
         // Find if chat with this title already exists in chatList
         for (let i = 0; i < chatList.length; i++) {
+            setTimeout(() => {}, 1000)
+            console.log(chatList[i].props.children.props.chatTitle);
             const chatTitle = chatList[i].props.children.props.chatTitle;
             if (chatTitle === chatData.chatTitle) {
                 replaceIdx = i;
             }
         }
 
-        if (replaceIdx == -1) {
+        if (replaceIdx === -1) {
             // Chat did not already exist, so append it to chatList
             setChatList([...chatList, newChat]);
         }

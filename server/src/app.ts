@@ -108,7 +108,9 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
             }).then(async function (chatOwnerId) {
                 // Add this chat to the database
                 return db.addChat(connection, req, res, chatOwnerId, chatTitle);
-            }).then(async function (chatId) {
+            }).then(async function (chatIdAndColor) {
+                let chatId = chatIdAndColor[0];
+                let bgColor = chatIdAndColor[1];
                 // Get all conversations from this file upload and store in the database
                 console.log("Chat ID: " + chatId);
                 let numMessages = 0;  // Tracks how many messages were sent in this chat
@@ -131,7 +133,7 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                     // res.send()
                 })
                 // console.log("first: " + numMessages);
-                res.json({ chatId: chatId, chatTitle: chatTitle, numMessages: numMessages });
+                res.json({ chatId: chatId, chatTitle: chatTitle, numMessages: numMessages, bgColor: bgColor });
             })
         connection.release();
 

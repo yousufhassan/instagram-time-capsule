@@ -194,17 +194,18 @@ export class database {
      * @return {Promise<number>} Returns a promise that resolves with the ID of the newly inserted chat.
      * @throws {Error} If there is an error during the database query.
 */
-    async addChat(connection, req, res, chatOwnerID: number, chatTitle: string): Promise<number> {
+    async addChat(connection, req, res, chatOwnerID: number, chatTitle: string): Promise<any[]> {
         return new Promise(async function (resolve, reject) {
-            const addChatSQL = "INSERT INTO Chats(chat_owner_id, title) VALUES (?,?)";
-            const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle]);
+            const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];  // Set of colors for chat img
+            let bgColor = colors[Math.floor(Math.random() * colors.length)];
+
+            const addChatSQL = "INSERT INTO Chats(chat_owner_id, title, bg_color) VALUES (?,?,?)";
+            const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle, bgColor]);
             await connection.query(addChatQuery, async (err, result) => {
                 if (err) return reject(err);
 
-                // TODO: Figure out what status to send
-                // console.log(result);
                 console.log("-- Added new chat --");
-                return resolve(result.insertId);
+                return resolve([result.insertId, bgColor]);
             })
         })
     }
@@ -234,7 +235,7 @@ export class database {
     }
 
     async getAllUserChats(connection, req, res, userId: number) {
-        const getChatsQuery = `SELECT C1.chat_id, title, sum(num_messages) AS num_messages
+        const getChatsQuery = `SELECT C1.chat_id, title, sum(num_messages) AS num_messages, C1.bg_color
                                    FROM chats C1 JOIN conversations C2
                                    WHERE C1.chat_id = C2.chat_id AND
                                        C1.chat_owner_id = ?
