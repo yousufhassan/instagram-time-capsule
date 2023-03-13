@@ -26,16 +26,6 @@ function SignUp() {
         navigate('/home')
     }
 
-    // const initializeChatList = async () => {
-    //     axios.get('http://localhost:8000/getAllChats')
-    //         .then(response => {
-    //             localStorage.setItem('chatList', JSON.stringify(response.data))
-    //         })
-    //         .catch(function (error) {
-    //             console.log("Error: " + error);
-    //         })
-    // }
-
 
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -46,7 +36,6 @@ function SignUp() {
                 // console.log(response.data);
                 // var user = response.data;
                 localStorage.setItem('user', JSON.stringify(response.data));
-                // await initializeChatList();
                 navigate('/home')
             })
             .catch(function (error) {

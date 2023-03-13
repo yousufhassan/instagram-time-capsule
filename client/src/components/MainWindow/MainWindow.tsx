@@ -8,9 +8,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 
-function ChatItem({ chatId, chatTitle, numMessages }: { chatId: number, chatTitle: string, numMessages: number }) {
-    const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];
-    const bgColor = colors[Math.floor(Math.random() * colors.length)];
+function ChatItem({ chatTitle, numMessages, bgColor }: { chatTitle: string, numMessages: number, bgColor: string }) {
     return (
         <div>
             <div className="flex-row center chat-item-container">
@@ -28,14 +26,7 @@ function ChatItem({ chatId, chatTitle, numMessages }: { chatId: number, chatTitl
 function MainWindow() {
     const [chatList, setChatList] = useState(Array<JSX.Element>());
     const user = JSON.parse(localStorage.getItem("user")!);
-
-    // useEffect(() => {
-    //     const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
-    //             <ChatItem chatId={chatData.chat_id} chatTitle={chatData.title} numMessages={chatData.num_messages} />
-    //     )
-    //     setChatList(initalChatList)
-    // }, [])
-    // TODO: sdafsdaf
+    const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];  // Set of colors for chat img
 
     const initializeChatList = async () => {
         let username = user.username;
@@ -43,13 +34,24 @@ function MainWindow() {
             .then(response => {
                 // localStorage.setItem('chatList', JSON.stringify(response.data))
                 let initialChatList = new Array<JSX.Element>();
-                response.data.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
+                let rawChatList = response.data;
+                rawChatList.map((chat: { chat_id: number, title: string, num_messages: number }) => {
+                    let bgColor = colors[Math.floor(Math.random() * colors.length)];
                     initialChatList.push(
                         <li key={chat.chat_id}>
-                            <ChatItem chatId={chat.chat_id} chatTitle={chat.title} numMessages={chat.num_messages} />
+                            <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} bgColor={bgColor} />
                         </li>
                     )
-                });
+                })
+
+                // response.data.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
+                //     let bgColor = colors[Math.floor(Math.random() * colors.length)];
+                //     initialChatList.push(
+                //         <li key={chat.chat_id}>
+                //             <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} bgColor={bgColor} />
+                //         </li>
+                //     )
+                // });
 
                 setChatList(initialChatList)
             })
@@ -63,15 +65,12 @@ function MainWindow() {
     }, [])
 
     const addChatToChatList = (chatData: { chatId: number, chatTitle: string, numMessages: number }) => {
-        console.log(chatData);
-        let currentChatList = chatList;
-        console.log(currentChatList);
-
-        let newChat = <li key={chatData.chatId}> <ChatItem chatId={chatData.chatId} chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} /></li>
-        currentChatList.push(newChat.props)
-        setChatList(currentChatList);
-        console.log(chatList);
-        window.location.reload();
+        // let currentChatList = chatList;
+        let bgColor = colors[Math.floor(Math.random() * colors.length)];
+        let newChat = <li key={chatData.chatId}> <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} bgColor={bgColor} /></li>
+        // currentChatList.push(newChat.props)
+        setChatList([...chatList, newChat]);
+        // window.location.reload();
     }
 
     return (
@@ -84,6 +83,7 @@ function MainWindow() {
                     <div id="conversation-list">
                         <ul>
                             {chatList}
+                            {/* {chatList.map(chat => <div>{chat}</div>)} */}
                         </ul>
                     </div>
                     <div id="conversation-footer">
