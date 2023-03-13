@@ -116,10 +116,10 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                 files.forEach(async file => {
                     let chatData = require(file.path)
                     let messages = message.getAllMessages(chatData);
-                    numMessages += messages.length;
                     let conversationsMap = message.splitConversationsByDay(messages);
-
+                    
                     conversationsMap.forEach(async (conversation, date) => {
+                        numMessages += messages.length;
                         let conversationId = await db.addConversation(connection, req, res, chatId,
                             date, JSON.stringify(conversation), messages.length)
                         console.log("Conversation ID: " + conversationId);

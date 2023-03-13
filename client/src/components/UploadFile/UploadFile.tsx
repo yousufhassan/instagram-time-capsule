@@ -27,6 +27,8 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
             { headers: { 'Content-Type': 'multipart/form-data' } })
             .then((response) => {
                 console.log(response)
+                console.log(response.data);
+                
                 chatDataCallback(response.data)
                 setFiles([]);
                 setFilesSelected(false);

@@ -5,7 +5,6 @@ import './Home.css';
 import { useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
 import MainWindow from '../MainWindow/MainWindow';
-import { useEffect, useState } from 'react';
 
 function Home() {
     const navigate = useNavigate();
