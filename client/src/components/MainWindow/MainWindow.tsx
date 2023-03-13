@@ -39,9 +39,10 @@ function MainWindow({ rawChatList }: { rawChatList: any }) {
     }, [])
     
     const addChatToChatList = (chatData: { chatTitle: string, numMessages: number }) => {
-        // console.log(chatData.chatTitle);
-        // let newChat = <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} />
-        // setNewChat(chatData);
+        let currentChatList = chatList;
+        let newChat = <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} />
+        currentChatList.push(newChat)
+        setChatList(currentChatList);
     }
 
     return (
