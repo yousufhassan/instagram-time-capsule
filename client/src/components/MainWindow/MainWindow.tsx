@@ -26,48 +26,18 @@ function ChatItem({ chatTitle, numMessages }: { chatTitle: string, numMessages: 
 }
 
 function MainWindow({ rawChatList }: { rawChatList: any }) {
-    // const [chatList, setChatList] = useState(() => {
-
-    //     const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
-    //         <li key={chatData.chat_id}>
-    //             <ChatItem chatTitle={chatData.title} numMessages={chatData.num_messages} />
-    //         </li>
-    //     )
-    //     return initalChatList;
-    // });
-
-
-    // const [chatList, setChatList] = useState(() => {
-
-    //     const initalChatList = new Array<JSX.Element>();
-    //     rawChatList.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
-    //         initalChatList.push(
-    //             <li key={chat.chat_id}>
-    //                 <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} />
-    //             </li>)
-    //     });
-
-    //     // const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
-    //     // <li key={chatData.chat_id}>
-    //     //     <ChatItem chatTitle={chatData.title} numMessages={chatData.num_messages} />
-    //     // </li>
-    //     // )
-    //     return initalChatList;
-    // });
-
-
-
     const [chatList, setChatList] = useState(Array<JSX.Element>());
-
+    
+    
     useEffect(() => {
         const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
-            <li key={chatData.chat_id}>
+        <li key={chatData.chat_id}>
                 <ChatItem chatTitle={chatData.title} numMessages={chatData.num_messages} />
             </li>
         )
         setChatList(initalChatList)
     }, [])
-
+    
     const addChatToChatList = (chatData: { chatTitle: string, numMessages: number }) => {
         // console.log(chatData.chatTitle);
         // let newChat = <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} />

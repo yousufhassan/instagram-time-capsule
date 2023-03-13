@@ -37,7 +37,7 @@ function Login() {
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         axios.post('http://localhost:8000/login', { username, password })
-            .then(async (response) => {
+            .then(async(response) => {
                 // console.log(response)
                 if (response.data === "Password incorrect!") {
                     alert("Incorrect password given.")
