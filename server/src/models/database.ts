@@ -242,8 +242,26 @@ export class database {
                                    GROUP BY C1.chat_id`
         const getChatsSQL = mysql.format(getChatsQuery, [userId])
         await connection.query(getChatsSQL, async (err, result) => {
+            if (err) throw (err);
             console.log(result);
             res.json(result)
         })
     }
+
+
+    async getConversationOnDate(connection, req, res, date: string) {
+        const getConversationQuery = `SELECT messages
+                                      FROM conversations
+                                      WHERE conversation_date = ?`;
+        const getConversationSQL = mysql.format(getConversationQuery, [date]);
+        await connection.query(getConversationSQL, async (err, result) => {
+            if (err) throw (err);
+
+            console.log(result[0].messages);
+
+            res.json(JSON.parse(result[0].messages))
+            
+        })
+    }
+
 }

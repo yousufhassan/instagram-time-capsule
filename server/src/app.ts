@@ -54,22 +54,12 @@ app.listen(port, () => {            //server starts listening for any attempts f
 // Database Playground
 // db.connectToDB();
 
-app.get("/temp", (req, res) => {
-    let chatData = require('../original-data/original-files/message_1.json');
-    let messages = message.getAllMessages(chatData);
-    // console.log(messages);
-
-
-    let conversationsMap = message.splitConversationsByDay(messages);
-    let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
-    console.log(temp);
-
-    res.json({
-        messagesLen: messages.length,
-        numConversations: conversationsMap.size,
-        dayConversationLen: temp.length
+app.post("/getConversationOnDate", (req, res) => {
+    let date = req.body.date;
+    db.con.getConnection(async function (err, connection) {
+        db.getConversationOnDate(connection, req, res, date)
+        connection.release();
     })
-
 })
 
 app.post("/getAllChats", (req, res) => {
