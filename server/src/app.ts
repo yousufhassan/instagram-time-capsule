@@ -54,6 +54,24 @@ app.listen(port, () => {            //server starts listening for any attempts f
 // Database Playground
 // db.connectToDB();
 
+app.get("/temp", (req, res) => {
+    let chatData = require('../original-data/original-files/message_1.json');
+    let messages = message.getAllMessages(chatData);
+    // console.log(messages);
+
+
+    let conversationsMap = message.splitConversationsByDay(messages);
+    let temp = message.getConversationByDate(conversationsMap, "2023-01-16")
+    console.log(temp);
+
+    res.json({
+        messagesLen: messages.length,
+        numConversations: conversationsMap.size,
+        dayConversationLen: temp.length
+    })
+
+})
+
 app.post("/getAllChats", (req, res) => {
     let username = req.body.username  // Username of the logged in user
     db.con.getConnection(async function (err, connection) {
@@ -119,11 +137,11 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
                     let chatData = require(file.path)
                     let messages = message.getAllMessages(chatData);
                     let conversationsMap = message.splitConversationsByDay(messages);
-                    
+
                     conversationsMap.forEach(async (conversation, date) => {
-                        numMessages += messages.length;
+                        numMessages += conversation.length;
                         let conversationId = await db.addConversation(connection, req, res, chatId,
-                            date, JSON.stringify(conversation), messages.length)
+                            date, JSON.stringify(conversation), conversation.length)
                         console.log("Conversation ID: " + conversationId);
                     })
 
