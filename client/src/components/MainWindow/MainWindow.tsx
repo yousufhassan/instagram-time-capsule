@@ -87,7 +87,7 @@ function MainWindow() {
             })
             setChatList(newChatList);
         }
-        // window.location.reload();
+        window.location.reload();
     }
     // console.log(chatList[1].props.children.props.chatTitle);
 

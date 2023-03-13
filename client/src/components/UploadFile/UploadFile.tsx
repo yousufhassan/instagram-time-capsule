@@ -10,9 +10,13 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
     const user = JSON.parse(localStorage.getItem("user")!);
     const [files, setFiles] = useState<any[]>([]);
     const [filesSelected, setFilesSelected] = useState(false);
+    const [isUploadInProgress, setIsUploadInProgress] = useState(false);
 
     const uploadFiles = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // Render the loader spinner
+        setFilesSelected(false);
+        setIsUploadInProgress(true);
 
         // Add all files to a FormData object to send to server
         const data = new FormData();
@@ -32,6 +36,7 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
                 chatDataCallback(response.data)
                 setFiles([]);
                 setFilesSelected(false);
+                setIsUploadInProgress(false);
                 // Use the below line of code instead if button is disabling too quick
                 // setTimeout(() => { setFilesSelected(false) }, 2000)
             })
@@ -62,7 +67,8 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
                     <p className='no-margin'>
                         Add new conversation
                     </p>
-                    <button id='upload-btn' hidden={!filesSelected}>Upload {files.length} files</button>
+                    <button id='upload-btn' className='light-grey-bg btn' hidden={!filesSelected}>Upload {files.length} files</button>
+                    <div className="loader" hidden={!isUploadInProgress}></div>
                 </label>
                 <input type="file" id='file-upload' onChange={selectFileHandler} multiple />
             </form>
