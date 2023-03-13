@@ -54,8 +54,17 @@ app.listen(port, () => {            //server starts listening for any attempts f
 // Database Playground
 // db.connectToDB();
 
-app.get("/getAllChats", async (req, res) => {
-    db.getAllChats(req, res);
+app.post("/getAllChats", (req, res) => {
+    let username = req.body.username  // Username of the logged in user
+    db.con.getConnection(async function (err, connection) {
+        db.getUserIdFromUsername(connection, req, res, username)
+            .then(function (userId) {
+                return userId;
+            })
+            .then(async function (userId) {
+                db.getAllUserChats(connection, req, res, userId);
+            })
+    })
 })
 
 

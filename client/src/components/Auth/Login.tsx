@@ -25,8 +25,9 @@ function Login() {
     }
 
     const initializeChatList = async () => {
-        axios.get('http://localhost:8000/getAllChats')
+        axios.post('http://localhost:8000/getAllChats', { username })
             .then(response => {
+                console.log("hellooooo");
                 localStorage.setItem('chatList', JSON.stringify(response.data))
             })
             .catch(function (error) {
@@ -37,7 +38,7 @@ function Login() {
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         axios.post('http://localhost:8000/login', { username, password })
-            .then(async(response) => {
+            .then(async (response) => {
                 // console.log(response)
                 if (response.data === "Password incorrect!") {
                     alert("Incorrect password given.")
@@ -45,7 +46,10 @@ function Login() {
                 else {
                     localStorage.setItem('user', JSON.stringify(response.data));
                     await initializeChatList();
-                    navigate('/home')
+
+                    // Setting a small buffer or else chatList isn't added to localStorge
+                    // for some reason.
+                    setTimeout(() => {navigate('/home')}, 50)
                 }
             })
             .catch(function (error) {

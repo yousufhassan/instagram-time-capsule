@@ -233,20 +233,16 @@ export class database {
         })
     }
 
-    async getAllChats(req, res) {
-        this.con.getConnection(async function (err, connection) {
-            if (err) throw err;
-
-            const getChatsQuery = `select C1.chat_id, title, sum(num_messages) as num_messages
-                                   from chats C1 join conversations C2
-                                   where C2.chat_id = C1.chat_id
-                                   group by C1.chat_id`
-            const getChatsSQL = mysql.format(getChatsQuery)
-            await connection.query(getChatsSQL,async (err, result) => {
-                console.log(result);
-                res.json(result)
-            })
-
-        });
+    async getAllUserChats(connection, req, res, userId: number) {
+        const getChatsQuery = `SELECT C1.chat_id, title, sum(num_messages) AS num_messages
+                                   FROM chats C1 JOIN conversations C2
+                                   WHERE C1.chat_id = C2.chat_id AND
+                                       C1.chat_owner_id = ?
+                                   GROUP BY C1.chat_id`
+        const getChatsSQL = mysql.format(getChatsQuery, [userId])
+        await connection.query(getChatsSQL, async (err, result) => {
+            console.log(result);
+            res.json(result)
+        })
     }
 }
