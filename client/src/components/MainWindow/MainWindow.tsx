@@ -89,8 +89,6 @@ function MainWindow() {
         }
         window.location.reload();
     }
-    // console.log(chatList[1].props.children.props.chatTitle);
-
 
     return (
         <div>
