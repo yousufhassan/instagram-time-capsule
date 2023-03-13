@@ -13,36 +13,65 @@ function ChatItem({ chatId, chatTitle, numMessages }: { chatId: number, chatTitl
     const bgColor = colors[Math.floor(Math.random() * colors.length)];
     return (
         <div>
-            <li key={chatId}>
-                <div className="flex-row center chat-item-container">
-                    <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
-                    </span>
-                    <div className="chat-item-details">
-                        <h3 className='no-margin white-text'>{chatTitle}</h3>
-                        <p className='thin white-text'>{numMessages} messages</p>
-                    </div>
+            <div className="flex-row center chat-item-container">
+                <span className='flex-row center chat-item-img' style={{ backgroundColor: bgColor }}>
+                </span>
+                <div className="chat-item-details">
+                    <h3 className='no-margin white-text'>{chatTitle}</h3>
+                    <p className='thin white-text'>{numMessages} messages</p>
                 </div>
-            </li>
+            </div>
         </div>
     )
 }
 
-function MainWindow({ rawChatList }: { rawChatList: any }) {
+function MainWindow() {
     const [chatList, setChatList] = useState(Array<JSX.Element>());
-    useEffect(() => {
-        const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
-                <ChatItem chatId={chatData.chat_id} chatTitle={chatData.title} numMessages={chatData.num_messages} />
-        )
-        setChatList(initalChatList)
-    }, [])
+    const user = JSON.parse(localStorage.getItem("user")!);
+
+    // useEffect(() => {
+    //     const initalChatList: Array<JSX.Element> = rawChatList.map((chatData: { chat_id: number, title: string, num_messages: number }) =>
+    //             <ChatItem chatId={chatData.chat_id} chatTitle={chatData.title} numMessages={chatData.num_messages} />
+    //     )
+    //     setChatList(initalChatList)
+    // }, [])
     // TODO: sdafsdaf
 
+    const initializeChatList = async () => {
+        let username = user.username;
+        axios.post('http://localhost:8000/getAllChats', { username })
+            .then(response => {
+                // localStorage.setItem('chatList', JSON.stringify(response.data))
+                let initialChatList = new Array<JSX.Element>();
+                response.data.forEach((chat: { chat_id: number, title: string, num_messages: number }) => {
+                    initialChatList.push(
+                        <li key={chat.chat_id}>
+                            <ChatItem chatId={chat.chat_id} chatTitle={chat.title} numMessages={chat.num_messages} />
+                        </li>
+                    )
+                });
+
+                setChatList(initialChatList)
+            })
+            .catch(function (error) {
+                console.log("Error: " + error);
+            })
+    }
+
+    useEffect(() => {
+        initializeChatList();
+    }, [])
+
     const addChatToChatList = (chatData: { chatId: number, chatTitle: string, numMessages: number }) => {
-        let currentChatList = chatList.slice();
-        let newChat = <ChatItem chatId={chatData.chatId} chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} />
+        console.log(chatData);
+        let currentChatList = chatList;
+        console.log(currentChatList);
+
+        let newChat = <li key={chatData.chatId}> <ChatItem chatId={chatData.chatId} chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} /></li>
         currentChatList.push(newChat.props)
         setChatList(currentChatList);
         console.log(chatList);
+        window.location.reload();
     }
 
     return (

@@ -11,15 +11,15 @@ function Home() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user")!);
 
-    const [rawChatList, setRawChatList] = useState(() => {
-        return JSON.parse(localStorage.getItem("chatList")!)
-    })
+    // const [rawChatList, setRawChatList] = useState(() => {
+    //     return JSON.parse(localStorage.getItem("chatList")!)
+    // })
     
-    // For some reason rawChatList is null after user login or sign up, but a page reload
-    // will get the actual values. This is what this if statement does.
-    if (rawChatList === null) {
-        window.location.reload();
-    }
+    // // For some reason rawChatList is null after user login or sign up, but a page reload
+    // // will get the actual values. This is what this if statement does.
+    // if (rawChatList === null) {
+    //     window.location.reload();
+    // }
 
     const handleLogout = () => {
         localStorage.clear();
@@ -36,7 +36,7 @@ function Home() {
                     <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
                 </div>
                 <div id='container' className='flex-row center'>
-                    <MainWindow rawChatList={rawChatList} />
+                    <MainWindow />
                     {/* ConversationPanel Component */}
                     {/* ChatPanel Component */}
                 </div>

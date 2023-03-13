@@ -62,10 +62,10 @@ app.post("/getAllChats", (req, res) => {
                 return userId;
             })
             .then(async function (userId) {
-                console.log("woohoo");
-                res.send("woohoo");
+                // console.log("woohoo");
+                // res.send("woohoo");
 
-                // db.getAllUserChats(connection, req, res, userId);
+                db.getAllUserChats(connection, req, res, userId);
             })
         connection.release();
     })

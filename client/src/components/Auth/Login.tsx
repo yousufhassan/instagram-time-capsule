@@ -24,15 +24,15 @@ function Login() {
         navigate('/home')
     }
 
-    const initializeChatList = async () => {
-        axios.post('http://localhost:8000/getAllChats', { username })
-            .then(response => {
-                localStorage.setItem('chatList', JSON.stringify(response.data))
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-            })
-    }
+    // const initializeChatList = async () => {
+    //     axios.post('http://localhost:8000/getAllChats', { username })
+    //         .then(response => {
+    //             localStorage.setItem('chatList', JSON.stringify(response.data))
+    //         })
+    //         .catch(function (error) {
+    //             console.log("Error: " + error);
+    //         })
+    // }
 
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -44,7 +44,7 @@ function Login() {
                 }
                 else {
                     localStorage.setItem('user', JSON.stringify(response.data));
-                    await initializeChatList();
+                    // await initializeChatList();
 
                     // Setting a small buffer or else chatList isn't added to localStorge
                     // for some reason.
