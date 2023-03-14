@@ -3,6 +3,7 @@
     border-bottom: solid;
     border-color: rgba(0, 0, 0, 0.35);
     border-bottom-width: 1px;
+    /* position: absolute; */
     /* background: red; */
 }
 
@@ -19,7 +20,10 @@
 
 #conversation-footer {
     /* background: #432343; */
-    margin-top: auto;
+    /* margin-top: auto; */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     border-top: solid;
     border-color: rgba(0, 0, 0, 0.35);
     border-top-width: 1px;
