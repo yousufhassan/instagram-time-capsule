@@ -3,14 +3,20 @@
     height: calc(100vh - 220px);
     border-radius: 12px;
     overflow: hidden;
+    min-width: 600px;
 }
 
-#conversation-panel {
+#conversation-panel-container {
     position: relative;
+    /* width: 300px; */
     flex: 3;
+    min-width: 200px;
 }
 
-#chat-panel {
+#chat-panel-container {
     padding: 12px;
-    flex: 7;
+    /* width: 800px; */
+    flex: 8;
+    /* width: 400px; */
+    min-width: 600px;
 }

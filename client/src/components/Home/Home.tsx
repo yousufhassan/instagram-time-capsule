@@ -13,7 +13,7 @@ function Home() {
     // const [rawChatList, setRawChatList] = useState(() => {
     //     return JSON.parse(localStorage.getItem("chatList")!)
     // })
-    
+
     // // For some reason rawChatList is null after user login or sign up, but a page reload
     // // will get the actual values. This is what this if statement does.
     // if (rawChatList === null) {
@@ -36,8 +36,6 @@ function Home() {
                 </div>
                 <div id='container' className='flex-row center'>
                     <MainWindow />
-                    {/* ConversationPanel Component */}
-                    {/* ChatPanel Component */}
                 </div>
             </div>
         </div>
