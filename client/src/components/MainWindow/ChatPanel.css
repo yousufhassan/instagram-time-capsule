@@ -1,0 +1,48 @@
+#chat-panel-header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 51.5px;
+    border-bottom: solid;
+    border-color: rgba(0, 0, 0, 0.35);
+    border-bottom-width: 1px;
+}
+
+/* Chat Title Styles */
+.chat-title-container {
+    padding: 8px 8px 8px 36px;
+    height: 51.5px;
+}
+
+.chat-title-container h3 {
+    padding: 0;
+    margin: 0;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.chat-title-img {
+    font-weight: 200;
+    margin-right: 4px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+/* Chat Icons Styles */
+.icons-container {
+    height: 51.5px;
+    padding: 0 32px;
+}
+
+.icon {
+    margin: 0 6px;
+}
+
+
+/* Chat Area Styles */
+#chat-area {
+    position: absolute;
+    top: 51.5px;
+}

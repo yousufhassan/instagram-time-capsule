@@ -34,7 +34,7 @@ function Home() {
                     </div>
                     <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
                 </div>
-                <div id='container' className='flex-row center'>
+                <div id='main-window-container' className='flex-row center'>
                     <MainWindow />
                 </div>
             </div>

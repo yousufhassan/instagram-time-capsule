@@ -1,26 +1,31 @@
-#conversation-header {
+#conversation-panel-header {
     padding: 0px 18px 0 18px;
     border-bottom: solid;
     border-color: rgba(0, 0, 0, 0.35);
     border-bottom-width: 1px;
-    /* position: absolute; */
-    /* background: red; */
+    position: absolute;
+    width: 100%;
+    top: 0;
+
 }
 
-#conversation-header h3 {
+#conversation-panel-header h3 {
     font-size: 1rem;
     font-weight: lighter;
 }
 
+#conversation-list {
+    position: absolute;
+    top: 51.5px;
+    width: 100%;
+}
+
 #conversation-list ul {
     margin: 0;
-    /* list-style: none; */
     padding: 0;
 }
 
-#conversation-footer {
-    /* background: #432343; */
-    /* margin-top: auto; */
+#conversation-panel-footer {
     position: absolute;
     bottom: 0;
     width: 100%;

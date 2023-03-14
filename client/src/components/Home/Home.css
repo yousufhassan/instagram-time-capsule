@@ -10,7 +10,7 @@
     padding-right: 30px;
 }
 
-#container {
+#main-window-container {
     min-width: 600px;
     /* width: 20%; */
     flex: 8;

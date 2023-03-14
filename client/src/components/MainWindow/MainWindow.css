@@ -8,15 +8,12 @@
 
 #conversation-panel-container {
     position: relative;
-    /* width: 300px; */
     flex: 3;
     min-width: 200px;
 }
 
 #chat-panel-container {
-    padding: 12px;
-    /* width: 800px; */
+    position: relative;
     flex: 8;
-    /* width: 400px; */
     min-width: 600px;
 }

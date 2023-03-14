@@ -88,7 +88,7 @@ function ConversationPanel() {
 
     return (
         <div>
-            <div id="conversation-header">
+            <div id="conversation-panel-header">
                 <h3 className='light-grey-text'>Conversations</h3>
             </div>
             <div id="conversation-list">
@@ -96,7 +96,7 @@ function ConversationPanel() {
                     {chatList}
                 </ul>
             </div>
-            <div id="conversation-footer">
+            <div id="conversation-panel-footer">
                 <UploadFile chatDataCallback={addChatToChatList} />
             </div>
         </div>

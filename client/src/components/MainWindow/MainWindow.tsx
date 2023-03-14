@@ -1,6 +1,7 @@
 import '../../styles/general.css';
 import './MainWindow.css';
 import ConversationPanel from './CoversationsPanel';
+import ChatPanel from './ChatPanel';
 
 
 function MainWindow() {
@@ -13,7 +14,7 @@ function MainWindow() {
                     <ConversationPanel />
                 </div>
                 <div id="chat-panel-container" className='flex-col light-grey-bg'>
-                    chat
+                    <ChatPanel />
                 </div>
             </div>
         </div>
