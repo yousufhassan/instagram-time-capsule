@@ -29,9 +29,9 @@ function ConversationPanel({setActiveChat}:{setActiveChat: Function}) {
             .then(response => {
                 let initialChatList = new Array<JSX.Element>();
                 let rawChatList = response.data;
-                rawChatList.map((chat: { chatId: number, title: string, num_messages: number, bg_color: string }) => {
+                rawChatList.map((chat: { chat_id: number, title: string, num_messages: number, bg_color: string }) => {
                     initialChatList.push(
-                        <li key={chat.chatId} onClick={() => {setActiveChat(chat)}}>
+                        <li key={chat.chat_id} onClick={() => {setActiveChat(chat)}}>
                             <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} bgColor={chat.bg_color} />
                         </li>
                     )
@@ -50,9 +50,6 @@ function ConversationPanel({setActiveChat}:{setActiveChat: Function}) {
 
     const addChatToChatList = (chatData: { chatId: number, chatTitle: string, numMessages: number, bgColor: string }) => {
         // Creating new ChatItem component
-        // let bgColor = colors[Math.floor(Math.random() * colors.length)];
-        console.log(chatData.bgColor);
-
         let newChat = <li key={chatData.chatId} onClick={() => {setActiveChat(chatData)}}> <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} bgColor={chatData.bgColor} /></li>
 
         let replaceIdx = -1;  // Index of existing chat to replace in chatList
