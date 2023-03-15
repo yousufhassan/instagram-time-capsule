@@ -196,7 +196,7 @@ export class database {
 */
     async addChat(connection, req, res, chatOwnerID: number, chatTitle: string): Promise<any[]> {
         return new Promise(async function (resolve, reject) {
-            const colors = ['#512C2C', '#586E52', '#3C4E64', '#D9D9D9'];  // Set of colors for chat img
+            const colors = ['#512C2C', '#586E52', '#3C4E64'];  // Set of colors for chat img
             let bgColor = colors[Math.floor(Math.random() * colors.length)];
 
             const addChatSQL = "INSERT INTO Chats(chat_owner_id, title, bg_color) VALUES (?,?,?)";

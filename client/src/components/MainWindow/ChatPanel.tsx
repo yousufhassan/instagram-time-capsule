@@ -16,11 +16,15 @@ function ChatTitle({ chatTitle, bgColor }: { chatTitle: string, bgColor: string 
 }
 
 
-function ChatPanel() {
+function ChatPanel({activeChat}:{activeChat: any}) {
+    if (Object.keys(activeChat).length === 0) {
+        // TODO: Display something in the chat panel to signify this
+    }
+    
     return (
         <div>
             <div id="chat-panel-header" className='flex-row space-btwn'>
-                <ChatTitle chatTitle='Maheerah' bgColor='red' />
+                <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
                 <div className="icons-container flex-row center">
                     <span className="material-symbols-outlined icon btn"> casino </span>
                     <span className="material-symbols-outlined icon btn"> info </span>
