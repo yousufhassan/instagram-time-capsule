@@ -249,18 +249,28 @@ export class database {
     }
 
 
-    async getConversationOnDate(connection, req, res, date: string) {
+    async getConversationOnDate(connection, req, res, date: string, chatId: number) {
         const getConversationQuery = `SELECT messages
                                       FROM conversations
-                                      WHERE conversation_date = ?`;
-        const getConversationSQL = mysql.format(getConversationQuery, [date]);
+                                      WHERE conversation_date = ? AND chat_id = ?`;
+        const getConversationSQL = mysql.format(getConversationQuery, [date, chatId]);
         await connection.query(getConversationSQL, async (err, result) => {
             if (err) throw (err);
+            // console.log("length: " + result.length);
 
-            console.log(result[0].messages);
+            // console.log(result);
 
-            res.json(JSON.parse(result[0].messages))
-            
+            // console.log(result[0].messages);
+            if (result.length === 0) {
+                console.log("-- No conversation found --");
+                res.json({});
+            }
+            else {
+                // assert(result.length === 1)
+                console.log("-- Conversation found --");
+                res.json(JSON.parse(result[0].messages));
+            }
+
         })
     }
 

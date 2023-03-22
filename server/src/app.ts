@@ -51,13 +51,11 @@ app.listen(port, () => {            //server starts listening for any attempts f
 // });
 
 
-// Database Playground
-// db.connectToDB();
-
 app.post("/getConversationOnDate", (req, res) => {
     let date = req.body.date;
+    let chatId = req.body.chatId;
     db.con.getConnection(async function (err, connection) {
-        db.getConversationOnDate(connection, req, res, date)
+        db.getConversationOnDate(connection, req, res, date, chatId)
         connection.release();
     })
 })

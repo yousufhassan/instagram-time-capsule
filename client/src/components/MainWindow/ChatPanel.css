@@ -45,4 +45,47 @@
 #chat-area {
     position: absolute;
     top: 51.5px;
+    padding: 8px 16px;
+    height: 600px;
+    overflow-y: auto;
 }
+
+#chat-area ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    /* background-color: red; */
+    width: 700px;
+}
+
+.no-active-chat {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.message-bubble-container {
+    font-size: 12px;
+    font-weight: 100;
+    width: fit-content;
+    padding: 8px 12px;
+    margin: 2px 0;
+    border-radius: 20px;
+    display: block;
+    max-width: 300px;
+}
+
+.error-message {
+    background-color: rgb(153, 153, 153);
+    color: red;
+}
+
+/* .friend-message {
+    
+} */
+
+.user-message {
+    /* background-color: #342E34; */
+    margin-left: auto;
+}
+

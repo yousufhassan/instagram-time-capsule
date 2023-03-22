@@ -19,9 +19,26 @@ function ChatItem({ chatTitle, numMessages, bgColor }: { chatTitle: string, numM
     )
 }
 
-function ConversationPanel({setActiveChat}:{setActiveChat: Function}) {
+function ConversationPanel({ activeChat, setActiveChat }: { activeChat: any, setActiveChat: Function }) {
     const user = JSON.parse(localStorage.getItem("user")!);
     const [chatList, setChatList] = useState(Array<JSX.Element>());
+    // console.log(activeChat);
+    // console.log(chatList);
+    
+    
+
+    const selectChat = (chatData: any) => {
+        setActiveChat(chatData);
+
+        // Below code is debugging purposes
+        // TODO: why is this chatList empty????
+        // console.log(chatList);
+        // console.log(activeChat);
+                
+        // for (let i = 0; i < chatList.length; i++) {
+        //     console.log(chatList);
+        // }
+    }
 
     const initializeChatList = async () => {
         let username = user.username;
@@ -31,7 +48,7 @@ function ConversationPanel({setActiveChat}:{setActiveChat: Function}) {
                 let rawChatList = response.data;
                 rawChatList.map((chat: { chat_id: number, title: string, num_messages: number, bg_color: string }) => {
                     initialChatList.push(
-                        <li key={chat.chat_id} onClick={() => {setActiveChat(chat)}}>
+                        <li key={chat.chat_id} onClick={() => { selectChat(chat) }}>
                             <ChatItem chatTitle={chat.title} numMessages={chat.num_messages} bgColor={chat.bg_color} />
                         </li>
                     )
@@ -50,7 +67,9 @@ function ConversationPanel({setActiveChat}:{setActiveChat: Function}) {
 
     const addChatToChatList = (chatData: { chatId: number, chatTitle: string, numMessages: number, bgColor: string }) => {
         // Creating new ChatItem component
-        let newChat = <li key={chatData.chatId} onClick={() => {setActiveChat(chatData)}}> <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} bgColor={chatData.bgColor} /></li>
+        let newChat = <li key={chatData.chatId} onClick={() => { selectChat(chatData); }}>
+            <ChatItem chatTitle={chatData.chatTitle} numMessages={chatData.numMessages} bgColor={chatData.bgColor} />
+        </li>
 
         let replaceIdx = -1;  // Index of existing chat to replace in chatList
 
