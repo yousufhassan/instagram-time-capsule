@@ -113,6 +113,9 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                         message["content"] = "Cannot load this type of message"
                         // console.log(message);
                     }
+
+                    // This block of code decodes the Facebook styled encoding to UTF-8
+                    // Solution taken from: https://stackoverflow.com/questions/54067194/convert-facebook-json-file-sequences-like-u00f0-u009f-u0098-u008a-to-emoji-char
                     else {
                         let arr: number[] = []
                         for (let i = 0; i < message["content"].length; i++) {
