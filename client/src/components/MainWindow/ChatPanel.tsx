@@ -42,7 +42,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
             if (message.content == "Cannot load this type of message") {
                 return (
                     <div>
-                        <div className='flex-row' style={{alignItems:'center', justifyContent:'left', flexDirection:'row-reverse'}}>
+                        <div className='flex-row' style={{ alignItems: 'center', justifyContent: 'left', flexDirection: 'row-reverse' }}>
                             <div className="message-bubble-container friend-message error-message">
                                 {message.content}
                             </div>
@@ -56,7 +56,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
 
                 return (
                     <div>
-                        <div className='flex-row' style={{alignItems:'center', justifyContent:'left', flexDirection:'row-reverse'}}>
+                        <div className='flex-row' style={{ alignItems: 'center', justifyContent: 'left', flexDirection: 'row-reverse' }}>
                             <div className="message-bubble-container friend-message main-sage-bg white-text">
                                 {message.content}
                             </div>
@@ -72,7 +72,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
             if (message.content == "Cannot load this type of message") {
                 return (
                     <div>
-                        <div className='flex-row' style={{alignItems:'center'}}>
+                        <div className='flex-row' style={{ alignItems: 'center' }}>
                             <div className="message-bubble-container user-message error-message">
                                 {message.content}
                             </div>
@@ -86,7 +86,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
 
                 return (
                     <div>
-                        <div className='flex-row' style={{alignItems:'center'}}>
+                        <div className='flex-row' style={{ alignItems: 'center' }}>
                             <div className="message-bubble-container user-message dark-grey-bg white-text">
                                 {message.content}
                             </div>
@@ -110,9 +110,15 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
 
 function ChatPanel({ activeChat }: { activeChat: any }) {
     const [messageList, setMessageList] = useState(Array<JSX.Element>());
+    const [selectedDate, setSelectedDate] = useState('');
 
     const displayChat = async () => {
         let date = '2022-12-30'  // TODO: get date from user input
+        let dateString = new Date(date).toLocaleString('default', {
+            month: 'short',
+            day: '2-digit', year: 'numeric'
+        })
+        setSelectedDate(dateString);
         axios.post('http://localhost:8000/getConversationOnDate', { "date": date, "chatId": activeChat.chat_id })
             .then(response => {
                 // console.log(response.data);
@@ -188,7 +194,11 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
     return (
         <div>
             <div id="chat-panel-header" className='flex-row space-btwn'>
-                <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
+                <div className='flex-row center'>
+                    <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
+                    <hr />
+                    <p style={{fontSize:'14px'}}>{selectedDate}</p>
+                </div>
                 <div className="icons-container flex-row center">
                     <span className="material-symbols-outlined icon btn"> casino </span>
                     <span className="material-symbols-outlined icon btn"> info </span>

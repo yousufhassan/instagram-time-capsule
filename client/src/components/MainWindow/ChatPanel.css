@@ -10,7 +10,7 @@
 
 /* Chat Title Styles */
 .chat-title-container {
-    padding: 8px 8px 8px 36px;
+    padding: 8px 0px 8px 36px;
     height: 51.5px;
 }
 
@@ -28,6 +28,13 @@
     height: 38px;
     border-radius: 50%;
     margin-right: 12px;
+}
+
+hr {
+    margin: 0 8px;
+    height: 20px;
+    width: 0;
+    border: 0.3px solid #342E34;
 }
 
 /* Chat Icons Styles */
@@ -79,7 +86,7 @@
     display: none;
 }
 
-.message-bubble-container:hover + .message-timestamp {
+.message-bubble-container:hover+.message-timestamp {
     font-size: 10px;
     margin: 0 6px;
     display: inline;
@@ -99,4 +106,3 @@
     /* background-color: #342E34; */
     margin-left: auto;
 }
-
