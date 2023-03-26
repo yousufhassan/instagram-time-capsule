@@ -29,14 +29,24 @@ function ChatTitle({ chatTitle, bgColor }: { chatTitle: string, bgColor: string 
  * 
  * */
 function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, message: any }) {
+    const getTimeFromUnix = (timestamp: number): string => {
+        let datetime = new Date(message['timestamp_ms']);
+        let time = datetime.toLocaleString('default', { hour: 'numeric', minute: '2-digit' });
+        return time;
+
+    }
+
     if (message) {
         // If the other (non-logged in) user sent the message
         if (activeChatTitle === message.sender_name) {
             if (message.content == "Cannot load this type of message") {
                 return (
                     <div>
-                        <div className="message-bubble-container friend-message error-message">
-                            {message.content}
+                        <div className='flex-row' style={{alignItems:'center', justifyContent:'left', flexDirection:'row-reverse'}}>
+                            <div className="message-bubble-container friend-message error-message">
+                                {message.content}
+                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 )
@@ -46,8 +56,11 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
 
                 return (
                     <div>
-                        <div className="message-bubble-container friend-message main-sage-bg white-text">
-                            {message.content}
+                        <div className='flex-row' style={{alignItems:'center', justifyContent:'left', flexDirection:'row-reverse'}}>
+                            <div className="message-bubble-container friend-message main-sage-bg white-text">
+                                {message.content}
+                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 )
@@ -59,8 +72,11 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
             if (message.content == "Cannot load this type of message") {
                 return (
                     <div>
-                        <div className="message-bubble-container user-message error-message">
-                            {message.content}
+                        <div className='flex-row' style={{alignItems:'center'}}>
+                            <div className="message-bubble-container user-message error-message">
+                                {message.content}
+                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 )
@@ -70,8 +86,11 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
 
                 return (
                     <div>
-                        <div className="message-bubble-container user-message dark-grey-bg white-text">
-                            {message.content}
+                        <div className='flex-row' style={{alignItems:'center'}}>
+                            <div className="message-bubble-container user-message dark-grey-bg white-text">
+                                {message.content}
+                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 )
@@ -93,7 +112,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
     const [messageList, setMessageList] = useState(Array<JSX.Element>());
 
     const displayChat = async () => {
-        let date = '2022-09-17'  // TODO: get date from user input
+        let date = '2022-12-30'  // TODO: get date from user input
         axios.post('http://localhost:8000/getConversationOnDate', { "date": date, "chatId": activeChat.chat_id })
             .then(response => {
                 // console.log(response.data);
@@ -123,7 +142,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                         }
                         message["content"] = Buffer.from(arr).toString("utf8");
                         console.log(message["content"]);
-                        
+
                     }
 
                     // Add message to list of messages

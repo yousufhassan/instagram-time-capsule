@@ -75,6 +75,17 @@
     max-width: 300px;
 }
 
+.message-timestamp {
+    display: none;
+}
+
+.message-bubble-container:hover + .message-timestamp {
+    font-size: 10px;
+    margin: 0 6px;
+    display: inline;
+    /* background-color: red; */
+}
+
 .error-message {
     background-color: rgb(153, 153, 153);
     color: red;

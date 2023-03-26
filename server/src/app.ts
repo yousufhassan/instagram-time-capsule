@@ -50,6 +50,16 @@ app.listen(port, () => {            //server starts listening for any attempts f
 //     message.customPrint(message1);
 // });
 
+// let chatData = require('../original-data/original-files/message_4.json');
+// let messages = message.getAllMessages(chatData);
+// // messages.forEach(message1 => {
+// //     message.customPrint(message1);
+// // });
+
+// for (let i = 1200; i >= 900; i--) {
+//     message.customPrint(messages[i]);
+// }
+
 
 app.post("/getConversationOnDate", (req, res) => {
     let date = req.body.date;
