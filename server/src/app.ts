@@ -50,9 +50,42 @@ app.listen(port, () => {            //server starts listening for any attempts f
 //     message.customPrint(message1);
 // });
 
+let chatData = require('../original-data/original-files/message_4.json');
+let messages = message.getAllMessages(chatData);
+messages.forEach(message1 => {
+    message.customPrint(message1);
+});
 
-// Database Playground
-// db.connectToDB();
+// for (let i = 1200; i >= 900; i--) {
+//     message.customPrint(messages[i]);
+// }
+
+
+app.post("/getConversationOnDate", (req, res) => {
+    let date = req.body.date;
+    let chatId = req.body.chatId;
+    db.con.getConnection(async function (err, connection) {
+        db.getConversationOnDate(connection, req, res, date, chatId)
+        connection.release();
+    })
+})
+
+app.post("/getAllChats", (req, res) => {
+    let username = req.body.username  // Username of the logged in user
+    db.con.getConnection(async function (err, connection) {
+        db.getUserIdFromUsername(connection, req, res, username)
+            .then(function (userId) {
+                return userId;
+            })
+            .then(async function (userId) {
+                // console.log("woohoo");
+                // res.send("woohoo");
+
+                db.getAllUserChats(connection, req, res, userId);
+            })
+        connection.release();
+    })
+})
 
 
 const storage = multer.diskStorage(
@@ -69,6 +102,7 @@ const upload = multer({ storage: storage });
 app.post("/uploadFiles", upload.array('files'), (req, res) => {
     let files = req.files;
     let chatOwner = req.body.user
+
 
     // Obtain the chat title to store in the database (only need to do once for each upload)
     let chatData = require(files[0].path)
@@ -90,24 +124,35 @@ app.post("/uploadFiles", upload.array('files'), (req, res) => {
             }).then(async function (chatOwnerId) {
                 // Add this chat to the database
                 return db.addChat(connection, req, res, chatOwnerId, chatTitle);
-            }).then(async function (chatId) {
+            }).then(async function (chatIdAndColor) {
+                let chatId = chatIdAndColor[0];
+                let bgColor = chatIdAndColor[1];
                 // Get all conversations from this file upload and store in the database
                 console.log("Chat ID: " + chatId);
+                let numMessages = 0;  // Tracks how many messages were sent in this chat
+
                 files.forEach(async file => {
                     let chatData = require(file.path)
                     let messages = message.getAllMessages(chatData);
                     let conversationsMap = message.splitConversationsByDay(messages);
 
                     conversationsMap.forEach(async (conversation, date) => {
-                        let conversationId = await db.addConversation(connection, req, res, chatId, date, JSON.stringify(conversation))
+                        numMessages += conversation.length;
+                        let conversationId = await db.addConversation(connection, req, res, chatId,
+                            date, JSON.stringify(conversation), conversation.length)
                         console.log("Conversation ID: " + conversationId);
                     })
 
                     // Delete file from server
-                    await unlinkAsync(file.path)
+                    await unlinkAsync(file.path);
 
-                });
+                    // res.send()
+                })
+                // console.log("first: " + numMessages);
+                res.json({ chatId: chatId, chatTitle: chatTitle, numMessages: numMessages, bgColor: bgColor });
             })
+        connection.release();
+
     })
 })
 

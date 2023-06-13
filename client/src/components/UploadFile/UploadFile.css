@@ -1,0 +1,63 @@
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    padding: 12px 12px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 100;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+#add-conversation p {
+    padding-left: 8px;
+    margin-right: 12px;
+    font-size: 12px;
+}
+
+#upload-btn {
+    margin-left: 12px;
+    border: none;
+    border-radius: 2px;
+    min-height: 22px;
+}
+
+#upload-btn:hover {
+    background-color: #bebebe;
+}
+
+#upload-btn:active {
+    background-color: #d3d3d3;
+}
+
+.loader {
+    margin-left: 10px;
+    border: 2px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 2px solid #3498db;
+    width: 20px;
+    height: 20px;
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

@@ -1,33 +1,45 @@
 // import React, { useState } from 'react';
 // import axios from 'axios';
 import '../../styles/general.css';
+import './Home.css';
 import { useNavigate } from "react-router-dom";
 import AppTitle from '../Header/AppTitle';
-import UploadFile from '../UploadFile/UploadFile';
+import MainWindow from '../MainWindow/MainWindow';
 
-function Main() {
+function Home() {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem("user")!);
+
+    // const [rawChatList, setRawChatList] = useState(() => {
+    //     return JSON.parse(localStorage.getItem("chatList")!)
+    // })
+
+    // // For some reason rawChatList is null after user login or sign up, but a page reload
+    // // will get the actual values. This is what this if statement does.
+    // if (rawChatList === null) {
+    //     window.location.reload();
+    // }
 
     const handleLogout = () => {
         localStorage.clear();
         navigate('/login');
     };
 
-
     return (
         <div>
-            <div id="header">
-                <AppTitle username={user.username} />
-                <button onClick={handleLogout}>Log out</button>
-            </div>
-            <div id="main-container">
-                <UploadFile />
-                {/* ConversationPanel Component */}
-                {/* ChatPanel Component */}
+            <div id='page-container' className='flex-col'>
+                <div id="header" className='flex-row'>
+                    <div style={{ flex: 1 }}>
+                        <AppTitle username={user.username} />
+                    </div>
+                    <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
+                </div>
+                <div id='main-window-container' className='flex-row center'>
+                    <MainWindow />
+                </div>
             </div>
         </div>
     )
 }
 
-export default Main;
+export default Home;

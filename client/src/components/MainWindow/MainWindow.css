@@ -1,0 +1,19 @@
+#main-container {
+    width: calc(100vw - 500px);
+    height: calc(100vh - 220px);
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 600px;
+}
+
+#conversation-panel-container {
+    position: relative;
+    flex: 3;
+    min-width: 200px;
+}
+
+#chat-panel-container {
+    position: relative;
+    flex: 8;
+    min-width: 600px;
+}

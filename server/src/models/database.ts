@@ -120,10 +120,6 @@ export class database {
         }) //end of db.connection()
     } //end of app.post()
 
-    async uploadData(req, res, chatOwner: string, chatTitle: string) {
-        return null
-    }
-
 
     /**
      * Get user ID from username.
@@ -198,23 +194,24 @@ export class database {
      * @return {Promise<number>} Returns a promise that resolves with the ID of the newly inserted chat.
      * @throws {Error} If there is an error during the database query.
 */
-    async addChat(connection, req, res, chatOwnerID: number, chatTitle: string): Promise<number> {
+    async addChat(connection, req, res, chatOwnerID: number, chatTitle: string): Promise<any[]> {
         return new Promise(async function (resolve, reject) {
-            const addChatSQL = "INSERT INTO Chats(chat_owner_id, title) VALUES (?,?)";
-            const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle]);
+            const colors = ['#512C2C', '#586E52', '#3C4E64'];  // Set of colors for chat img
+            let bgColor = colors[Math.floor(Math.random() * colors.length)];
+
+            const addChatSQL = "INSERT INTO Chats(chat_owner_id, title, bg_color) VALUES (?,?,?)";
+            const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle, bgColor]);
             await connection.query(addChatQuery, async (err, result) => {
                 if (err) return reject(err);
 
-                // TODO: Figure out what status to send
-                // console.log(result);
                 console.log("-- Added new chat --");
-                return resolve(result.insertId);
+                return resolve([result.insertId, bgColor]);
             })
         })
     }
 
     async addConversation(connection, req, res, chatId: number,
-        date: string, conversation: string): Promise<number> {
+        date: string, conversation: string, numMessages: number): Promise<number> {
         /**
          * Note: This conversation should not already exist in the database. There are two cases:
          * 
@@ -226,8 +223,8 @@ export class database {
          */
 
         return new Promise(async function (resolve, reject) {
-            const addConversationSQL = "INSERT INTO Conversations(chat_id, conversation_date, messages) VALUES (?,?,?)";
-            const addConversationQuery = mysql.format(addConversationSQL, [chatId, date, conversation]);
+            const addConversationSQL = "INSERT INTO Conversations(chat_id, conversation_date, messages, num_messages) VALUES (?,?,?,?)";
+            const addConversationQuery = mysql.format(addConversationSQL, [chatId, date, conversation, numMessages]);
             await connection.query(addConversationQuery, async (err, result) => {
                 if (err) return reject(err);
 
@@ -236,4 +233,45 @@ export class database {
             })
         })
     }
+
+    async getAllUserChats(connection, req, res, userId: number) {
+        const getChatsQuery = `SELECT C1.chat_id, title, sum(num_messages) AS num_messages, C1.bg_color
+                                   FROM chats C1 JOIN conversations C2
+                                   WHERE C1.chat_id = C2.chat_id AND
+                                       C1.chat_owner_id = ?
+                                   GROUP BY C1.chat_id`
+        const getChatsSQL = mysql.format(getChatsQuery, [userId])
+        await connection.query(getChatsSQL, async (err, result) => {
+            if (err) throw (err);
+            console.log(result);
+            res.json(result)
+        })
+    }
+
+
+    async getConversationOnDate(connection, req, res, date: string, chatId: number) {
+        const getConversationQuery = `SELECT messages
+                                      FROM conversations
+                                      WHERE conversation_date = ? AND chat_id = ?`;
+        const getConversationSQL = mysql.format(getConversationQuery, [date, chatId]);
+        await connection.query(getConversationSQL, async (err, result) => {
+            if (err) throw (err);
+            // console.log("length: " + result.length);
+
+            // console.log(result);
+
+            // console.log(result[0].messages);
+            if (result.length === 0) {
+                console.log("-- No conversation found --");
+                res.json({});
+            }
+            else {
+                // assert(result.length === 1)
+                console.log("-- Conversation found --");
+                res.json(JSON.parse(result[0].messages));
+            }
+
+        })
+    }
+
 }
