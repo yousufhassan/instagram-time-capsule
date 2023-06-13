@@ -1,6 +1,6 @@
 require("dotenv").config()
-const mysql = require('mysql');
-const bcrypt = require("bcrypt")
+import mysql from 'mysql';
+import bcrypt from "bcrypt";
 
 const DB_HOST = process.env.DB_HOST
 const DB_USER = process.env.DB_USER

@@ -1,18 +1,17 @@
 import { database } from "./models/database";
 import * as message from "./services/messages";
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
+import express from 'express';
+import cors from 'cors';
+import multer from 'multer';
+import fs from 'fs';
+import { promisify } from 'util';
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 const port = 8000;
-let db = new database();
-
-const fs = require('fs')
-const { promisify } = require('util')
-
 const unlinkAsync = promisify(fs.unlink)
+let db = new database();
 
 
 
