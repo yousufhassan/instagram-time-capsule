@@ -37,6 +37,11 @@ hr {
     border: 0.3px solid #342E34;
 }
 
+#select-date {
+    margin: 0;
+    padding: 0;
+}
+
 /* Chat Icons Styles */
 .icons-container {
     height: 51.5px;

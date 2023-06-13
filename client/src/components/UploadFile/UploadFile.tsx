@@ -70,7 +70,7 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
                     <button id='upload-btn' className='light-grey-bg btn' hidden={!filesSelected}>Upload {files.length} files</button>
                     <div className="loader" hidden={!isUploadInProgress}></div>
                 </label>
-                <input type="file" id='file-upload' onChange={selectFileHandler} multiple disabled={isUploadInProgress} />
+                <input type="file" id='file-upload' accept='.json' onChange={selectFileHandler} multiple disabled={isUploadInProgress} />
             </form>
         </div>
     )

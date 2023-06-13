@@ -110,16 +110,35 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string, 
 
 function ChatPanel({ activeChat }: { activeChat: any }) {
     const [messageList, setMessageList] = useState(Array<JSX.Element>());
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDate, setSelectedDate] = useState(new Date);
+    const [calendarDisplayed, setCalendarDisplayed] = useState(false);
 
-    const displayChat = async () => {
-        let date = '2022-12-30'  // TODO: get date from user input
-        let dateString = new Date(date).toLocaleString('default', {
+    const convertDateToString = (date: Date): string => {
+        // console.log(dateObj);
+        let dateObj = new Date(date);
+        return dateObj.toLocaleString('default', {
             month: 'short',
             day: '2-digit', year: 'numeric'
         })
-        setSelectedDate(dateString);
-        axios.post('http://localhost:8000/getConversationOnDate', { "date": date, "chatId": activeChat.chat_id })
+    }
+
+    const toggleCalendar = () => {
+        setCalendarDisplayed(!calendarDisplayed)
+    }
+
+    const dateChangeHandler = (e: any) => {
+        console.log(e.target.value);
+        setSelectedDate(e.target.value)
+    }
+
+    const displayChat = async () => {
+        // let date = '2022-10-10'  // TODO: get date from user input
+        // let date = selectedDate;
+        // let dateObj = new Date(date);
+        // dateObj.setDate(dateObj.getDate() + 1)
+        // setSelectedDate(dateObj);
+
+        axios.post('http://localhost:8000/getConversationOnDate', { "date": selectedDate, "chatId": activeChat.chat_id })
             .then(response => {
                 // console.log(response.data);
                 let rawMessageList = response.data;
@@ -147,7 +166,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                             arr.push(message["content"].charCodeAt(i));
                         }
                         message["content"] = Buffer.from(arr).toString("utf8");
-                        console.log(message["content"]);
+                        // console.log(message["content"]);
 
                     }
 
@@ -168,7 +187,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
 
     useEffect(() => {
         displayChat();
-    }, [activeChat])
+    }, [activeChat, selectedDate])
 
     if (Object.keys(activeChat).length === 0) {
         // TODO: Display something in the chat panel to signify this
@@ -186,10 +205,39 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
         )
     }
 
-    // else {
-    //     // Display the chat
-    //     displayChat();
-    // }
+    else if (messageList.length == 0) {
+        return (
+            <div>
+                <div id="chat-panel-header" className='flex-row space-btwn'>
+                    <div className='flex-row center'>
+                        <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
+                        <hr />
+                        <p style={{ fontSize: '14px' }}>{convertDateToString(selectedDate)}</p>
+                    </div>
+                    <div className="icons-container flex-row center">
+                        <div id="select-date-form-container">
+                            <form name='select-conversation-date' onSubmit={() => { console.log("submitted!"); }}>
+                                <input onChange={dateChangeHandler} type="date" id='select-date' hidden={!calendarDisplayed} />
+                                <label htmlFor="select-date">
+                                    <span onClick={toggleCalendar} className="material-symbols-outlined icon btn"> calendar_month </span>
+                                </label>
+                            </form>
+                        </div>
+                        <span className="material-symbols-outlined icon btn"> casino </span>
+                        <span className="material-symbols-outlined icon btn"> info </span>
+                        <span className="material-symbols-outlined icon btn" style={{ color: "red" }}> delete </span>
+                    </div>
+                </div>
+                <div id="chat-area" className='no-active-chat'>
+                    {/* TODO: Center this in the chat area */}
+                    <h3>
+                        No messages sent on this date.
+                    </h3>
+                </div>
+            </div>
+        )
+    }
+
 
     return (
         <div>
@@ -197,9 +245,17 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                 <div className='flex-row center'>
                     <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
                     <hr />
-                    <p style={{fontSize:'14px'}}>{selectedDate}</p>
+                    <p style={{ fontSize: '14px' }}>{convertDateToString(selectedDate)}</p>
                 </div>
                 <div className="icons-container flex-row center">
+                    <div id="select-date-form-container">
+                        <form name='select-conversation-date' onSubmit={() => { console.log("submitted!"); }}>
+                            <input onChange={dateChangeHandler} type="date" id='select-date' hidden={!calendarDisplayed} />
+                            <label htmlFor="select-date">
+                                <span onClick={toggleCalendar} className="material-symbols-outlined icon btn"> calendar_month </span>
+                            </label>
+                        </form>
+                    </div>
                     <span className="material-symbols-outlined icon btn"> casino </span>
                     <span className="material-symbols-outlined icon btn"> info </span>
                     <span className="material-symbols-outlined icon btn" style={{ color: "red" }}> delete </span>
