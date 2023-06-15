@@ -1,21 +1,23 @@
-import { database } from "./models/database";
-import * as message from "./services/messages";
+import { database } from "./models/database.js";
+import { getChatTitle, getAllMessages, splitConversationsByDay } from "./services/messages.js";
 import * as fs from "fs";
 import { promisify } from "util";
 
-const express = require("express");
-const cors = require("cors");
-const multer = require("multer");
-const app = express();
+import { router } from "./routes/auth.js";
+import express from "express";
+import cors from "cors";
+import multer from "multer";
+export const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/auth", router);
 const port = 8000;
 const unlinkAsync = promisify(fs.unlink);
-let db = new database();
+export const db = new database();
 
 // Start web app
 //Idiomatic expression in express to route and respond to a client request
-app.get("/", (req, res) => {
+app.get("/", (req: any, res: any) => {
     //get requests to the root ("/") will route here
     res.sendFile("./views/index.html", {
         root: __dirname,
@@ -23,7 +25,7 @@ app.get("/", (req, res) => {
     //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile
 });
 
-app.get("/message", (req, res) => {
+app.get("/message", (req: any, res: any) => {
     res.json({
         message: "Hello from server!",
     });
@@ -62,19 +64,19 @@ app.listen(port, () => {
 //     message.customPrint(messages[i]);
 // }
 
-app.post("/getConversationOnDate", (req, res) => {
+app.post("/getConversationOnDate", (req: any, res: any) => {
     let date = req.body.date;
     let chatId = req.body.chatId;
-    db.con.getConnection(async function (err, connection) {
-        db.getConversationOnDate(connection, req, res, date, chatId);
+    db.con.getConnection(async function (connection: any) {
+        db.getConversationOnDate(connection, res, date, chatId);
         connection.release();
     });
 });
 
-app.post("/getAllChats", (req, res) => {
+app.post("/getAllChats", (req: any, res: any) => {
     let username = req.body.username; // Username of the logged in user
-    db.con.getConnection(async function (err, connection) {
-        db.getUserIdFromUsername(connection, req, res, username)
+    db.con.getConnection(async function (connection: any) {
+        db.getUserIdFromUsername(connection, username)
             .then(function (userId) {
                 return userId;
             })
@@ -82,7 +84,7 @@ app.post("/getAllChats", (req, res) => {
                 // console.log("woohoo");
                 // res.send("woohoo");
 
-                db.getAllUserChats(connection, req, res, userId);
+                db.getAllUserChats(connection, res, userId);
             });
         connection.release();
     });
@@ -90,7 +92,7 @@ app.post("/getAllChats", (req, res) => {
 
 const storage = multer.diskStorage({
     destination: "../uploads",
-    filename: function (req, file, cb) {
+    filename: function (req: any, file: any, cb: any) {
         cb(null, file.originalname.slice(0, -5) + "-" + Date.now() + ".json");
     },
 });
@@ -99,31 +101,31 @@ const upload = multer({
     storage: storage,
 });
 
-app.post("/uploadFiles", upload.array("files"), (req, res) => {
+app.post("/uploadFiles", upload.array("files"), (req: any, res: any) => {
     let files = req.files;
     let chatOwner = req.body.user;
 
     // Obtain the chat title to store in the database (only need to do once for each upload)
     let chatData = require(files[0].path);
-    let chatTitle = message.getChatTitle(chatData);
+    let chatTitle = getChatTitle(chatData);
 
-    db.con.getConnection(async function (err, connection) {
+    db.con.getConnection(async function (err: any, connection: any) {
         if (err) throw err;
 
         // Get the userId of the logged in user
-        db.getUserIdFromUsername(connection, req, res, chatOwner)
+        db.getUserIdFromUsername(connection, chatOwner)
             .then(function (chatOwnerId) {
                 return chatOwnerId;
             })
             .then(async function (chatOwnerId) {
                 // If this chat already exists in the database, delete it
                 // Note: deleteChat will also delete all conversations for that chat.
-                await db.deleteChat(connection, req, res, chatOwnerId, chatTitle);
+                await db.deleteChat(connection, chatOwnerId, chatTitle);
                 return chatOwnerId;
             })
             .then(async function (chatOwnerId) {
                 // Add this chat to the database
-                return db.addChat(connection, req, res, chatOwnerId, chatTitle);
+                return db.addChat(connection, chatOwnerId, chatTitle);
             })
             .then(async function (chatIdAndColor) {
                 let chatId = chatIdAndColor[0];
@@ -132,17 +134,15 @@ app.post("/uploadFiles", upload.array("files"), (req, res) => {
                 console.log("Chat ID: " + chatId);
                 let numMessages = 0; // Tracks how many messages were sent in this chat
 
-                files.forEach(async (file) => {
-                    let chatData = require(file.path);
-                    let messages = message.getAllMessages(chatData);
-                    let conversationsMap = message.splitConversationsByDay(messages);
+                files.forEach(async (file: any) => {
+                    // let chatData = require(file.path);
+                    let messages = getAllMessages(chatData);
+                    let conversationsMap = splitConversationsByDay(messages);
 
                     conversationsMap.forEach(async (conversation, date) => {
                         numMessages += conversation.length;
                         let conversationId = await db.addConversation(
                             connection,
-                            req,
-                            res,
                             chatId,
                             date,
                             JSON.stringify(conversation),
@@ -170,12 +170,12 @@ app.post("/uploadFiles", upload.array("files"), (req, res) => {
 
 // ---------------------------------------------------------------------------
 // CREATE USER
-app.post("/createUser", async (req, res) => {
-    db.createUser(req, res);
-    console.log(res);
-});
+// app.post("/createUser", async (req, res) => {
+//     db.createUser(req, res);
+//     console.log(res);
+// });
 
-// LOGIN USER
-app.post("/login", async (req, res) => {
-    db.login(req, res);
-});
+// // LOGIN USER
+// app.post("/login", async (req, res) => {
+//     db.login(req, res);
+// });
