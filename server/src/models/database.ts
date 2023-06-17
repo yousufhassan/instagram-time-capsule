@@ -1,5 +1,6 @@
 import mysql from "mysql";
 import bcrypt from "bcrypt";
+import { Request, Response } from "express";
 
 // TODO: Instead of taking these consts from the .env file, put them in a TS file and structure it
 // in whatever way is best. Then make the data types as appropriate.
@@ -35,7 +36,7 @@ export class database {
      * @returns {void}
      */
     connectToDB(): void {
-        this.con.getConnection(function (err: any, connection: { threadId: string }) {
+        this.con.getConnection(function (err: Error, connection: { threadId: string }) {
             if (err) throw err;
             console.log("Database connected successful: " + connection.threadId);
         });
@@ -44,23 +45,23 @@ export class database {
     /**
      * Creates a new user in a MySQL database based on the provided request object.
      * @async
-     * @param {Object} req - The HTTP request object containing the user's username and password in the request body.
-     * @param {Object} res - The HTTP response object to send back to the client.
+     * @param {Request} req - The HTTP request object containing the user's username and password in the request body.
+     * @param {Response} res - The HTTP response object to send back to the client.
      * @returns {Promise<void>}
      */
-    async createUser(req: any, res: any) {
+    async createUser(req: Request, res: Response) {
         // Extract username and hashed password from request body
         const username = req.body.username;
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
         // Obtain a connection to the MySQL database
-        this.con.getConnection(async (err: any, connection: any) => {
+        this.con.getConnection(async (err: Error, connection: any) => {
             if (err) throw err;
             // Search for existing user with same username
             const sqlSearch = "SELECT * FROM Users WHERE username = ?";
             const searchQuery = mysql.format(sqlSearch, [username]);
 
-            await connection.query(searchQuery, async (err: any, result: any) => {
+            await connection.query(searchQuery, async (err: Error, result: any) => {
                 if (err) throw err;
                 if (result.length !== 0) {
                     // User already exists, send conflict status code and release connection
@@ -71,7 +72,7 @@ export class database {
                     // Insert new user into database and send created status code
                     const sqlInsert = "INSERT INTO Users(username, password) VALUES (?,?)";
                     const insertQuery = mysql.format(sqlInsert, [username, hashedPassword]);
-                    await connection.query(insertQuery, (err: any, result: any) => {
+                    await connection.query(insertQuery, (err: Error, result: any) => {
                         connection.release();
                         if (err) throw err;
                         console.log("--- Created new User ---");
@@ -91,15 +92,15 @@ export class database {
      * @param {Object} res - The HTTP response object to send back to the client.
      * @returns {Promise<void>}
      */
-    async login(req: any, res: any) {
+    async login(req: Request, res: Response) {
         const username = req.body.username;
         const password = req.body.password;
 
-        this.con.getConnection(async (err: any, connection: any) => {
+        this.con.getConnection(async (err: Error, connection: any) => {
             if (err) throw err;
             const sqlSearch = "Select * from Users where username = ?";
             const searchQuery = mysql.format(sqlSearch, [username]);
-            await connection.query(searchQuery, async (err: any, result: any) => {
+            await connection.query(searchQuery, async (err: Error, result: any) => {
                 connection.release();
 
                 if (err) throw err;
@@ -136,7 +137,7 @@ export class database {
         return new Promise(async function (resolve, reject) {
             const getUserIDSearch = "SELECT user_id FROM Users WHERE username = ?";
             const getUserIDSQuery = mysql.format(getUserIDSearch, [username]);
-            await connection.query(getUserIDSQuery, async (err: any, result: any) => {
+            await connection.query(getUserIDSQuery, async (err: Error, result: any) => {
                 if (err) return reject(err);
                 return resolve(result[0].user_id);
             });
@@ -148,8 +149,6 @@ export class database {
      * conversations associated with this chat.
      *
      * @param connection - The database connection.
-     * @param req - The request object.
-     * @param res - The response object.
      * @param chatTitle - The title of the chat to be deleted.
      *
      * @returns True if the chat was deleted, and an error otherwise.
@@ -159,7 +158,7 @@ export class database {
         return new Promise(async function (resolve, reject) {
             const findChatSearch = "SELECT * FROM Chats WHERE chat_owner_id = ? and title = ?";
             const findChatQuery = mysql.format(findChatSearch, [chatOwner, chatTitle]);
-            await connection.query(findChatQuery, async (err: any, result: any) => {
+            await connection.query(findChatQuery, async (err: Error, result: any) => {
                 if (err) return reject(err);
 
                 if (result.length == 0) {
@@ -172,7 +171,7 @@ export class database {
                     const deleteChatSearch =
                         "DELETE FROM Chats WHERE chat_owner_id = ? and title = ?";
                     const deleteChatQuery = mysql.format(deleteChatSearch, [chatOwner, chatTitle]);
-                    await connection.query(deleteChatQuery, async (err: any) => {
+                    await connection.query(deleteChatQuery, async (err: Error) => {
                         if (err) throw err;
                         console.log("--- Chat deleted ---");
                         return resolve(true);
@@ -201,7 +200,7 @@ export class database {
 
             const addChatSQL = "INSERT INTO Chats(chat_owner_id, title, bg_color) VALUES (?,?,?)";
             const addChatQuery = mysql.format(addChatSQL, [chatOwnerID, chatTitle, bgColor]);
-            await connection.query(addChatQuery, async (err: any, result: any) => {
+            await connection.query(addChatQuery, async (err: Error, result: any) => {
                 if (err) return reject(err);
 
                 console.log("-- Added new chat --");
@@ -236,7 +235,7 @@ export class database {
                 conversation,
                 numMessages,
             ]);
-            await connection.query(addConversationQuery, async (err: any, result: any) => {
+            await connection.query(addConversationQuery, async (err: Error, result: any) => {
                 if (err) return reject(err);
 
                 console.log("-- Conversation added --");
@@ -252,7 +251,7 @@ export class database {
                                        C1.chat_owner_id = ?
                                    GROUP BY C1.chat_id`;
         const getChatsSQL = mysql.format(getChatsQuery, [userId]);
-        await connection.query(getChatsSQL, async (err: any, result: any) => {
+        await connection.query(getChatsSQL, async (err: Error, result: any) => {
             if (err) throw err;
             console.log(result);
             res.json(result);
@@ -264,7 +263,7 @@ export class database {
                                       FROM conversations
                                       WHERE conversation_date = ? AND chat_id = ?`;
         const getConversationSQL = mysql.format(getConversationQuery, [date, chatId]);
-        await connection.query(getConversationSQL, async (err: any, result: any) => {
+        await connection.query(getConversationSQL, async (err: Error, result: any) => {
             if (err) throw err;
             // console.log("length: " + result.length);
 
