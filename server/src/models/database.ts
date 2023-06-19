@@ -1,6 +1,6 @@
-import mysql from "mysql";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+import mysql from "mysql";
 
 // TODO: Instead of taking these consts from the .env file, put them in a TS file and structure it
 // in whatever way is best. Then make the data types as appropriate.

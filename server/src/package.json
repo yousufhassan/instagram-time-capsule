@@ -22,6 +22,7 @@
         "typescript": "^4.9.5"
     },
     "dependencies": {
+        "@types/node-fetch": "^2.6.4",
         "cors": "^2.8.5",
         "express": "^4.18.2",
         "exprss": "^0.0.1-security",

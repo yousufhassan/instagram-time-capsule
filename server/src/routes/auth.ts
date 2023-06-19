@@ -1,13 +1,14 @@
+import { Request, Response, Router } from "express";
 import { db } from "../app.js";
-import express from "express";
-export const router = express.Router();
+import { pool } from "../app.js";
+import { createUser } from "../database/auth/createUser.js";
+export const authRouter = Router();
 
-router.post("/createUser", async (req: any, res: any) => {
-    db.createUser(req, res);
-    console.log(res);
+authRouter.post("/createUser", async (request: Request, response: Response) => {
+    createUser(pool, request, response);
 });
 
-router.post("/login", async (req: any, res: any) => {
+authRouter.post("/login", async (req: any, res: any) => {
     db.login(req, res);
 });
 

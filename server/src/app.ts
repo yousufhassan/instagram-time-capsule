@@ -1,23 +1,27 @@
-import { database } from "./models/database.js";
-import { getChatTitle, getAllMessages, splitConversationsByDay } from "./services/messages.js";
+import cors from "cors";
+import express from "express";
+import multer from "multer";
 import * as fs from "fs";
 import { promisify } from "util";
-
-import { router } from "./routes/auth.js";
-import express from "express";
-import cors from "cors";
-import multer from "multer";
+import { database } from "./models/database.js";
+import { getAllMessages, getChatTitle, splitConversationsByDay } from "./services/messages.js";
+import { createPool } from "./database/database.js";
+import { authRouter } from "./routes/auth.js";
+import { chatsRouter } from "./routes/chats.js";
 export const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/auth", router);
 const port = 8000;
+
+app.use("/auth", authRouter);
+app.use("/chats", chatsRouter);
 const unlinkAsync = promisify(fs.unlink);
 export const db = new database();
+export const pool = createPool();
 
 // Start web app
 //Idiomatic expression in express to route and respond to a client request
-app.get("/", (req: any, res: any) => {
+app.get("/", (res: any) => {
     //get requests to the root ("/") will route here
     res.sendFile("./views/index.html", {
         root: __dirname,
@@ -25,11 +29,11 @@ app.get("/", (req: any, res: any) => {
     //the .sendFile method needs the absolute path to the file, see: https://expressjs.com/en/4x/api.html#res.sendFile
 });
 
-app.get("/message", (req: any, res: any) => {
-    res.json({
-        message: "Hello from server!",
-    });
-});
+// app.get("/message", (req: any, res: any) => {
+//     res.json({
+//         message: "Hello from server!",
+//     });
+// });
 
 app.listen(port, () => {
     //server starts listening for any attempts from a client to connect at port: {port}
@@ -73,25 +77,26 @@ app.post("/getConversationOnDate", (req: any, res: any) => {
     });
 });
 
-app.post("/getAllChats", (req: any, res: any) => {
-    let username = req.body.username; // Username of the logged in user
-    db.con.getConnection(async function (connection: any) {
-        db.getUserIdFromUsername(connection, username)
-            .then(function (userId) {
-                return userId;
-            })
-            .then(async function (userId) {
-                // console.log("woohoo");
-                // res.send("woohoo");
+// app.post("/getAllChats", (req: any, res: any) => {
+//     let username = req.body.username; // Username of the logged in user
+//     db.con.getConnection(async function (connection: any) {
+//         db.getUserIdFromUsername(connection, username)
+//             .then(function (userId) {
+//                 return userId;
+//             })
+//             .then(async function (userId) {
+//                 // console.log("woohoo");
+//                 // res.send("woohoo");
 
-                db.getAllUserChats(connection, res, userId);
-            });
-        connection.release();
-    });
-});
+//                 db.getAllUserChats(connection, res, userId);
+//             });
+//         connection.release();
+//     });
+// });
 
 const storage = multer.diskStorage({
     destination: "../uploads",
+    // @ts-ignore
     filename: function (req: any, file: any, cb: any) {
         cb(null, file.originalname.slice(0, -5) + "-" + Date.now() + ".json");
     },
