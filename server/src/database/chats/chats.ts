@@ -38,17 +38,3 @@ export const getChatListFromUserId = async (client: PoolClient, userId: string) 
     const chatList = queryResult.rows;
     return chatList;
 };
-
-// let username = req.body.username; // Username of the logged in user
-// db.con.getConnection(async function (connection: any) {
-//     db.getUserIdFromUsername(connection, username)
-//         .then(function (userId) {
-//             return userId;
-//         })
-//         .then(async function (userId) {
-//             // console.log("woohoo");
-//             // res.send("woohoo");
-//             db.getAllUserChats(connection, res, userId);
-//         });
-//     connection.release();
-// });
