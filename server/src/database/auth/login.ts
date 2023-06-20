@@ -26,9 +26,6 @@ export const login = async (pool: Pool, request: Request, response: Response) =>
         const password = getPasswordFromRequest(request);
         const user = await getUserFromUsername(client, username);
         if (user !== undefined) {
-            log(user);
-            log(username);
-            log(password);
             await tryLogin(user, username, password, response);
         } else {
             userDoesNotExist(response);
@@ -54,7 +51,7 @@ export const getUserFromUsername = async (client: PoolClient, username: string) 
 };
 
 const tryLogin = async (user: User, username: string, password: string, response: Response) => {
-    const hashedPassword = user.hashedPassword;
+    const hashedPassword = user.password;
     if (await compare(password, hashedPassword)) {
         logSuccessfulLogin();
         response.json({ username: username, password: hashedPassword });
