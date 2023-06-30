@@ -25,3 +25,11 @@ export interface Reaction {
     reaction: string;
     actor: string;
 }
+
+export interface Conversation {
+    conversation_id: string;
+    chat_id: string;
+    conversation_date: string;
+    messages: string;
+    num_messages: number;
+}

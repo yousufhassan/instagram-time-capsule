@@ -11,6 +11,10 @@ export const getChatOwnerFromRequest = (request: Request): string => {
     return request.body.user;
 };
 
+export const getChatIdFromRequest = (request: Request) => {
+    return request.body.chatId;
+};
+
 export const getChatDataFromFiles = (files: Express.Multer.File[]): ChatData => {
     return JSON.parse(fs.readFileSync(files[0].path, "utf-8"));
 };

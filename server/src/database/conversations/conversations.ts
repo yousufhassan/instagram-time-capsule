@@ -1,4 +1,30 @@
-import { PoolClient } from "pg";
+import { Request, Response } from "express";
+import { Pool, PoolClient } from "pg";
+
+import {
+    getConversationDateFromRequest,
+    logConversationDoesNotExist,
+    logConversationFound,
+} from "../../services/conversations.js";
+import { getChatIdFromRequest } from "../../services/chats.js";
+import { Conversation } from "../../types.js";
+
+export const getConversationOnDate = async (pool: Pool, request: Request, response: Response) => {
+    const conversationDate = getConversationDateFromRequest(request);
+    const chatId = getChatIdFromRequest(request);
+    const getConversationQuery = `SELECT messages
+                                      FROM conversations
+                                      WHERE conversation_date = $1 AND chat_id = $2`;
+    const queryResult = await pool.query(getConversationQuery, [conversationDate, chatId]);
+    const conversation: Conversation = queryResult.rows[0];
+    if (queryResult.rowCount === 0) {
+        logConversationDoesNotExist();
+        response.json({});
+    } else {
+        logConversationFound();
+        response.json(JSON.parse(conversation.messages));
+    }
+};
 
 export const insertConversationIntoDB = async (
     client: PoolClient,
