@@ -15,7 +15,7 @@ import {
 } from "../database.js";
 import { Pool, PoolClient } from "pg";
 
-export const createUser = async (pool: Pool, request: Request, response: Response) => {
+export const createUser = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);
     try {
         await beginTransaction(client);
@@ -39,16 +39,12 @@ export const createUser = async (pool: Pool, request: Request, response: Respons
     }
 };
 
-const insertUserIntoDB = async (client: PoolClient, username: string, hashedPassword: string) => {
-    try {
-        const insertUserQuery = "INSERT INTO Users(username, password) VALUES ($1, $2)";
-        await client.query(insertUserQuery, [username, hashedPassword]);
-    } catch (error: unknown) {
-        log(error);
-    }
+const insertUserIntoDB = async (client: PoolClient, username: string, hashedPassword: string): Promise<void> => {
+    const insertUserQuery = "INSERT INTO Users(username, password) VALUES ($1, $2)";
+    await client.query(insertUserQuery, [username, hashedPassword]);
 };
 
-const userExistsInDB = async (client: PoolClient, username: string) => {
+const userExistsInDB = async (client: PoolClient, username: string): Promise<boolean> => {
     const searchUserQuery = "SELECT * FROM Users WHERE username = $1";
     const queryResult = await client.query(searchUserQuery, [username]);
     return queryResult.rowCount === 1;

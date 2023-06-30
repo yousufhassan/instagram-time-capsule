@@ -1,10 +1,10 @@
 import cors from "cors";
 import express from "express";
-import multer from "multer";
-import * as fs from "fs";
-import { promisify } from "util";
+// import multer from "multer";
+// import * as fs from "fs";
+// import { promisify } from "util";
 import { database } from "./models/database.js";
-import { getAllMessages, getChatTitle, splitConversationsByDay } from "./services/messages.js";
+// import { getAllMessages, getChatTitle, splitConversationsByDay } from "./services/messages.js";
 import { createPool } from "./database/database.js";
 import { authRouter } from "./routes/auth.js";
 import { chatsRouter } from "./routes/chats.js";
@@ -15,7 +15,7 @@ const port = 8000;
 
 app.use("/auth", authRouter);
 app.use("/chats", chatsRouter);
-const unlinkAsync = promisify(fs.unlink);
+// const unlinkAsync = promisify(fs.unlink);
 export const db = new database();
 export const pool = createPool();
 
@@ -94,84 +94,84 @@ app.post("/getConversationOnDate", (req: any, res: any) => {
 //     });
 // });
 
-const storage = multer.diskStorage({
-    destination: "../uploads",
-    // @ts-ignore
-    filename: function (req: any, file: any, cb: any) {
-        cb(null, file.originalname.slice(0, -5) + "-" + Date.now() + ".json");
-    },
-});
+// const storage = multer.diskStorage({
+//     destination: "../uploads",
+//     // @ts-ignore
+//     filename: function (req: any, file: any, cb: any) {
+//         cb(null, file.originalname.slice(0, -5) + "-" + Date.now() + ".json");
+//     },
+// });
 
-const upload = multer({
-    storage: storage,
-});
+// const upload = multer({
+//     storage: storage,
+// });
 
-app.post("/uploadFiles", upload.array("files"), (req: any, res: any) => {
-    let files = req.files;
-    let chatOwner = req.body.user;
+// app.post("/uploadFiles", upload.array("files"), (req: any, res: any) => {
+//     let files = req.files;
+//     let chatOwner = req.body.user;
 
-    // Obtain the chat title to store in the database (only need to do once for each upload)
-    let chatData = require(files[0].path);
-    let chatTitle = getChatTitle(chatData);
+//     // Obtain the chat title to store in the database (only need to do once for each upload)
+//     let chatData = require(files[0].path);
+//     let chatTitle = getChatTitle(chatData);
 
-    db.con.getConnection(async function (err: any, connection: any) {
-        if (err) throw err;
+//     db.con.getConnection(async function (err: any, connection: any) {
+//         if (err) throw err;
 
-        // Get the userId of the logged in user
-        db.getUserIdFromUsername(connection, chatOwner)
-            .then(function (chatOwnerId) {
-                return chatOwnerId;
-            })
-            .then(async function (chatOwnerId) {
-                // If this chat already exists in the database, delete it
-                // Note: deleteChat will also delete all conversations for that chat.
-                await db.deleteChat(connection, chatOwnerId, chatTitle);
-                return chatOwnerId;
-            })
-            .then(async function (chatOwnerId) {
-                // Add this chat to the database
-                return db.addChat(connection, chatOwnerId, chatTitle);
-            })
-            .then(async function (chatIdAndColor) {
-                let chatId = chatIdAndColor[0];
-                let bgColor = chatIdAndColor[1];
-                // Get all conversations from this file upload and store in the database
-                console.log("Chat ID: " + chatId);
-                let numMessages = 0; // Tracks how many messages were sent in this chat
+//         // Get the userId of the logged in user
+//         db.getUserIdFromUsername(connection, chatOwner)
+//             .then(function (chatOwnerId) {
+//                 return chatOwnerId;
+//             })
+//             .then(async function (chatOwnerId) {
+//                 // If this chat already exists in the database, delete it
+//                 // Note: deleteChat will also delete all conversations for that chat.
+//                 await db.deleteChat(connection, chatOwnerId, chatTitle);
+//                 return chatOwnerId;
+//             })
+//             .then(async function (chatOwnerId) {
+//                 // Add this chat to the database
+//                 return db.addChat(connection, chatOwnerId, chatTitle);
+//             })
+//             .then(async function (chatIdAndColor) {
+//                 let chatId = chatIdAndColor[0];
+//                 let bgColor = chatIdAndColor[1];
+//                 // Get all conversations from this file upload and store in the database
+//                 console.log("Chat ID: " + chatId);
+//                 let numMessages = 0; // Tracks how many messages were sent in this chat
 
-                files.forEach(async (file: any) => {
-                    // let chatData = require(file.path);
-                    let messages = getAllMessages(chatData);
-                    let conversationsMap = splitConversationsByDay(messages);
+//                 files.forEach(async (file: any) => {
+//                     // let chatData = require(file.path);
+//                     let messages = getAllMessages(chatData);
+//                     let conversationsMap = splitConversationsByDay(messages);
 
-                    conversationsMap.forEach(async (conversation, date) => {
-                        numMessages += conversation.length;
-                        let conversationId = await db.addConversation(
-                            connection,
-                            chatId,
-                            date,
-                            JSON.stringify(conversation),
-                            conversation.length
-                        );
-                        console.log("Conversation ID: " + conversationId);
-                    });
+//                     conversationsMap.forEach(async (conversation, date) => {
+//                         numMessages += conversation.length;
+//                         let conversationId = await db.addConversation(
+//                             connection,
+//                             chatId,
+//                             date,
+//                             JSON.stringify(conversation),
+//                             conversation.length
+//                         );
+//                         console.log("Conversation ID: " + conversationId);
+//                     });
 
-                    // Delete file from server
-                    await unlinkAsync(file.path);
+//                     // Delete file from server
+//                     await unlinkAsync(file.path);
 
-                    // res.send()
-                });
-                // console.log("first: " + numMessages);
-                res.json({
-                    chatId: chatId,
-                    chatTitle: chatTitle,
-                    numMessages: numMessages,
-                    bgColor: bgColor,
-                });
-            });
-        connection.release();
-    });
-});
+//                     // res.send()
+//                 });
+//                 // console.log("first: " + numMessages);
+//                 res.json({
+//                     chatId: chatId,
+//                     chatTitle: chatTitle,
+//                     numMessages: numMessages,
+//                     bgColor: bgColor,
+//                 });
+//             });
+//         connection.release();
+//     });
+// });
 
 // ---------------------------------------------------------------------------
 // CREATE USER

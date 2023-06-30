@@ -1,9 +1,8 @@
 // import { Request, Response } from "express";
-import { Pool } from "pg";
+import { PoolClient } from "pg";
 
-export const getUserIdFromUsername = async (pool: Pool, username: string) => {
+export const getUserIdFromUsername = async (client: PoolClient, username: string): Promise<string> => {
     const getUserIdQuery = "SELECT user_id FROM Users WHERE username = $1";
-    const queryResult = await pool.query(getUserIdQuery, [username]);
-    const user_id: string = queryResult.rows[0].user_id;
-    return user_id;
+    const queryResult = await client.query(getUserIdQuery, [username]);
+    return queryResult.rows[0].user_id;
 };
