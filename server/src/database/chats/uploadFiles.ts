@@ -41,9 +41,8 @@ export const uploadFiles = async (pool: Pool, request: Request, response: Respon
         await deleteOldChatIfExists(client, chatOwnerId, chatTitle);
         const [chatId, chatImageColor] = await insertChatToDB(client, chatOwnerId, chatTitle);
 
-        // TODO: Implement from line 140 onwards (app.ts file)
         // @ts-ignore Same as above
-        const numMessages = insertAllConversationsFromUploadIntoDB(client, files, chatData, chatId);
+        const numMessages = await insertAllConversationsFromUploadIntoDB(client, files, chatData, chatId);
         response.json({
             chatId: chatId,
             chatTitle: chatTitle,
@@ -72,17 +71,18 @@ export const deleteOldChatIfExists = async (
     }
 };
 
-export const insertAllConversationsFromUploadIntoDB = (
+export const insertAllConversationsFromUploadIntoDB = async (
     client: PoolClient,
     files: Express.Multer.File[],
     chatData: ChatData,
     chatId: string
-): number => {
+): Promise<number> => {
     const unlinkAsync = promisify(fs.unlink);
     let numConversations = 0;
     let numMessages = 0;
 
     files.forEach(async (file: Express.Multer.File) => {
+        log(file.filename);
         const messages = getAllMessages(chatData);
         const conversationMap = splitConversationsByDay(messages);
 

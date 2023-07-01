@@ -13,8 +13,8 @@ export const getConversationOnDate = async (pool: Pool, request: Request, respon
     const conversationDate = getConversationDateFromRequest(request);
     const chatId = getChatIdFromRequest(request);
     const getConversationQuery = `SELECT messages
-                                      FROM conversations
-                                      WHERE conversation_date = $1 AND chat_id = $2`;
+                                  FROM conversations
+                                  WHERE conversation_date = $1 AND chat_id = $2`;
     const queryResult = await pool.query(getConversationQuery, [conversationDate, chatId]);
     const conversation: Conversation = queryResult.rows[0];
     if (queryResult.rowCount === 0) {
@@ -34,5 +34,5 @@ export const insertConversationIntoDB = async (
 ): Promise<void> => {
     const insertConversationQuery = `INSERT INTO Conversations(chat_id, conversation_date, messages, num_messages)
                                      VALUES ($1,$2,$3,$4)`;
-    await client.query(insertConversationQuery, [chatId, date, conversation, conversation.length]);
+    await client.query(insertConversationQuery, [chatId, date, JSON.stringify(conversation), conversation.length]);
 };

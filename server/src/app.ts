@@ -8,6 +8,7 @@ import { database } from "./models/database.js";
 import { createPool } from "./database/database.js";
 import { authRouter } from "./routes/auth.js";
 import { chatsRouter } from "./routes/chats.js";
+import { conversationsRouter } from "./routes/conversations.js";
 export const app = express();
 app.use(cors());
 app.use(express.json());
@@ -15,12 +16,12 @@ const port = 8000;
 
 app.use("/auth", authRouter);
 app.use("/chats", chatsRouter);
+app.use("/conversations", conversationsRouter);
 // const unlinkAsync = promisify(fs.unlink);
 export const db = new database();
 export const pool = createPool();
 
 // Start web app
-//Idiomatic expression in express to route and respond to a client request
 app.get("/", (res: any) => {
     //get requests to the root ("/") will route here
     res.sendFile("./views/index.html", {
@@ -34,11 +35,11 @@ app.listen(port, () => {
     console.log(`Now listening on port ${port}`);
 });
 
-app.post("/getConversationOnDate", (req: any, res: any) => {
-    let date = req.body.date;
-    let chatId = req.body.chatId;
-    db.con.getConnection(async function (connection: any) {
-        db.getConversationOnDate(connection, res, date, chatId);
-        connection.release();
-    });
-});
+// app.post("/getConversationOnDate", (req: any, res: any) => {
+//     let date = req.body.date;
+//     let chatId = req.body.chatId;
+//     db.con.getConnection(async function (connection: any) {
+//         db.getConversationOnDate(connection, res, date, chatId);
+//         connection.release();
+//     });
+// });
