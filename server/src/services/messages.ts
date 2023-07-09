@@ -1,4 +1,4 @@
-// import { ESMap } from "typescript";
+import { ChatData, Message } from "../types.js";
 
 /**
  * Prints the message in a readable format.
@@ -26,7 +26,7 @@ export function customPrint(message: any): void {
  * @param chatData JSON file containing all chat data
  * @returns A string containing the chat title
  */
-export function getChatTitle(chatData: any): string {
+export function getChatTitle(chatData: ChatData): string {
     return chatData["title"];
 }
 
@@ -36,34 +36,9 @@ export function getChatTitle(chatData: any): string {
  * @param filepath - A string representing the file path to retrieve messages from.
  * @returns An array of JSON, where each JSON represents a message.
  */
-export function getAllMessages(chatData: any): JSON[] {
+export function getAllMessages(chatData: ChatData): Message[] {
     let messages = chatData["messages"];
     return messages;
-}
-
-/**
- * Function that splits a given array of messages into conversations by day.
- *
- * @param messages Array of messages to be split into conversations by their date.
- * @returns Map[dateAsString, ArrayOfMessages]
- */
-export function splitConversationsByDay(messages: any[]): Map<string, JSON[]> {
-    let conversationsMap = new Map();
-    messages.forEach((message) => {
-        let date = new Date(message["timestamp_ms"]);
-        let formattedDate =
-            date.getFullYear() +
-            "-" +
-            date.toLocaleDateString("default", { month: "2-digit" }) +
-            "-" +
-            date.toLocaleDateString("default", { day: "2-digit" });
-        if (conversationsMap.has(formattedDate)) {
-            conversationsMap.get(formattedDate).push(message);
-        } else {
-            conversationsMap.set(formattedDate, [message]);
-        }
-    });
-    return conversationsMap;
 }
 
 /**

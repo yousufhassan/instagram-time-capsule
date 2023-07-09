@@ -15,8 +15,8 @@ export const getChatIdFromRequest = (request: Request) => {
     return request.body.chatId;
 };
 
-export const getChatDataFromFiles = (files: Express.Multer.File[]): ChatData => {
-    return JSON.parse(fs.readFileSync(files[0].path, "utf-8"));
+export const getChatDataFromFile = (file: Express.Multer.File): ChatData => {
+    return JSON.parse(fs.readFileSync(file.path, "utf-8"));
 };
 
 export const getChatTitleFromChatData = (chatData: ChatData) => {

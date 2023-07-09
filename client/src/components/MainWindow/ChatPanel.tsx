@@ -8,10 +8,7 @@ function ChatTitle({ chatTitle, bgColor }: { chatTitle: string; bgColor: string 
     return (
         <div>
             <div className="chat-title-container flex-row center">
-                <span
-                    className="flex-row center chat-title-img"
-                    style={{ backgroundColor: bgColor }}
-                ></span>
+                <span className="flex-row center chat-title-img" style={{ backgroundColor: bgColor }}></span>
                 <h3>{chatTitle}</h3>
             </div>
         </div>
@@ -54,9 +51,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
                             <div className="message-bubble-container friend-message error-message">
                                 {message.content}
                             </div>
-                            <div className="message-timestamp">
-                                {getTimeFromUnix(message.timestamp_ms)}
-                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 );
@@ -74,9 +69,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
                             <div className="message-bubble-container friend-message main-sage-bg white-text">
                                 {message.content}
                             </div>
-                            <div className="message-timestamp">
-                                {getTimeFromUnix(message.timestamp_ms)}
-                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 );
@@ -89,12 +82,8 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
                 return (
                     <div>
                         <div className="flex-row" style={{ alignItems: "center" }}>
-                            <div className="message-bubble-container user-message error-message">
-                                {message.content}
-                            </div>
-                            <div className="message-timestamp">
-                                {getTimeFromUnix(message.timestamp_ms)}
-                            </div>
+                            <div className="message-bubble-container user-message error-message">{message.content}</div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 );
@@ -105,9 +94,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
                             <div className="message-bubble-container user-message dark-grey-bg white-text">
                                 {message.content}
                             </div>
-                            <div className="message-timestamp">
-                                {getTimeFromUnix(message.timestamp_ms)}
-                            </div>
+                            <div className="message-timestamp">{getTimeFromUnix(message.timestamp_ms)}</div>
                         </div>
                     </div>
                 );
@@ -151,14 +138,12 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
         // setSelectedDate(dateObj);
 
         axios
-            .post("http://localhost:8000/chats/getConversationOnDate", {
+            .post("http://localhost:8000/conversations/getConversationOnDate", {
                 date: selectedDate,
                 chatId: activeChat.chat_id,
             })
             .then((response) => {
-                // console.log(response.data);
                 let rawMessageList = response.data;
-                // console.log(rawMessageList);
 
                 let newMessageList = new Array<JSX.Element>();
 
@@ -239,10 +224,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                                     hidden={!calendarDisplayed}
                                 />
                                 <label htmlFor="select-date">
-                                    <span
-                                        onClick={toggleCalendar}
-                                        className="material-symbols-outlined icon btn"
-                                    >
+                                    <span onClick={toggleCalendar} className="material-symbols-outlined icon btn">
                                         {" "}
                                         calendar_month{" "}
                                     </span>
@@ -251,10 +233,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                         </div>
                         <span className="material-symbols-outlined icon btn"> casino </span>
                         <span className="material-symbols-outlined icon btn"> info </span>
-                        <span
-                            className="material-symbols-outlined icon btn"
-                            style={{ color: "red" }}
-                        >
+                        <span className="material-symbols-outlined icon btn" style={{ color: "red" }}>
                             {" "}
                             delete{" "}
                         </span>
@@ -291,10 +270,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                                 hidden={!calendarDisplayed}
                             />
                             <label htmlFor="select-date">
-                                <span
-                                    onClick={toggleCalendar}
-                                    className="material-symbols-outlined icon btn"
-                                >
+                                <span onClick={toggleCalendar} className="material-symbols-outlined icon btn">
                                     {" "}
                                     calendar_month{" "}
                                 </span>

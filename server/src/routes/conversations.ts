@@ -4,6 +4,6 @@ import { pool } from "../app.js";
 
 export const conversationsRouter = Router();
 
-conversationsRouter.post("getConversationOnDate", async (request: Request, response: Response) => {
+conversationsRouter.post("/getConversationOnDate", async (request: Request, response: Response) => {
     getConversationOnDate(pool, request, response);
 });

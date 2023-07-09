@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
 import {
@@ -9,7 +8,7 @@ import {
     rollbackTransaction,
 } from "../database.js";
 import {
-    getChatDataFromFiles,
+    getChatDataFromFile,
     getChatOwnerFromRequest,
     getChatTitleFromChatData,
     getFilesFromRequest,
@@ -17,12 +16,9 @@ import {
 } from "../../services/chats.js";
 import { getUserIdFromUsername } from "../core.js";
 import { deleteChat, doesChatExist, insertChatToDB } from "./chats.js";
-import { ChatData } from "../../types.js";
 import { insertConversationIntoDB } from "../conversations/conversations.js";
-import { getAllMessages, splitConversationsByDay } from "../../services/messages.js";
-import * as fs from "fs";
-import { promisify } from "util";
-import { logConversationInserted } from "../../services/conversations.js";
+import { Message } from "../../types.js";
+import { getConversationsFromFiles, logConversationInserted } from "../../services/conversations.js";
 
 // @ts-ignore
 export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
@@ -35,25 +31,20 @@ export const uploadFiles = async (pool: Pool, request: Request, response: Respon
 
         // @ts-ignore An error to do with unmatched types from the request.files
         // Come back to solve later, but for now it seems to work.
-        const chatData = getChatDataFromFiles(files);
+        const chatData = getChatDataFromFile(files[0]);
         const chatTitle = getChatTitleFromChatData(chatData);
 
         await deleteOldChatIfExists(client, chatOwnerId, chatTitle);
         const [chatId, chatImageColor] = await insertChatToDB(client, chatOwnerId, chatTitle);
 
-        // TODO: Implement from line 140 onwards (app.ts file)
         // @ts-ignore Same as above
-        const numMessages = insertAllConversationsFromUploadIntoDB(client, files, chatData, chatId);
-        response.json({
-            chatId: chatId,
-            chatTitle: chatTitle,
-            numMessages: numMessages,
-            bgColor: chatImageColor,
-        });
+        const conversations = getConversationsFromFiles(files);
+        const numMessages = await insertAllConversationsFromUploadIntoDB(client, conversations, chatId);
+        sendUploadFilesResponse(response, chatId, chatTitle, numMessages, chatImageColor);
         await commitTransaction(client);
     } catch (error: unknown) {
         await rollbackTransaction(client);
-        log(error);
+        console.log(error);
     } finally {
         releasePoolClient(client);
     }
@@ -72,28 +63,64 @@ export const deleteOldChatIfExists = async (
     }
 };
 
-export const insertAllConversationsFromUploadIntoDB = (
+export const insertAllConversationsFromUploadIntoDB = async (
     client: PoolClient,
-    files: Express.Multer.File[],
-    chatData: ChatData,
+    conversations: Map<string, Message[]>,
     chatId: string
-): number => {
-    const unlinkAsync = promisify(fs.unlink);
+): Promise<number> => {
     let numConversations = 0;
     let numMessages = 0;
 
-    files.forEach(async (file: Express.Multer.File) => {
-        const messages = getAllMessages(chatData);
-        const conversationMap = splitConversationsByDay(messages);
-
-        conversationMap.forEach(async (conversation, date) => {
-            numConversations++;
-            numMessages += conversation.length;
-            await insertConversationIntoDB(client, chatId, date, conversation);
-        });
-        await unlinkAsync(file.path); // Delete file from server
+    conversations.forEach(async (conversation, date) => {
+        numConversations++;
+        numMessages += conversation.length;
+        await insertConversationIntoDB(client, chatId, date, conversation);
     });
 
     logConversationInserted(numConversations);
     return numMessages;
 };
+
+const sendUploadFilesResponse = (
+    response: Response,
+    chatId: string,
+    chatTitle: string,
+    numMessages: number,
+    chatImageColor: string
+) => {
+    response.json({
+        chatId: chatId,
+        chatTitle: chatTitle,
+        numMessages: numMessages,
+        bgColor: chatImageColor,
+    });
+};
+
+// let chatId = chatIdAndColor[0];
+// let bgColor = chatIdAndColor[1];
+// // Get all conversations from this file upload and store in the database
+// console.log("Chat ID: " + chatId);
+// let numMessages = 0; // Tracks how many messages were sent in this chat
+
+// files.forEach(async (file: any) => {
+//     // let chatData = require(file.path);
+//     let messages = getAllMessages(chatData);
+//     let conversationsMap = splitConversationsByDay(messages);
+
+//     conversationsMap.forEach(async (conversation, date) => {
+//         numMessages += conversation.length;
+//         let conversationId = await db.addConversation(
+//             connection,
+//             chatId,
+//             date,
+//             JSON.stringify(conversation),
+//             conversation.length
+//         );
+//         console.log("Conversation ID: " + conversationId);
+//     });
+
+//     // Delete file from server
+//     await unlinkAsync(file.path);
+
+//     // res.send()
+// });
