@@ -4,6 +4,21 @@ export interface User {
     password: string;
 }
 
+export interface Chat {
+    chat_id: string;
+    chat_owner_id: string;
+    title: string;
+    bg_color: string;
+}
+
+export interface Conversation {
+    conversation_id: string;
+    chat_id: string;
+    conversation_date: string;
+    messages: string;
+    num_messages: number;
+}
+
 export interface ChatData {
     paricipants: Participant[];
     messages: Message[];
@@ -24,12 +39,4 @@ export interface Message {
 export interface Reaction {
     reaction: string;
     actor: string;
-}
-
-export interface Conversation {
-    conversation_id: string;
-    chat_id: string;
-    conversation_date: string;
-    messages: string;
-    num_messages: number;
 }
