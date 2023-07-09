@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
 import {
@@ -18,10 +17,8 @@ import {
 import { getUserIdFromUsername } from "../core.js";
 import { deleteChat, doesChatExist, insertChatToDB } from "./chats.js";
 import { insertConversationIntoDB } from "../conversations/conversations.js";
-import { getAllMessages, splitConversationsByDay } from "../../services/messages.js";
-import * as fs from "fs";
-import { promisify } from "util";
-import { logConversationInserted } from "../../services/conversations.js";
+import { Message } from "../../types.js";
+import { getConversationsFromFiles, logConversationInserted } from "../../services/conversations.js";
 
 // @ts-ignore
 export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
@@ -41,17 +38,13 @@ export const uploadFiles = async (pool: Pool, request: Request, response: Respon
         const [chatId, chatImageColor] = await insertChatToDB(client, chatOwnerId, chatTitle);
 
         // @ts-ignore Same as above
-        const numMessages = await insertAllConversationsFromUploadIntoDB(client, files, chatId);
-        response.json({
-            chatId: chatId,
-            chatTitle: chatTitle,
-            numMessages: numMessages,
-            bgColor: chatImageColor,
-        });
+        const conversations = getConversationsFromFiles(files);
+        const numMessages = await insertAllConversationsFromUploadIntoDB(client, conversations, chatId);
+        sendUploadFilesResponse(response, chatId, chatTitle, numMessages, chatImageColor);
         await commitTransaction(client);
     } catch (error: unknown) {
         await rollbackTransaction(client);
-        log(error);
+        console.log(error);
     } finally {
         releasePoolClient(client);
     }
@@ -72,29 +65,35 @@ export const deleteOldChatIfExists = async (
 
 export const insertAllConversationsFromUploadIntoDB = async (
     client: PoolClient,
-    files: Express.Multer.File[],
+    conversations: Map<string, Message[]>,
     chatId: string
 ): Promise<number> => {
-    const unlinkAsync = promisify(fs.unlink);
     let numConversations = 0;
     let numMessages = 0;
 
-    files.forEach(async (file: Express.Multer.File) => {
-        const chatData = getChatDataFromFile(file);
-        const messages = getAllMessages(chatData);
-        const conversationMap = splitConversationsByDay(messages);
-        log(conversationMap.keys());
-
-        conversationMap.forEach(async (conversation, date) => {
-            numConversations++;
-            numMessages += conversation.length;
-            await insertConversationIntoDB(client, chatId, date, conversation);
-        });
-        await unlinkAsync(file.path); // Delete file from server
+    conversations.forEach(async (conversation, date) => {
+        numConversations++;
+        numMessages += conversation.length;
+        await insertConversationIntoDB(client, chatId, date, conversation);
     });
 
     logConversationInserted(numConversations);
     return numMessages;
+};
+
+const sendUploadFilesResponse = (
+    response: Response,
+    chatId: string,
+    chatTitle: string,
+    numMessages: number,
+    chatImageColor: string
+) => {
+    response.json({
+        chatId: chatId,
+        chatTitle: chatTitle,
+        numMessages: numMessages,
+        bgColor: chatImageColor,
+    });
 };
 
 // let chatId = chatIdAndColor[0];

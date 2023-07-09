@@ -7,7 +7,7 @@ import {
     logConversationFound,
 } from "../../services/conversations.js";
 import { getChatIdFromRequest } from "../../services/chats.js";
-import { Conversation } from "../../types.js";
+import { Conversation, Message } from "../../types.js";
 
 export const getConversationOnDate = async (pool: Pool, request: Request, response: Response) => {
     const conversationDate = getConversationDateFromRequest(request);
@@ -30,7 +30,7 @@ export const insertConversationIntoDB = async (
     client: PoolClient,
     chatId: string,
     date: string,
-    conversation: JSON[]
+    conversation: Message[]
 ): Promise<void> => {
     const insertConversationQuery = `INSERT INTO Conversations(chat_id, conversation_date, messages, num_messages)
                                      VALUES ($1,$2,$3,$4)`;
