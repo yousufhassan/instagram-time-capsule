@@ -1,4 +1,3 @@
-// import { Request, Response } from "express";
 import { PoolClient } from "pg";
 
 export const getUserIdFromUsername = async (client: PoolClient, username: string): Promise<string> => {

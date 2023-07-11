@@ -28,7 +28,7 @@ export const login = async (pool: Pool, request: Request, response: Response) =>
         if (user !== undefined) {
             await tryLogin(user, username, password, response);
         } else {
-            userDoesNotExist(response);
+            sendUserDoesNotExist(response);
         }
         await commitTransaction(client);
     } catch (error: unknown) {
@@ -61,7 +61,7 @@ const tryLogin = async (user: User, username: string, password: string, response
     }
 };
 
-const userDoesNotExist = (response: Response) => {
+const sendUserDoesNotExist = (response: Response) => {
     logUserDoesNotExist();
     response.sendStatus(404);
 };

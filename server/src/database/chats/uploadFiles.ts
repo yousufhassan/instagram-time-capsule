@@ -20,7 +20,6 @@ import { insertConversationIntoDB } from "../conversations/conversations.js";
 import { Message } from "../../types.js";
 import { getConversationsFromFiles, logConversationInserted } from "../../services/conversations.js";
 
-// @ts-ignore
 export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);
     try {
@@ -95,32 +94,3 @@ const sendUploadFilesResponse = (
         bgColor: chatImageColor,
     });
 };
-
-// let chatId = chatIdAndColor[0];
-// let bgColor = chatIdAndColor[1];
-// // Get all conversations from this file upload and store in the database
-// console.log("Chat ID: " + chatId);
-// let numMessages = 0; // Tracks how many messages were sent in this chat
-
-// files.forEach(async (file: any) => {
-//     // let chatData = require(file.path);
-//     let messages = getAllMessages(chatData);
-//     let conversationsMap = splitConversationsByDay(messages);
-
-//     conversationsMap.forEach(async (conversation, date) => {
-//         numMessages += conversation.length;
-//         let conversationId = await db.addConversation(
-//             connection,
-//             chatId,
-//             date,
-//             JSON.stringify(conversation),
-//             conversation.length
-//         );
-//         console.log("Conversation ID: " + conversationId);
-//     });
-
-//     // Delete file from server
-//     await unlinkAsync(file.path);
-
-//     // res.send()
-// });

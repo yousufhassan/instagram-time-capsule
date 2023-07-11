@@ -7,8 +7,7 @@ export const chatsRouter = Router();
 
 const storage = multer.diskStorage({
     destination: "../uploads",
-    // @ts-ignore
-    filename: function (req: any, file: any, cb: any) {
+    filename: function (file: any, cb: any) {
         cb(null, file.originalname.slice(0, -5) + "-" + Date.now() + ".json");
     },
 });

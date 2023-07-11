@@ -1,10 +1,5 @@
 import cors from "cors";
 import express from "express";
-// import multer from "multer";
-// import * as fs from "fs";
-// import { promisify } from "util";
-import { database } from "./models/database.js";
-// import { getAllMessages, getChatTitle, splitConversationsByDay } from "./services/messages.js";
 import { createPool } from "./database/database.js";
 import { authRouter } from "./routes/auth.js";
 import { chatsRouter } from "./routes/chats.js";
@@ -17,8 +12,6 @@ const port = 8000;
 app.use("/auth", authRouter);
 app.use("/chats", chatsRouter);
 app.use("/conversations", conversationsRouter);
-// const unlinkAsync = promisify(fs.unlink);
-export const db = new database();
 export const pool = createPool();
 
 // Start web app
@@ -34,12 +27,3 @@ app.listen(port, () => {
     //server starts listening for any attempts from a client to connect at port: {port}
     console.log(`Now listening on port ${port}`);
 });
-
-// app.post("/getConversationOnDate", (req: any, res: any) => {
-//     let date = req.body.date;
-//     let chatId = req.body.chatId;
-//     db.con.getConnection(async function (connection: any) {
-//         db.getConversationOnDate(connection, res, date, chatId);
-//         connection.release();
-//     });
-// });
