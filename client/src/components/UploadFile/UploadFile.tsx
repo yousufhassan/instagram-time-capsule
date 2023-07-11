@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import '../../styles/general.css';
-import './UploadFile.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "../../styles/general.css";
+import "./UploadFile.css";
 // import { Link, useNavigate } from "react-router-dom";
 
-
-function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
+function UploadFile({ chatDataCallback }: { chatDataCallback: Function }) {
     // alert('asdf')
     const user = JSON.parse(localStorage.getItem("user")!);
     const [files, setFiles] = useState<any[]>([]);
@@ -27,13 +26,15 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
         // Append the username of the logged in user to the FormData object
         data.append("user", user.username);
 
-        axios.post('http://localhost:8000/uploadFiles', data,
-            { headers: { 'Content-Type': 'multipart/form-data' } })
+        axios
+            .post("http://localhost:8000/chats/uploadFiles", data, {
+                headers: { "Content-Type": "multipart/form-data" },
+            })
             .then((response) => {
-                console.log(response)
+                console.log(response);
                 console.log(response.data);
-                
-                chatDataCallback(response.data)
+
+                chatDataCallback(response.data);
                 setFiles([]);
                 setFilesSelected(false);
                 setIsUploadInProgress(false);
@@ -45,35 +46,39 @@ function UploadFile({chatDataCallback}:{chatDataCallback: Function}) {
                 setFiles([]);
                 setFilesSelected(false);
             });
-    }
+    };
 
     const selectFileHandler = (e: any) => {
-        setFiles(e.target.files)
+        setFiles(e.target.files);
         if (e.target.files.length > 0) {
             setFilesSelected(true);
-        }
-        else {
+        } else {
             setFilesSelected(false);
         }
-    }
+    };
 
     return (
         <div>
-            <form name='upload-form' onSubmit={uploadFiles}>
-                <label id='add-conversation' htmlFor='file-upload' className='custom-file-upload light-grey-text'>
-                    <span className="material-symbols-outlined">
-                        upload_file
-                    </span>
-                    <p className='no-margin'>
-                        Add new conversation
-                    </p>
-                    <button id='upload-btn' className='light-grey-bg btn' hidden={!filesSelected}>Upload {files.length} files</button>
+            <form name="upload-form" onSubmit={uploadFiles}>
+                <label id="add-conversation" htmlFor="file-upload" className="custom-file-upload light-grey-text">
+                    <span className="material-symbols-outlined">upload_file</span>
+                    <p className="no-margin">Add new conversation</p>
+                    <button id="upload-btn" className="light-grey-bg btn" hidden={!filesSelected}>
+                        Upload {files.length} files
+                    </button>
                     <div className="loader" hidden={!isUploadInProgress}></div>
                 </label>
-                <input type="file" id='file-upload' accept='.json' onChange={selectFileHandler} multiple disabled={isUploadInProgress} />
+                <input
+                    type="file"
+                    id="file-upload"
+                    accept=".json"
+                    onChange={selectFileHandler}
+                    multiple
+                    disabled={isUploadInProgress}
+                />
             </form>
         </div>
-    )
+    );
 }
 
 export default UploadFile;

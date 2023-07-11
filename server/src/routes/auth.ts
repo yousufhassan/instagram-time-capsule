@@ -1,22 +1,13 @@
-import { db } from "../app.js";
-import express from "express";
-export const router = express.Router();
+import { Request, Response, Router } from "express";
+import { pool } from "../app.js";
+import { createUser } from "../database/auth/createUser.js";
+import { login } from "../database/auth/login.js";
+export const authRouter = Router();
 
-router.post("/createUser", async (req: any, res: any) => {
-    db.createUser(req, res);
-    console.log(res);
+authRouter.post("/createUser", async (request: Request, response: Response) => {
+    createUser(pool, request, response);
 });
 
-router.post("/login", async (req: any, res: any) => {
-    db.login(req, res);
+authRouter.post("/login", async (request: Request, response: Response) => {
+    login(pool, request, response);
 });
-
-// app.post("/createUser", async (req, res) => {
-//     db.createUser(req, res);
-//     console.log(res);
-// });
-
-// // LOGIN USER
-// app.post("/login", async (req, res) => {
-//     db.login(req, res);
-// });
