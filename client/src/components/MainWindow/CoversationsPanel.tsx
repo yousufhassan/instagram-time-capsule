@@ -4,22 +4,11 @@ import UploadFile from "../UploadFile/UploadFile";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function ChatItem({
-    chatTitle,
-    numMessages,
-    bgColor,
-}: {
-    chatTitle: string;
-    numMessages: number;
-    bgColor: string;
-}) {
+function ChatItem({ chatTitle, numMessages, bgColor }: { chatTitle: string; numMessages: number; bgColor: string }) {
     return (
         <div>
             <div className="flex-row center chat-item-container">
-                <span
-                    className="flex-row center chat-item-img"
-                    style={{ backgroundColor: bgColor }}
-                ></span>
+                <span className="flex-row center chat-item-img" style={{ backgroundColor: bgColor }}></span>
                 <div className="chat-item-details">
                     <h3 className="no-margin white-text">{chatTitle}</h3>
                     <p className="thin white-text">{numMessages} messages</p>
@@ -29,13 +18,7 @@ function ChatItem({
     );
 }
 
-function ConversationPanel({
-    activeChat,
-    setActiveChat,
-}: {
-    activeChat: any;
-    setActiveChat: Function;
-}) {
+function ConversationPanel({ activeChat, setActiveChat }: { activeChat: any; setActiveChat: Function }) {
     const user = JSON.parse(localStorage.getItem("user")!);
     const [chatList, setChatList] = useState(Array<JSX.Element>());
     // console.log(activeChat);
@@ -54,46 +37,40 @@ function ConversationPanel({
         // }
     };
 
-    const initializeChatList = async () => {
-        let username = user.username;
-        axios
-            .post("http://localhost:8000/chats/getChatList", { username })
-            .then((response) => {
-                let initialChatList = new Array<JSX.Element>();
-                let rawChatList = response.data;
-                rawChatList.map(
-                    (chat: {
-                        chat_id: number;
-                        title: string;
-                        num_messages: number;
-                        bg_color: string;
-                    }) => {
-                        initialChatList.push(
-                            <li
-                                key={chat.chat_id}
-                                onClick={() => {
-                                    selectChat(chat);
-                                }}
-                            >
-                                <ChatItem
-                                    chatTitle={chat.title}
-                                    numMessages={chat.num_messages}
-                                    bgColor={chat.bg_color}
-                                />
-                            </li>
-                        );
-                    }
-                );
-
-                setChatList(initialChatList);
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-            });
-    };
-
     useEffect(() => {
+        const initializeChatList = async () => {
+            let username = user.username;
+            axios
+                .post("http://localhost:8000/chats/getChatList", { username })
+                .then((response) => {
+                    let initialChatList = new Array<JSX.Element>();
+                    let rawChatList = response.data;
+                    rawChatList.map(
+                        (chat: { chat_id: number; title: string; num_messages: number; bg_color: string }) =>
+                            initialChatList.push(
+                                <li
+                                    key={chat.chat_id}
+                                    onClick={() => {
+                                        selectChat(chat);
+                                    }}
+                                >
+                                    <ChatItem
+                                        chatTitle={chat.title}
+                                        numMessages={chat.num_messages}
+                                        bgColor={chat.bg_color}
+                                    />
+                                </li>
+                            )
+                    );
+
+                    setChatList(initialChatList);
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        };
         initializeChatList();
+        // eslint-disable-next-line
     }, []);
 
     const addChatToChatList = (chatData: {
