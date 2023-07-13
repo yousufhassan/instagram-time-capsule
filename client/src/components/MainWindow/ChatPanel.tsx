@@ -37,7 +37,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
     if (message) {
         // If the other (non-logged in) user sent the message
         if (activeChatTitle === message.sender_name) {
-            if (message.content == "Cannot load this type of message") {
+            if (message.content === "Cannot load this type of message") {
                 return (
                     <div>
                         <div
@@ -78,7 +78,7 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
 
         // If the logged in user sent the message
         else {
-            if (message.content == "Cannot load this type of message") {
+            if (message.content === "Cannot load this type of message") {
                 return (
                     <div>
                         <div className="flex-row" style={{ alignItems: "center" }}>
@@ -138,62 +138,61 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
         setSelectedDate(e.target.value);
     };
 
-    const displayChat = async () => {
-        // let date = '2022-10-10'  // TODO: get date from user input
-        // let date = selectedDate;
-        // let dateObj = new Date(date);
-        // dateObj.setDate(dateObj.getDate() + 1)
-        // setSelectedDate(dateObj);
-
-        axios
-            .post("http://localhost:8000/conversations/getConversationOnDate", {
-                date: selectedDate,
-                chatId: activeChat.chat_id,
-            })
-            .then((response) => {
-                let rawMessageList = response.data;
-
-                let newMessageList = new Array<JSX.Element>();
-
-                for (let i = rawMessageList.length - 1; i >= 0; i--) {
-                    // console.log(rawMessageList[i]);
-
-                    let message = rawMessageList[i];
-
-                    // If the message contains no text-content (i.e. link, photo, post, etc.), then
-                    // set text-content to be an error message.
-                    if (!("content" in rawMessageList[i])) {
-                        message["content"] = "Cannot load this type of message";
-                        // console.log(message);
-                    }
-
-                    // This block of code decodes the Facebook styled encoding to UTF-8
-                    // Solution taken from: https://stackoverflow.com/questions/54067194/convert-facebook-json-file-sequences-like-u00f0-u009f-u0098-u008a-to-emoji-char
-                    else {
-                        let arr: number[] = [];
-                        for (let i = 0; i < message["content"].length; i++) {
-                            arr.push(message["content"].charCodeAt(i));
-                        }
-                        message["content"] = Buffer.from(arr).toString("utf8");
-                        // console.log(message["content"]);
-                    }
-
-                    // Add message to list of messages
-                    newMessageList.push(
-                        <li key={i}>
-                            <MessageBubble activeChatTitle={activeChat.title} message={message} />
-                        </li>
-                    );
-                }
-
-                setMessageList(newMessageList);
-            })
-            .catch(function (error) {
-                console.log("Error: " + error);
-            });
-    };
-
     useEffect(() => {
+        const displayChat = async () => {
+            // let date = '2022-10-10'  // TODO: get date from user input
+            // let date = selectedDate;
+            // let dateObj = new Date(date);
+            // dateObj.setDate(dateObj.getDate() + 1)
+            // setSelectedDate(dateObj);
+
+            axios
+                .post("http://localhost:8000/conversations/getConversationOnDate", {
+                    date: selectedDate,
+                    chatId: activeChat.chat_id,
+                })
+                .then((response) => {
+                    let rawMessageList = response.data;
+
+                    let newMessageList = new Array<JSX.Element>();
+
+                    for (let i = rawMessageList.length - 1; i >= 0; i--) {
+                        // console.log(rawMessageList[i]);
+
+                        let message = rawMessageList[i];
+
+                        // If the message contains no text-content (i.e. link, photo, post, etc.), then
+                        // set text-content to be an error message.
+                        if (!("content" in rawMessageList[i])) {
+                            message["content"] = "Cannot load this type of message";
+                            // console.log(message);
+                        }
+
+                        // This block of code decodes the Facebook styled encoding to UTF-8
+                        // Solution taken from: https://stackoverflow.com/questions/54067194/convert-facebook-json-file-sequences-like-u00f0-u009f-u0098-u008a-to-emoji-char
+                        else {
+                            let arr: number[] = [];
+                            for (let i = 0; i < message["content"].length; i++) {
+                                arr.push(message["content"].charCodeAt(i));
+                            }
+                            message["content"] = Buffer.from(arr).toString("utf8");
+                            // console.log(message["content"]);
+                        }
+
+                        // Add message to list of messages
+                        newMessageList.push(
+                            <li key={i}>
+                                <MessageBubble activeChatTitle={activeChat.title} message={message} />
+                            </li>
+                        );
+                    }
+
+                    setMessageList(newMessageList);
+                })
+                .catch(function (error) {
+                    console.log("Error: " + error);
+                });
+        };
         displayChat();
     }, [activeChat, selectedDate]);
 
@@ -208,7 +207,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                 </div>
             </div>
         );
-    } else if (messageList.length == 0) {
+    } else if (messageList.length === 0) {
         return (
             <div>
                 <div id="chat-panel-header" className="flex-row space-btwn">
