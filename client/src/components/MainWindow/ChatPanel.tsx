@@ -111,14 +111,22 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [calendarDisplayed, setCalendarDisplayed] = useState(false);
 
-    const convertDateToString = (date: Date): string => {
-        // console.log(dateObj);
-        let dateObj = new Date(date);
-        return dateObj.toLocaleString("default", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-        });
+    const convertDateToString = (date: string | Date): string => {
+        if (typeof date === "object") {
+            return date.toLocaleString("default", {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+            });
+        } else {
+            let dateObj = new Date(date);
+            dateObj.setDate(dateObj.getDate() + 1);
+            return dateObj.toLocaleString("default", {
+                month: "short",
+                day: "2-digit",
+                year: "numeric",
+            });
+        }
     };
 
     const toggleCalendar = () => {
