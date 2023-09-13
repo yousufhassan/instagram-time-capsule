@@ -107,6 +107,7 @@ dist
 *.js
 
 # SQL files
+/server/src/database/schema
 *.sql
 
 # DS_Store file
