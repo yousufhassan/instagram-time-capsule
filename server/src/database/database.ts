@@ -3,7 +3,7 @@ import pg, { Pool, PoolClient } from "pg";
 dotenv.config();
 
 export const createPool = () => {
-    return new pg.Pool({ connectionString: process.env.DATABASE_URL });
+    return new pg.Pool({ connectionString: process.env.LOCAL_DATABASE_URL });
 };
 
 export const acquireClientFromPool = (pool: Pool) => {

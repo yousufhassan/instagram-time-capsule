@@ -141,3 +141,6 @@ yarn-error.log*
 
 # Directory with uploaded instagram files
 /server/uploads/
+
+# Original data
+/server/original-data/
