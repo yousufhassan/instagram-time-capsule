@@ -144,3 +144,6 @@ yarn-error.log*
 
 # Original data
 /server/original-data/
+
+# React client build directory
+/server/build
