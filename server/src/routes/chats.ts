@@ -6,7 +6,7 @@ import multer from "multer";
 export const chatsRouter = Router();
 
 const storage = multer.diskStorage({
-    destination: "../uploads",
+    destination: "./uploads",
     // @ts-ignore The unused 'request' variable. The function expects it to be there
     // otherwise, things don't work nicely.
     filename: function (request: Request, file: any, cb: any) {
