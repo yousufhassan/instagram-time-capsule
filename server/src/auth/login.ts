@@ -6,7 +6,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../database.js";
+} from "../common/database.js";
 import { log } from "console";
 import {
     getPasswordFromRequest,
@@ -14,9 +14,9 @@ import {
     logIncorrectPassword,
     logSuccessfulLogin,
     logUserDoesNotExist,
-} from "../../services/auth.js";
+} from "./services.js";
 import { compare } from "bcrypt";
-import { User } from "../../types.js";
+import { User } from "../types.js";
 
 export const login = async (pool: Pool, request: Request, response: Response) => {
     const client = await acquireClientFromPool(pool);

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
-import { getUserIdFromUsername } from "../core.js";
-import { getUsernameFromRequest } from "../../services/auth.js";
+import { getUserIdFromUsername } from "../common/services.js";
+import { getUsernameFromRequest } from "../auth/services.js";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../database.js";
+} from "../common/database.js";
 import { log } from "console";
-import { getChatImageColor, logChatDeleted, logChatInserted } from "../../services/chats.js";
+import { getChatImageColor, logChatDeleted, logChatInserted } from "./services.js";
 
 export const getChatList = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);

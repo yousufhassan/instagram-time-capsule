@@ -6,19 +6,19 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../database.js";
+} from "../common/database.js";
 import {
     getChatDataFromFile,
     getChatOwnerFromRequest,
     getChatTitleFromChatData,
     getFilesFromRequest,
     logChatDoesNotExist,
-} from "../../services/chats.js";
-import { getUserIdFromUsername } from "../core.js";
-import { deleteChat, doesChatExist, insertChatToDB } from "./chats.js";
-import { insertConversationIntoDB } from "../conversations/conversations.js";
-import { Message } from "../../types.js";
-import { getConversationsFromFiles, logConversationInserted } from "../../services/conversations.js";
+} from "./services.js";
+import { getUserIdFromUsername } from "../common/services.js";
+import { deleteChat, doesChatExist, insertChatToDB } from "./chatList.js";
+import { insertConversationIntoDB } from "../conversation/getConversation.js";
+import { Message } from "../types.js";
+import { getConversationsFromFiles, logConversationInserted } from "../conversation/services.js";
 
 export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);

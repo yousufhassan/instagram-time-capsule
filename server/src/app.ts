@@ -1,9 +1,9 @@
 import cors from "cors";
 import express from "express";
-import { createPool } from "./database/database.js";
-import { authRouter } from "./routes/auth.js";
-import { chatsRouter } from "./routes/chats.js";
-import { conversationsRouter } from "./routes/conversations.js";
+import { createPool } from "./common/database.js";
+import { authRouter } from "./auth/routes.js";
+import { chatsRouter } from "./chat/routes.js";
+import { conversationsRouter } from "./conversation/routes.js";
 export const app = express();
 app.use(cors());
 app.use(express.json());

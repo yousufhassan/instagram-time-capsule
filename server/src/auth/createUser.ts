@@ -3,7 +3,7 @@ import {
     getUsernameFromRequest,
     logUserAlreadyExists,
     logUserCreated,
-} from "../../services/auth.js";
+} from "./services.js";
 import { Request, Response } from "express";
 import { log } from "console";
 import {
@@ -12,7 +12,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../database.js";
+} from "../common/database.js";
 import { Pool, PoolClient } from "pg";
 
 export const createUser = async (pool: Pool, request: Request, response: Response): Promise<void> => {

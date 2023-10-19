@@ -1,9 +1,8 @@
 import { log } from "console";
 import { Request } from "express";
-import { getChatDataFromFile } from "./chats.js";
-import { getAllMessages } from "./messages.js";
+import { getChatDataFromFile } from "../chat/services.js";
 import { Message } from "../types.js";
-import { getFormattedDate } from "./core.js";
+import { getAllMessages, getFormattedDate } from "../common/services.js";
 import { promisify } from "util";
 import * as fs from "fs";
 

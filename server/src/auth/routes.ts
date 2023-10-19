@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import { pool } from "../app.js";
-import { createUser } from "../database/auth/createUser.js";
-import { login } from "../database/auth/login.js";
+import { createUser } from "./createUser.js";
+import { login } from "./login.js";
 export const authRouter = Router();
 
 authRouter.post("/createUser", async (request: Request, response: Response) => {

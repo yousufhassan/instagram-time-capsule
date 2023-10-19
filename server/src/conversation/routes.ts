@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { getConversationOnDate } from "../database/conversations/conversations.js";
+import { getConversationOnDate } from "./getConversation.js";
 import { pool } from "../app.js";
 
 export const conversationsRouter = Router();
