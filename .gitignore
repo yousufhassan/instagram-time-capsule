@@ -147,3 +147,6 @@ yarn-error.log*
 
 # React client build directory
 /client/build
+
+# Compiled JS files
+/server/compiled-js
