@@ -150,3 +150,9 @@ yarn-error.log*
 
 # Compiled JS files
 /server/compiled-js
+
+# CDK stuff
+!jest.config.js
+*.d.ts
+.cdk.staging
+cdk.out
