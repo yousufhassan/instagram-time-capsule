@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 import { createPool } from "./common/database.js";
-import { authRouter } from "./auth/routes.js";
+import { authRouter } from "./auth/src/routes.js";
 import { chatsRouter } from "./chat/routes.js";
 import { conversationsRouter } from "./conversation/routes.js";
 export const app = express();

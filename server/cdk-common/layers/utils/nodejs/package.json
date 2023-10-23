@@ -1,7 +1,7 @@
 {
-    "name": "server",
+    "name": "cdk-utils",
     "version": "1.0.0",
-    "description": "",
+    "description": "Node modules Lambda Layer",
     "main": "index.js",
     "type": "commonjs",
     "scripts": {

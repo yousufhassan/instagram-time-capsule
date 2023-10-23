@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
+import { compare } from "bcrypt";
+import { log } from "console";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../common/database.js";
-import { log } from "console";
+} from "../../common/database.js";
 import {
     getPasswordFromRequest,
     getUsernameFromRequest,
@@ -15,8 +16,7 @@ import {
     logSuccessfulLogin,
     logUserDoesNotExist,
 } from "./services.js";
-import { compare } from "bcrypt";
-import { User } from "../types.js";
+import { User } from "../../types.js";
 
 export const login = async (pool: Pool, request: Request, response: Response) => {
     const client = await acquireClientFromPool(pool);

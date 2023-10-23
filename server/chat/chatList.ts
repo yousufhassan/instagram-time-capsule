@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
 import { getUserIdFromUsername } from "../common/services.js";
-import { getUsernameFromRequest } from "../auth/services.js";
+import { getUsernameFromRequest } from "../auth/src/services.js";
 import {
     acquireClientFromPool,
     beginTransaction,

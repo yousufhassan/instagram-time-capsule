@@ -81,10 +81,7 @@ function SignUp() {
                         />
                     </div>
                     <div className="form-section flex-row center">
-                        <button
-                            id="submit-btn"
-                            className="btn flex-row center main-sage-bg white-text"
-                        >
+                        <button id="submit-btn" className="btn flex-row center main-sage-bg white-text">
                             Create account
                         </button>
                     </div>

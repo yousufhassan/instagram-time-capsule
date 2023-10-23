@@ -4,7 +4,7 @@ import { getChatDataFromFile } from "../chat/services.js";
 import { Message } from "../types.js";
 import { getAllMessages, getFormattedDate } from "../common/services.js";
 import { promisify } from "util";
-import * as fs from "fs";
+import * as fs from "fs"; // TODO: only import what is being used
 
 export const getConversationDateFromRequest = (request: Request): string => {
     return request.body.date;

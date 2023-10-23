@@ -142,6 +142,9 @@ yarn-error.log*
 # Directory with uploaded instagram files
 /server/uploads/
 
+# Directory with local cockroach db data
+/server/database/schema/cockroach-data
+
 # Original data
 /server/original-data/
 

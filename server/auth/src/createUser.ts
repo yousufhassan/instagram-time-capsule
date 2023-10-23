@@ -1,19 +1,19 @@
+import { Request, Response } from "express";
+import { Pool, PoolClient } from "pg";
+import { log } from "console";
 import {
     getHashedPasswordFromRequest,
     getUsernameFromRequest,
     logUserAlreadyExists,
     logUserCreated,
 } from "./services.js";
-import { Request, Response } from "express";
-import { log } from "console";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../common/database.js";
-import { Pool, PoolClient } from "pg";
+} from "../../common/database.js";
 
 export const createUser = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);
