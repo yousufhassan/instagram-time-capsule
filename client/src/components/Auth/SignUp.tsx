@@ -28,7 +28,9 @@ function SignUp() {
         e.preventDefault();
         // const user = { username, password };
         axios
-            .post("http://localhost:8000/auth/createUser", { username, password })
+            // TODO: move url into it's own variable or another file preferably
+            // .post("http://localhost:8000/auth/createUser", { username, password })  // Old url
+            .post("https://ztityfvd77vohqx2vkzyjivahy0qnivs.lambda-url.us-east-2.on.aws/", { username, password }) // New url
             .then(async (response) => {
                 // console.log(response);
                 // console.log(response.data);
@@ -81,10 +83,7 @@ function SignUp() {
                         />
                     </div>
                     <div className="form-section flex-row center">
-                        <button
-                            id="submit-btn"
-                            className="btn flex-row center main-sage-bg white-text"
-                        >
+                        <button id="submit-btn" className="btn flex-row center main-sage-bg white-text">
                             Create account
                         </button>
                     </div>
