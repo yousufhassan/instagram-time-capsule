@@ -1,7 +1,7 @@
 import { Request } from "express";
-import fs from "fs";
-import { ChatData } from "../types.js";
+import { ChatData } from "../types";
 import { log } from "console";
+import fs from "fs";
 
 export const getFilesFromRequest = (request: Request) => {
     return request.files;

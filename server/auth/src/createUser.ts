@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { Pool, PoolClient } from "pg";
 import { log } from "console";
 import {
@@ -6,16 +6,16 @@ import {
     getUsernameFromRequest,
     logUserAlreadyExists,
     logUserCreated,
-} from "./services.js";
+} from "../src/services";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../../common/database.js";
+} from "../../common/database";
 
-export const createUser = async (pool: Pool, request: Request, response: Response): Promise<void> => {
+export const createUser = async (pool: Pool, request: Request): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
     try {
         await beginTransaction(client);
@@ -24,16 +24,19 @@ export const createUser = async (pool: Pool, request: Request, response: Respons
         const userExists = await userExistsInDB(client, username);
         if (userExists) {
             logUserAlreadyExists();
-            response.sendStatus(409);
+            return { statusCode: 409 };
+            // response.sendStatus(409);
         } else {
             await insertUserIntoDB(client, username, hashedPassword);
             logUserCreated();
-            response.json({ username: username, password: hashedPassword });
+            // response.json({ username: username, password: hashedPassword });
         }
         await commitTransaction(client);
+        return { username: username, password: hashedPassword };
     } catch (error: unknown) {
         await rollbackTransaction(client);
         log(error);
+        throw error;
     } finally {
         releasePoolClient(client);
     }

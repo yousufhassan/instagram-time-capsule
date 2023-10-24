@@ -1,15 +1,15 @@
 import cors from "cors";
 import express from "express";
-import { createPool } from "./common/database.js";
-import { authRouter } from "./auth/src/routes.js";
-import { chatsRouter } from "./chat/routes.js";
-import { conversationsRouter } from "./conversation/routes.js";
+import { createPool } from "./common/database";
+// import { authRouter } from "auth/src/routes";
+import { chatsRouter } from "./chat/routes";
+import { conversationsRouter } from "./conversation/routes";
 export const app = express();
 app.use(cors());
 app.use(express.json());
 const port = 8000;
 
-app.use("/auth", authRouter);
+// app.use("/auth", authRouter);
 app.use("/chats", chatsRouter);
 app.use("/conversations", conversationsRouter);
 export const pool = createPool();

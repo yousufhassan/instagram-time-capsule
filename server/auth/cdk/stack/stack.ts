@@ -6,12 +6,19 @@ export class AuthStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
-        // @ts-ignore
         const utilsLayer = new LayerVersion(this, "utils-layer", {
+            description: "Contains the node modules for the Node.js app",
             removalPolicy: RemovalPolicy.RETAIN,
             code: Code.fromAsset("../cdk-common/layers/utils"),
             // compatibleArchitectures: [lambda.Architecture.X86_64, lambda.Architecture.ARM_64],
         });
+
+        // const logicLayer = new LayerVersion(this, "logic-layer", {
+        //     description: "Contains the app.js file",
+        //     removalPolicy: RemovalPolicy.RETAIN,
+        //     code: Code.fromAsset("../cdk-common/layers/business-logic"),
+        //     // compatibleArchitectures: [lambda.Architecture.X86_64, lambda.Architecture.ARM_64],
+        // });
 
         const createUserLambdaId = "createUserLambda";
         // @ts-ignore
@@ -26,7 +33,7 @@ export class AuthStack extends Stack {
             authType: FunctionUrlAuthType.NONE,
             // TODO: Put the origin in a different general location or at least in a variable
             // TODO: Change to website url once a proper "www" is available
-            cors: { allowCredentials: true, allowedOrigins: ["https://*"] },
+            cors: { allowCredentials: true, allowedOrigins: ["https://*"], allowedHeaders: ["content-type"] },
         });
     }
 }

@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import { getConversationOnDate } from "./getConversation.js";
-import { pool } from "../app.js";
+import { getConversationOnDate } from "./getConversation";
+import { pool } from "../app";
 
 export const conversationsRouter = Router();
 

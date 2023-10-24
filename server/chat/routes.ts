@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
-import { pool } from "../app.js";
-import { uploadFiles } from "./uploadFiles.js";
-import { getChatList } from "./chatList.js";
+import { pool } from "../app";
+import { uploadFiles } from "./uploadFiles";
+import { getChatList } from "./chatList";
 import multer from "multer";
 export const chatsRouter = Router();
 
