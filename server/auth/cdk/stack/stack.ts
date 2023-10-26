@@ -1,6 +1,8 @@
 import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Code, Function, Runtime, LayerVersion, FunctionUrlAuthType } from "aws-cdk-lib/aws-lambda";
+import { config } from "dotenv";
+config();
 
 export class AuthStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -27,6 +29,7 @@ export class AuthStack extends Stack {
             code: Code.fromAsset("../compiled-js/auth/src"), // code loaded from "src" directory
             handler: "routes.handler", // file is "routes", function is "handler"
             layers: [utilsLayer],
+            environment: { DATABASE_URL: process.env.DATABASE_URL! },
         });
 
         createUser.addFunctionUrl({

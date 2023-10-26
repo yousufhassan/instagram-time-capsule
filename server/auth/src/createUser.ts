@@ -1,21 +1,15 @@
-import { Request } from "express";
 import { Pool, PoolClient } from "pg";
 import { log } from "console";
-import {
-    getHashedPasswordFromRequest,
-    getUsernameFromRequest,
-    logUserAlreadyExists,
-    logUserCreated,
-} from "../src/services";
+import { getHashedPasswordFromRequest, getUsernameFromRequest, logUserAlreadyExists, logUserCreated } from "./services";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../../common/database";
+} from "./database";
 
-export const createUser = async (pool: Pool, request: Request): Promise<Object> => {
+export const createUser = async (pool: Pool, request: any): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
     try {
         await beginTransaction(client);
@@ -25,14 +19,12 @@ export const createUser = async (pool: Pool, request: Request): Promise<Object> 
         if (userExists) {
             logUserAlreadyExists();
             return { statusCode: 409 };
-            // response.sendStatus(409);
         } else {
             await insertUserIntoDB(client, username, hashedPassword);
             logUserCreated();
-            // response.json({ username: username, password: hashedPassword });
         }
         await commitTransaction(client);
-        return { username: username, password: hashedPassword };
+        return { username: username, password: hashedPassword, test: "it works shordyyyy" };
     } catch (error: unknown) {
         await rollbackTransaction(client);
         log(error);

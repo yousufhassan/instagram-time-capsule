@@ -1,5 +1,5 @@
 {
     "extends": "../tsconfig.json",
-    "include": ["src", "cdk"],
+    "include": ["src", "cdk", "src/database.ts"],
     "exclude": ["cdk.out"]
 }

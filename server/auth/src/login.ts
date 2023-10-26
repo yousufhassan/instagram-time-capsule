@@ -8,7 +8,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../../common/database.js";
+} from "./database.js";
 import {
     getPasswordFromRequest,
     getUsernameFromRequest,

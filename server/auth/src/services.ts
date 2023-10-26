@@ -1,17 +1,17 @@
 import { log } from "console";
-import { hash } from "bcrypt";
-import { Request } from "express";
+import { hash } from "bcryptjs";
+// import { Request } from "express";
 
-export const getUsernameFromRequest = (request: Request): string => {
-    return request.body.username;
+export const getUsernameFromRequest = (request: any): string => {
+    return request.username;
 };
 
-export const getPasswordFromRequest = (request: Request): string => {
-    return request.body.password;
+export const getPasswordFromRequest = (request: any): string => {
+    return request.password;
 };
 
-export const getHashedPasswordFromRequest = (request: Request) => {
-    return hash(request.body.password, 10);
+export const getHashedPasswordFromRequest = async (request: any) => {
+    return await hash(request.password, 10);
 };
 
 export const logUserAlreadyExists = () => {
