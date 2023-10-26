@@ -6,7 +6,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../common/database";
+} from "../auth/src/database";
 import {
     getChatDataFromFile,
     getChatOwnerFromRequest,

@@ -1,9 +1,9 @@
 import cors from "cors";
 import express from "express";
-import { createPool } from "./common/database";
 // import { authRouter } from "auth/src/routes";
 import { chatsRouter } from "./chat/routes";
 import { conversationsRouter } from "./conversation/routes";
+import { createPool } from "./auth/src/database";
 export const app = express();
 app.use(cors());
 app.use(express.json());

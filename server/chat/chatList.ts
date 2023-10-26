@@ -8,7 +8,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../common/database";
+} from "../auth/src/database";
 import { log } from "console";
 import { getChatImageColor, logChatDeleted, logChatInserted } from "./services";
 

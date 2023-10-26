@@ -27,8 +27,9 @@ function SignUp() {
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         // const user = { username, password };
+        // TODO: can we rename the lambda urls?
         axios
-            .post("http://localhost:8000/auth/createUser", { username, password })
+            .post("https://ztityfvd77vohqx2vkzyjivahy0qnivs.lambda-url.us-east-2.on.aws/", { username, password })
             .then(async (response) => {
                 // console.log(response);
                 // console.log(response.data);
