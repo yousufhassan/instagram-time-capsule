@@ -1,6 +1,6 @@
 import { App } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { AuthStack } from "../stack/stack.js";
+import { AuthStack } from "../stack/AuthStack.js";
 
 test("SQS Queue and SNS Topic Created", () => {
     const app = new App();

@@ -1,4 +1,4 @@
-import { RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
+import { Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Code, Function, Runtime, LayerVersion, FunctionUrlAuthType } from "aws-cdk-lib/aws-lambda";
 import { config } from "dotenv";
@@ -12,7 +12,6 @@ export class AuthStack extends Stack {
             description: "Contains the node modules for the Node.js app",
             removalPolicy: RemovalPolicy.RETAIN,
             code: Code.fromAsset("../cdk-common/layers/utils"),
-            // compatibleArchitectures: [lambda.Architecture.X86_64, lambda.Architecture.ARM_64],
         });
 
         // const logicLayer = new LayerVersion(this, "logic-layer", {
@@ -23,13 +22,14 @@ export class AuthStack extends Stack {
         // });
 
         const createUserLambdaId = "createUserLambda";
-        // @ts-ignore
         const createUser = new Function(this, createUserLambdaId, {
             runtime: Runtime.NODEJS_18_X,
             code: Code.fromAsset("../compiled-js/auth/src"), // code loaded from "src" directory
             handler: "routes.handler", // file is "routes", function is "handler"
             layers: [utilsLayer],
             environment: { DATABASE_URL: process.env.DATABASE_URL! },
+            memorySize: 1024,
+            timeout: Duration.seconds(10),
         });
 
         createUser.addFunctionUrl({
