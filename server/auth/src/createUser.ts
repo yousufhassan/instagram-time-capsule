@@ -24,7 +24,7 @@ export const createUser = async (pool: Pool, request: any): Promise<Object> => {
             logUserCreated();
         }
         await commitTransaction(client);
-        return { username: username, password: hashedPassword, test: "it works shordyyyy" };
+        return { username: username, password: hashedPassword };
     } catch (error: unknown) {
         await rollbackTransaction(client);
         log(error);
