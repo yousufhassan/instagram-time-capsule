@@ -1,8 +1,8 @@
 import { log } from "console";
 import { Request } from "express";
 import { getChatDataFromFile } from "../chat/services";
-import { Message } from "../types";
-import { getAllMessages, getFormattedDate } from "../common/services";
+import { Message } from "../cdk-common/layers/logic/nodejs/types";
+import { getAllMessages, getFormattedDate } from "../cdk-common/layers/logic/nodejs/services";
 import { promisify } from "util";
 import * as fs from "fs"; // TODO: only import what is being used
 

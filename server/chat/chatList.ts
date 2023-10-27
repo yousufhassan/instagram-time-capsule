@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
-import { getUserIdFromUsername } from "../common/services";
 import { getUsernameFromRequest } from "../auth/src/services";
+import { getUserIdFromUsername } from "../cdk-common/layers/logic/nodejs/services";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../auth/src/database";
+} from "../cdk-common/layers/logic/nodejs/database";
 import { log } from "console";
 import { getChatImageColor, logChatDeleted, logChatInserted } from "./services";
 

@@ -1,4 +1,5 @@
 import { PoolClient } from "pg";
+import { ChatData, Message } from "./types.js";
 
 export const getFormattedDate = (date: Date) => {
     return (
@@ -9,8 +10,6 @@ export const getFormattedDate = (date: Date) => {
         date.toLocaleDateString("default", { day: "2-digit" })
     );
 };
-
-import { ChatData, Message } from "../types.js";
 
 /**
  * Prints the message in a readable format.

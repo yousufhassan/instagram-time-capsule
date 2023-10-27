@@ -7,7 +7,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "./database";
+} from "../../cdk-common/layers/logic/nodejs/database";
 
 export const createUser = async (pool: Pool, request: any): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
@@ -18,17 +18,17 @@ export const createUser = async (pool: Pool, request: any): Promise<Object> => {
         const userExists = await userExistsInDB(client, username);
         if (userExists) {
             logUserAlreadyExists();
-            return { statusCode: 409 };
+            throw { message: "ERROR: User already exists.", statusCode: 409 };
         } else {
             await insertUserIntoDB(client, username, hashedPassword);
             logUserCreated();
         }
         await commitTransaction(client);
         return { username: username, password: hashedPassword };
-    } catch (error: unknown) {
+    } catch (error: any) {
         await rollbackTransaction(client);
         log(error);
-        throw error;
+        return error;
     } finally {
         releasePoolClient(client);
     }

@@ -1,6 +1,5 @@
 import { log } from "console";
 import { hash } from "bcryptjs";
-// import { Request } from "express";
 
 export const getUsernameFromRequest = (request: any): string => {
     return request.username;

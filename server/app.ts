@@ -3,7 +3,7 @@ import express from "express";
 // import { authRouter } from "auth/src/routes";
 import { chatsRouter } from "./chat/routes";
 import { conversationsRouter } from "./conversation/routes";
-import { createPool } from "./auth/src/database";
+import { createPool } from "./cdk-common/layers/logic/nodejs/database";
 export const app = express();
 app.use(cors());
 app.use(express.json());

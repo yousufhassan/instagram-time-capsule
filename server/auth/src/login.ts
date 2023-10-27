@@ -8,7 +8,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "./database.js";
+} from "../../cdk-common/layers/logic/nodejs/database.js";
 import {
     getPasswordFromRequest,
     getUsernameFromRequest,
@@ -16,7 +16,7 @@ import {
     logSuccessfulLogin,
     logUserDoesNotExist,
 } from "./services.js";
-import { User } from "../../types.js";
+import { User } from "../../cdk-common/layers/logic/nodejs/types.js";
 
 export const login = async (pool: Pool, request: Request, response: Response) => {
     const client = await acquireClientFromPool(pool);

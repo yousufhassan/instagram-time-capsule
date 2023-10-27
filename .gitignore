@@ -159,3 +159,6 @@ yarn-error.log*
 *.d.ts
 .cdk.staging
 cdk.out
+
+# Environment variables in a TS file
+env.ts
