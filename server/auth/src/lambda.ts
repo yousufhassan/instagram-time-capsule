@@ -6,7 +6,7 @@ let pool: Pool;
 
 // @ts-ignore  remove later!!!
 // TODO: create interfaces/types for event (and maybe context). Make a different one for each event type
-export const handler: Handler = async (event, context) => {
+export const createUserHandler: Handler = async (event, context) => {
     if (!pool) {
         pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
     }
