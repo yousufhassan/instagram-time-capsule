@@ -5,6 +5,7 @@ import "./SignUp-Login.css";
 import "../../styles/form.css";
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from "../Header/AppTitle";
+import { LAMBDA_CREATE_USER_URL } from "../../constants";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function SignUp() {
         // const user = { username, password };
         // TODO: can we rename the lambda urls?
         axios
-            .post("https://ztityfvd77vohqx2vkzyjivahy0qnivs.lambda-url.us-east-2.on.aws/", { username, password })
+            .post(LAMBDA_CREATE_USER_URL, { username, password })
             .then(async (response) => {
                 // console.log(response);
                 // console.log(response.data);
