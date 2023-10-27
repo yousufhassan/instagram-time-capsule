@@ -142,8 +142,23 @@ yarn-error.log*
 # Directory with uploaded instagram files
 /server/uploads/
 
+# Directory with local cockroach db data
+/server/database/schema/cockroach-data
+
 # Original data
 /server/original-data/
 
 # React client build directory
 /client/build
+
+# Compiled JS files
+/server/compiled-js
+
+# CDK stuff
+!jest.config.js
+*.d.ts
+.cdk.staging
+cdk.out
+
+# Environment variables in a TS file
+env.ts
