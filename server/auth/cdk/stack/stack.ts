@@ -27,7 +27,11 @@ export class AuthStack extends Stack {
             code: Code.fromAsset("../compiled-js/auth/src"), // code loaded from "src" directory
             handler: "routes.handler", // file is "routes", function is "handler"
             layers: [utilsLayer],
-            environment: { DATABASE_URL: process.env.DATABASE_URL! },
+            // TODO: how to get this value from .env file and send to lambda config
+            environment: {
+                DATABASE_URL:
+                    "postgresql://yousuf:wFieLj_dOmD9ToVWJ4rh9Q@blond-beira-2717.g95.cockroachlabs.cloud:26257/instagram-capsule?sslmode=verify-full",
+            },
             memorySize: 1024,
             timeout: Duration.seconds(10),
         });
