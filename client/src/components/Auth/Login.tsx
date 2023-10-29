@@ -30,13 +30,8 @@ function Login() {
         axios
             .post(LAMBDA_LOGIN_URL, { username, password })
             .then(async (response) => {
-                // console.log(response)
-                if (response.data === "Password incorrect!") {
-                    alert("Incorrect password given.");
-                } else {
-                    localStorage.setItem("user", JSON.stringify(response.data));
-                    navigate("/home");
-                }
+                localStorage.setItem("user", JSON.stringify(response.data));
+                navigate("/home");
             })
             .catch(function (error) {
                 console.log(error);
