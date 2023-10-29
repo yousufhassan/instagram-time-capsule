@@ -1,6 +1,5 @@
-import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
-import { compare } from "bcrypt";
+import { compare } from "bcryptjs";
 import { log } from "console";
 import {
     acquireClientFromPool,
@@ -18,7 +17,7 @@ import {
 } from "./services.js";
 import { User } from "../../cdk-common/layers/logic/nodejs/types.js";
 
-export const login = async (pool: Pool, request: Request, response: Response) => {
+export const login = async (pool: Pool, request: any): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
     try {
         await beginTransaction(client);
@@ -26,14 +25,18 @@ export const login = async (pool: Pool, request: Request, response: Response) =>
         const password = getPasswordFromRequest(request);
         const user = await getUserFromUsername(client, username);
         if (user !== undefined) {
-            await tryLogin(user, username, password, response);
+            await tryLogin(user, password);
         } else {
-            sendUserDoesNotExist(response);
+            logUserDoesNotExist();
+            throw { message: "ERROR: User does not exist.", statusCode: 404 };
         }
         await commitTransaction(client);
-    } catch (error: unknown) {
+        const hashedPassword = user.password;
+        return { username: username, password: hashedPassword };
+    } catch (error: any) {
         await rollbackTransaction(client);
         log(error);
+        return error;
     } finally {
         releasePoolClient(client);
     }
@@ -50,18 +53,12 @@ export const getUserFromUsername = async (client: PoolClient, username: string) 
     }
 };
 
-const tryLogin = async (user: User, username: string, password: string, response: Response) => {
+const tryLogin = async (user: User, password: string) => {
     const hashedPassword = user.password;
     if (await compare(password, hashedPassword)) {
         logSuccessfulLogin();
-        response.json({ username: username, password: hashedPassword });
     } else {
         logIncorrectPassword();
-        response.send("Password incorrect!");
+        throw { message: "ERROR: Incorrect password.", statusCode: 401 };
     }
-};
-
-const sendUserDoesNotExist = (response: Response) => {
-    logUserDoesNotExist();
-    response.sendStatus(404);
 };

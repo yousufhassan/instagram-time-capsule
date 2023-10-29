@@ -5,6 +5,7 @@ import "./SignUp-Login.css";
 import "../../styles/form.css";
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from "../Header/AppTitle";
+import { LAMBDA_LOGIN_URL } from "../../constants";
 
 function Login() {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ function Login() {
     const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         axios
-            .post("http://localhost:8000/auth/login", { username, password })
+            .post(LAMBDA_LOGIN_URL, { username, password })
             .then(async (response) => {
                 // console.log(response)
                 if (response.data === "Password incorrect!") {
@@ -81,10 +82,7 @@ function Login() {
                     </div>
                     <div className="form-section flex-row center">
                         {/* <input className='btn flex-row center main-sage-bg white-text' id='submit-btn' type="button" value="Log in" /> */}
-                        <button
-                            id="submit-btn"
-                            className="btn flex-row center main-sage-bg white-text"
-                        >
+                        <button id="submit-btn" className="btn flex-row center main-sage-bg white-text">
                             Log in
                         </button>
                     </div>
