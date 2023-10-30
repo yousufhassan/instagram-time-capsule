@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { ChatData } from "../cdk-common/layers/logic/nodejs/types";
+import { ChatData } from "../../cdk-common/layers/logic/nodejs/types";
 import { log } from "console";
 import fs from "fs";
 

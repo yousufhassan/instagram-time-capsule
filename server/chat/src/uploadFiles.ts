@@ -6,7 +6,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../cdk-common/layers/logic/nodejs/database";
+} from "../../cdk-common/layers/logic/nodejs/database";
 import {
     getChatDataFromFile,
     getChatOwnerFromRequest,
@@ -14,11 +14,11 @@ import {
     getFilesFromRequest,
     logChatDoesNotExist,
 } from "./services";
-import { getUserIdFromUsername } from "../cdk-common/layers/logic/nodejs/services";
+import { getUserIdFromUsername } from "../../cdk-common/layers/logic/nodejs/services";
 import { deleteChat, doesChatExist, insertChatToDB } from "./chatList";
-import { insertConversationIntoDB } from "../conversation/getConversation";
-import { Message } from "../cdk-common/layers/logic/nodejs/types";
-import { getConversationsFromFiles, logConversationInserted } from "../conversation/services";
+import { insertConversationIntoDB } from "../../conversation/getConversation";
+import { Message } from "../../cdk-common/layers/logic/nodejs/types";
+import { getConversationsFromFiles, logConversationInserted } from "../../conversation/services";
 
 export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);

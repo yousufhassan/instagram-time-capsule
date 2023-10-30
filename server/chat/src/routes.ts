@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { pool } from "../app";
+import { pool } from "../../app";
 import { uploadFiles } from "./uploadFiles";
 import { getChatList } from "./chatList";
 import multer from "multer";

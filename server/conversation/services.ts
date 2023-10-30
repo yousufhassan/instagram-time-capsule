@@ -1,6 +1,6 @@
 import { log } from "console";
 import { Request } from "express";
-import { getChatDataFromFile } from "../chat/services";
+import { getChatDataFromFile } from "../chat/src/services";
 import { Message } from "../cdk-common/layers/logic/nodejs/types";
 import { getAllMessages, getFormattedDate } from "../cdk-common/layers/logic/nodejs/services";
 import { promisify } from "util";
