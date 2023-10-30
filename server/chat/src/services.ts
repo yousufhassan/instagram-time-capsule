@@ -3,6 +3,10 @@ import { ChatData } from "../../cdk-common/layers/logic/nodejs/types";
 import { log } from "console";
 import fs from "fs";
 
+export const getUsernameFromRequest = (request: any): string => {
+    return request.username;
+};
+
 export const getFilesFromRequest = (request: Request) => {
     return request.files;
 };
