@@ -41,7 +41,7 @@ function ConversationPanel({ activeChat, setActiveChat }: { activeChat: any; set
         const initializeChatList = async () => {
             let username = user.username;
             axios
-                .post("http://localhost:8000/chats/getChatList", { username })
+                .post("https://m2krivinu7cgg5optgirsfhnam0kiryi.lambda-url.us-east-2.on.aws/", { username })
                 .then((response) => {
                     let initialChatList = new Array<JSX.Element>();
                     let rawChatList = response.data;
