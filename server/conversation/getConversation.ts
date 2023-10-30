@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Pool, PoolClient } from "pg";
 
 import { getConversationDateFromRequest, logConversationDoesNotExist, logConversationFound } from "./services";
-import { getChatIdFromRequest } from "../chat/services";
+import { getChatIdFromRequest } from "../chat/src/services";
 import { Conversation, Message } from "../cdk-common/layers/logic/nodejs/types";
 
 export const getConversationOnDate = async (pool: Pool, request: Request, response: Response) => {

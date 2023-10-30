@@ -1,29 +1,30 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { Pool, PoolClient } from "pg";
-import { getUsernameFromRequest } from "../auth/src/services";
-import { getUserIdFromUsername } from "../cdk-common/layers/logic/nodejs/services";
+import { getUserIdFromUsername } from "../../cdk-common/layers/logic/nodejs/services";
 import {
     acquireClientFromPool,
     beginTransaction,
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../cdk-common/layers/logic/nodejs/database";
+} from "../../cdk-common/layers/logic/nodejs/database";
 import { log } from "console";
-import { getChatImageColor, logChatDeleted, logChatInserted } from "./services";
+import { getChatImageColor, getUsernameFromRequest, logChatDeleted, logChatInserted } from "./services";
 
-export const getChatList = async (pool: Pool, request: Request, response: Response): Promise<void> => {
+export const getChatList = async (pool: Pool, request: Request): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
     try {
         await beginTransaction(client);
         const username = getUsernameFromRequest(request);
         const userId = await getUserIdFromUsername(client, username);
+        if (!userId) throw { message: "ERROR: userId was undefined", statusCode: 401 };
         const chatList = await getChatListFromUserId(client, userId);
-        response.json(chatList);
         await commitTransaction(client);
-    } catch (error: unknown) {
+        return chatList;
+    } catch (error: any) {
         await rollbackTransaction(client);
         log(error);
+        return error;
     } finally {
         releasePoolClient(client);
     }

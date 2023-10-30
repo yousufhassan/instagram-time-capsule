@@ -6,7 +6,7 @@ import {
     commitTransaction,
     releasePoolClient,
     rollbackTransaction,
-} from "../cdk-common/layers/logic/nodejs/database";
+} from "../../cdk-common/layers/logic/nodejs/database";
 import {
     getChatDataFromFile,
     getChatOwnerFromRequest,
@@ -14,11 +14,12 @@ import {
     getFilesFromRequest,
     logChatDoesNotExist,
 } from "./services";
-import { getUserIdFromUsername } from "../cdk-common/layers/logic/nodejs/services";
+import { getUserIdFromUsername } from "../../cdk-common/layers/logic/nodejs/services";
 import { deleteChat, doesChatExist, insertChatToDB } from "./chatList";
-import { insertConversationIntoDB } from "../conversation/getConversation";
-import { Message } from "../cdk-common/layers/logic/nodejs/types";
-import { getConversationsFromFiles, logConversationInserted } from "../conversation/services";
+import { insertConversationIntoDB } from "../../conversation/getConversation";
+import { Message } from "../../cdk-common/layers/logic/nodejs/types";
+import { getConversationsFromFiles, logConversationInserted } from "../../conversation/services";
+import { log } from "console";
 
 export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
     const client = await acquireClientFromPool(pool);
@@ -27,6 +28,8 @@ export const uploadFiles = async (pool: Pool, request: Request, response: Respon
         const files = getFilesFromRequest(request);
         const chatOwner = getChatOwnerFromRequest(request); // aka: the logged in user.
         const chatOwnerId = await getUserIdFromUsername(client, chatOwner);
+
+        if (!chatOwnerId) throw { message: "ERROR: chatOwnerId was undefined", statuscode: 401 };
 
         // @ts-ignore An error to do with unmatched types from the request.files
         // Come back to solve later, but for now it seems to work.
@@ -41,9 +44,10 @@ export const uploadFiles = async (pool: Pool, request: Request, response: Respon
         const numMessages = await insertAllConversationsFromUploadIntoDB(client, conversations, chatId);
         sendUploadFilesResponse(response, chatId, chatTitle, numMessages, chatImageColor);
         await commitTransaction(client);
-    } catch (error: unknown) {
+    } catch (error: any) {
         await rollbackTransaction(client);
-        console.log(error);
+        log(error);
+        return error;
     } finally {
         releasePoolClient(client);
     }

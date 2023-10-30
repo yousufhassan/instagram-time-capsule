@@ -1,5 +1,6 @@
 import { PoolClient } from "pg";
 import { ChatData, Message } from "./types.js";
+import { isResultEmpty } from "./database";
 
 export const getFormattedDate = (date: Date) => {
     return (
@@ -42,8 +43,8 @@ export function getAllMessages(chatData: ChatData): Message[] {
     return messages;
 }
 
-export const getUserIdFromUsername = async (client: PoolClient, username: string): Promise<string> => {
+export const getUserIdFromUsername = async (client: PoolClient, username: string): Promise<string | undefined> => {
     const getUserIdQuery = "SELECT user_id FROM Users WHERE username = $1";
     const queryResult = await client.query(getUserIdQuery, [username]);
-    return queryResult.rows[0].user_id;
+    return isResultEmpty(queryResult) ? undefined : queryResult.rows[0].user_id;
 };

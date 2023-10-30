@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-import pg, { Pool, PoolClient } from "pg";
+import pg, { Pool, PoolClient, QueryResult } from "pg";
 config();
 
 export const createPool = () => {
@@ -24,4 +24,8 @@ export const commitTransaction = (client: PoolClient) => {
 
 export const rollbackTransaction = (client: PoolClient) => {
     return client.query("ROLLBACK");
+};
+
+export const isResultEmpty = (result: QueryResult<any>): boolean => {
+    return result.rowCount == 0;
 };
