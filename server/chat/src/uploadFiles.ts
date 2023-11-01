@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+// import { Request } from "express";
 import { Pool, PoolClient } from "pg";
 import {
     acquireClientFromPool,
@@ -21,7 +21,8 @@ import { Message } from "../../cdk-common/layers/logic/nodejs/types";
 import { getConversationsFromFiles, logConversationInserted } from "../../conversation/services";
 import { log } from "console";
 
-export const uploadFiles = async (pool: Pool, request: Request, response: Response): Promise<void> => {
+// TODO: change request type from 'any' to 'MultipartRequest'
+export const uploadFiles = async (pool: Pool, request: any): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
     try {
         await beginTransaction(client);
@@ -42,8 +43,8 @@ export const uploadFiles = async (pool: Pool, request: Request, response: Respon
         // @ts-ignore Same as above
         const conversations = getConversationsFromFiles(files);
         const numMessages = await insertAllConversationsFromUploadIntoDB(client, conversations, chatId);
-        sendUploadFilesResponse(response, chatId, chatTitle, numMessages, chatImageColor);
         await commitTransaction(client);
+        return sendUploadFilesResponse(chatId, chatTitle, numMessages, chatImageColor);
     } catch (error: any) {
         await rollbackTransaction(client);
         log(error);
@@ -84,17 +85,6 @@ export const insertAllConversationsFromUploadIntoDB = async (
     return numMessages;
 };
 
-const sendUploadFilesResponse = (
-    response: Response,
-    chatId: string,
-    chatTitle: string,
-    numMessages: number,
-    chatImageColor: string
-) => {
-    response.json({
-        chatId: chatId,
-        chatTitle: chatTitle,
-        numMessages: numMessages,
-        bgColor: chatImageColor,
-    });
+const sendUploadFilesResponse = (chatId: string, chatTitle: string, numMessages: number, chatImageColor: string) => {
+    return { chatId: chatId, chatTitle: chatTitle, numMessages: numMessages, bgColor: chatImageColor };
 };

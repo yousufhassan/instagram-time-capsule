@@ -3,8 +3,9 @@ import { Request } from "express";
 import { getChatDataFromFile } from "../chat/src/services";
 import { Message } from "../cdk-common/layers/logic/nodejs/types";
 import { getAllMessages, getFormattedDate } from "../cdk-common/layers/logic/nodejs/services";
-import { promisify } from "util";
-import * as fs from "fs"; // TODO: only import what is being used
+// import { promisify } from "util";
+// import * as fs from "fs"; // TODO: only import what is being used
+import { MultipartFile } from "lambda-multipart-parser";
 
 export const getConversationDateFromRequest = (request: Request): string => {
     return request.body.date;
@@ -22,15 +23,15 @@ export const logConversationFound = (): void => {
     log("--- Conversation found in DB ---");
 };
 
-export const getConversationsFromFiles = (files: Express.Multer.File[]): Map<string, Message[]> => {
-    const unlinkAsync = promisify(fs.unlink);
+export const getConversationsFromFiles = (files: MultipartFile[]): Map<string, Message[]> => {
+    // const unlinkAsync = promisify(fs.unlink);
     let conversations = new Map<string, Message[]>();
 
-    files.forEach(async (file: Express.Multer.File) => {
+    files.forEach(async (file: MultipartFile) => {
         const chatData = getChatDataFromFile(file);
         const messages = getAllMessages(chatData);
         organizeMessagesIntoConversations(messages, conversations);
-        await unlinkAsync(file.path); // Delete file from server
+        // await unlinkAsync(file.path); // Delete file from server
     });
 
     return conversations;
