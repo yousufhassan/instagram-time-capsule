@@ -15,8 +15,8 @@ export const getChatOwnerFromRequest = (request: Request): string => {
     return request.body.user;
 };
 
-export const getChatIdFromRequest = (request: Request) => {
-    return request.body.chatId;
+export const getChatIdFromRequest = (request: any) => {
+    return request.chatId;
 };
 
 export const getChatDataFromFile = (file: Express.Multer.File): ChatData => {
@@ -31,8 +31,8 @@ export const logChatDoesNotExist = () => {
     log("--- Chat does not exist in database ---");
 };
 
-export const logChatDeleted = () => {
-    log("--- Chat deleted from database ---");
+export const logChatDeleted = (chatId?: string) => {
+    chatId ? log(`--- Chat with id "${chatId}" deleted from database ---`) : log("--- Chat deleted from database ---");
 };
 export const logChatInserted = () => {
     log("--- Chat inserted into database ---");

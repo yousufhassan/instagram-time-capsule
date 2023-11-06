@@ -4,6 +4,7 @@ import { Router } from "express";
 import { Handler } from "aws-cdk-lib/aws-lambda";
 import { Pool } from "pg";
 import { getChatList } from "./chatList";
+import { deleteChat } from "./deleteChat";
 export const chatsRouter = Router();
 
 let pool: Pool;
@@ -15,6 +16,16 @@ export const getChatListHandler: Handler = async (event, context) => {
     }
     const eventBody = JSON.parse(event.body);
     const response = await getChatList(pool, eventBody);
+    return response;
+};
+
+// @ts-ignore  remove later!!! (just like other similar TODOs)
+export const deleteChatHandler: Handler = async (event, context) => {
+    if (!pool) {
+        pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
+    }
+    const eventBody = JSON.parse(event.body);
+    const response = await deleteChat(pool, eventBody);
     return response;
 };
 
