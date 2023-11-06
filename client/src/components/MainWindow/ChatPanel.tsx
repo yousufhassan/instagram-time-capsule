@@ -143,6 +143,9 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
             .post("https://j3dpvx7fh2q3rcfbzwmpf3phdi0zvzzk.lambda-url.us-east-2.on.aws/", {
                 chatId: activeChat.chat_id,
             })
+            .then(() => {
+                window.location.reload();
+            })
             .catch((response) => {
                 alert("Something went wrong when trying to delete the chat.");
                 console.log(response);
