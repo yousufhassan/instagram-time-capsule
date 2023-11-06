@@ -29,6 +29,8 @@ export const insertConversationIntoDB = async (
     conversation: Message[]
 ): Promise<void> => {
     const insertConversationQuery = `INSERT INTO Conversations(chat_id, conversation_date, messages, num_messages)
-                                     VALUES ($1,$2,$3,$4)`;
+                                     VALUES ($1,$2,$3,$4)
+                                     ON CONFLICT (chat_id, conversation_date)
+                                     DO NOTHING`;
     await client.query(insertConversationQuery, [chatId, date, JSON.stringify(conversation), conversation.length]);
 };

@@ -95,7 +95,11 @@ export class ChatStack extends Stack {
         uploadFiles.addFunctionUrl({
             authType: FunctionUrlAuthType.NONE,
             // TODO: Change to website url once a proper "www" is available
-            cors: { allowCredentials: true, allowedOrigins: ["https://*"], allowedHeaders: ["content-type"] },
+            cors: {
+                allowCredentials: true,
+                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedHeaders: ["content-type"],
+            },
         });
     }
 }

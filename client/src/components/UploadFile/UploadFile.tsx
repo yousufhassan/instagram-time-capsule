@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../../styles/general.css";
 import "./UploadFile.css";
+import { LAMBDA_UPLOAD_FILES_URL } from "../../constants";
 // import { Link, useNavigate } from "react-router-dom";
 
 function UploadFile({ chatDataCallback }: { chatDataCallback: Function }) {
@@ -27,7 +28,7 @@ function UploadFile({ chatDataCallback }: { chatDataCallback: Function }) {
         data.append("user", user.username);
 
         axios
-            .post("http://localhost:8000/chats/uploadFiles", data, {
+            .post(LAMBDA_UPLOAD_FILES_URL, data, {
                 headers: { "Content-Type": "multipart/form-data" },
             })
             .then((response) => {

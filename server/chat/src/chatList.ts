@@ -10,6 +10,7 @@ import {
 } from "../../cdk-common/layers/logic/nodejs/database";
 import { log } from "console";
 import { getChatImageColor, getUsernameFromRequest, logChatDeleted, logChatInserted } from "./services";
+import { Chat } from "../../cdk-common/layers/logic/nodejs/types";
 
 export const getChatList = async (pool: Pool, request: Request): Promise<Object> => {
     const client = await acquireClientFromPool(pool);
@@ -42,10 +43,21 @@ export const getChatListFromUserId = async (client: PoolClient, userId: string) 
     return chatList;
 };
 
-export const doesChatExist = async (client: PoolClient, chatOwnerId: string, chatTitle: string): Promise<boolean> => {
+export const doesChatExist = async (
+    client: PoolClient,
+    chatOwnerId: string,
+    chatTitle: string
+): Promise<Chat | undefined> => {
     const findChatQuery = "SELECT * FROM Chats WHERE chat_owner_id = $1 and title = $2";
     const queryResult = await client.query(findChatQuery, [chatOwnerId, chatTitle]);
-    return queryResult.rowCount === 1;
+    return queryResult.rowCount === 1
+        ? {
+              chat_id: queryResult.rows[0].chat_id,
+              chat_owner_id: queryResult.rows[0].chat_owner_id,
+              title: queryResult.rows[0].title,
+              bg_color: queryResult.rows[0].bg_color,
+          }
+        : undefined;
 };
 
 export const deleteChat = async (client: PoolClient, chatOwnerId: string, chatTitle: string): Promise<void> => {

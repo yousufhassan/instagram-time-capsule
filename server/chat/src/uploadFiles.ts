@@ -37,8 +37,15 @@ export const uploadFiles = async (pool: Pool, request: any): Promise<Object> => 
         const chatData = getChatDataFromFile(files[0]);
         const chatTitle = getChatTitleFromChatData(chatData);
 
-        await deleteOldChatIfExists(client, chatOwnerId, chatTitle);
-        const [chatId, chatImageColor] = await insertChatToDB(client, chatOwnerId, chatTitle);
+        // await deleteOldChatIfExists(client, chatOwnerId, chatTitle);
+        let chatId, chatImageColor;
+        const chat = await doesChatExist(client, chatOwnerId, chatTitle);
+        if (chat !== undefined) {
+            chatId = chat.chat_id;
+            chatImageColor = chat.bg_color;
+        } else {
+            [chatId, chatImageColor] = await insertChatToDB(client, chatOwnerId, chatTitle);
+        }
 
         // @ts-ignore Same as above
         const conversations = getConversationsFromFiles(files);
