@@ -41,7 +41,38 @@ export class ChatStack extends Stack {
         getChatList.addFunctionUrl({
             authType: FunctionUrlAuthType.NONE,
             // TODO: Change to website url once a proper "www" is available
-            cors: { allowCredentials: true, allowedOrigins: ["https://*"], allowedHeaders: ["content-type"] },
+            cors: {
+                allowCredentials: true,
+                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedHeaders: ["content-type"],
+            },
+        });
+
+        // --- DELETE CHAT ---
+        const deleteChatLambdaId = "deleteChatLambda";
+        const deleteChat = new NodejsFunction(this, deleteChatLambdaId, {
+            entry: "src/lambda.ts",
+            handler: "deleteChatHandler",
+            runtime: Runtime.NODEJS_18_X,
+            timeout: Duration.seconds(10),
+            memorySize: 1024,
+            layers: [utilsLayer, logicLayer],
+            environment: {
+                DATABASE_URL: PROD_DATABASE_URL,
+            },
+            bundling: {
+                externalModules: ["opt/nodejs/database", "opt/nodejs/services"],
+            },
+        });
+
+        deleteChat.addFunctionUrl({
+            authType: FunctionUrlAuthType.NONE,
+            // TODO: Change to website url once a proper "www" is available
+            cors: {
+                allowCredentials: true,
+                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedHeaders: ["content-type"],
+            },
         });
     }
 }
