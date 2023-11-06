@@ -6,6 +6,7 @@ import { Handler } from "aws-cdk-lib/aws-lambda";
 import { Pool } from "pg";
 import { getChatList } from "./chatList";
 import { uploadFiles } from "./uploadFiles";
+import { deleteChat } from "./deleteChat";
 export const chatsRouter = Router();
 
 let pool: Pool;
@@ -29,6 +30,16 @@ export const uploadFilesHandler: Handler = async (event, context) => {
     const response = await uploadFiles(pool, eventBody);
     return response;
     // return eventBody.files[0].content.toString();
+};
+
+// @ts-ignore  remove later!!! (just like other similar TODOs)
+export const deleteChatHandler: Handler = async (event, context) => {
+    if (!pool) {
+        pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
+    }
+    const eventBody = JSON.parse(event.body);
+    const response = await deleteChat(pool, eventBody);
+    return response;
 };
 
 // const storage = multer.diskStorage({

@@ -138,6 +138,20 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
         setSelectedDate(e.target.value);
     };
 
+    const deleteChat = () => {
+        axios
+            .post("https://j3dpvx7fh2q3rcfbzwmpf3phdi0zvzzk.lambda-url.us-east-2.on.aws/", {
+                chatId: activeChat.chat_id,
+            })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((response) => {
+                alert("Something went wrong when trying to delete the chat.");
+                console.log(response);
+            });
+    };
+
     useEffect(() => {
         const displayChat = async () => {
             // let date = '2022-10-10'  // TODO: get date from user input
@@ -240,9 +254,12 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                         </div>
                         <span className="material-symbols-outlined icon btn"> casino </span>
                         <span className="material-symbols-outlined icon btn"> info </span>
-                        <span className="material-symbols-outlined icon btn" style={{ color: "red" }}>
-                            {" "}
-                            delete{" "}
+                        <span
+                            onClick={deleteChat}
+                            className="material-symbols-outlined icon btn"
+                            style={{ color: "red" }}
+                        >
+                            delete
                         </span>
                     </div>
                 </div>
@@ -286,9 +303,8 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                     </div>
                     <span className="material-symbols-outlined icon btn"> casino </span>
                     <span className="material-symbols-outlined icon btn"> info </span>
-                    <span className="material-symbols-outlined icon btn" style={{ color: "red" }}>
-                        {" "}
-                        delete{" "}
+                    <span onClick={deleteChat} className="material-symbols-outlined icon btn" style={{ color: "red" }}>
+                        delete
                     </span>
                 </div>
             </div>
