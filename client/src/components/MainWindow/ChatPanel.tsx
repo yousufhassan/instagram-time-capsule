@@ -3,6 +3,7 @@ import "./ChatPanel.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Buffer } from "buffer";
+import { LAMBDA_DELETE_CHAT_URL } from "../../constants";
 
 function ChatTitle({ chatTitle, bgColor }: { chatTitle: string; bgColor: string }) {
     return (
@@ -140,7 +141,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
 
     const deleteChat = () => {
         axios
-            .post("https://j3dpvx7fh2q3rcfbzwmpf3phdi0zvzzk.lambda-url.us-east-2.on.aws/", {
+            .post(LAMBDA_DELETE_CHAT_URL, {
                 chatId: activeChat.chat_id,
             })
             .then(() => {
