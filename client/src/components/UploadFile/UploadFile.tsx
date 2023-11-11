@@ -20,33 +20,86 @@ function UploadFile({ chatDataCallback }: { chatDataCallback: Function }) {
 
         // Add all files to a FormData object to send to server
         const data = new FormData();
+        data.append("user", user.username);
+
+        let numCurrentFiles = 0;
         for (let i = 0; i < files.length; i++) {
             data.append("files", files[i]);
+            numCurrentFiles++;
+
+            if (numCurrentFiles === 3) {
+                axios
+                    .post(LAMBDA_UPLOAD_FILES_URL, data, {
+                        headers: { "Content-Type": "multipart/form-data" },
+                    })
+                    .then((response) => {
+                        console.log(response);
+                        console.log(response.data);
+
+                        chatDataCallback(response.data);
+                        setFiles([]);
+                        setFilesSelected(false);
+                        setIsUploadInProgress(false);
+                        // Use the below line of code instead if button is disabling too quick
+                        // setTimeout(() => { setFilesSelected(false) }, 2000)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        setFiles([]);
+                        setFilesSelected(false);
+                    });
+
+                data.delete("files");
+                numCurrentFiles = 0;
+            }
+        }
+
+        if (numCurrentFiles !== 0) {
+            axios
+                .post(LAMBDA_UPLOAD_FILES_URL, data, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                })
+                .then((response) => {
+                    console.log(response);
+                    console.log(response.data);
+
+                    chatDataCallback(response.data);
+                    setFiles([]);
+                    setFilesSelected(false);
+                    setIsUploadInProgress(false);
+                    // Use the below line of code instead if button is disabling too quick
+                    // setTimeout(() => { setFilesSelected(false) }, 2000)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setFiles([]);
+                    setFilesSelected(false);
+                });
         }
 
         // Append the username of the logged in user to the FormData object
-        data.append("user", user.username);
+        // data.append("user", user.username);
 
-        axios
-            .post(LAMBDA_UPLOAD_FILES_URL, data, {
-                headers: { "Content-Type": "multipart/form-data" },
-            })
-            .then((response) => {
-                console.log(response);
-                console.log(response.data);
+        // axios
+        //     .post(LAMBDA_UPLOAD_FILES_URL, data, {
+        //         headers: { "Content-Type": "multipart/form-data" },
+        //     })
+        //     .then((response) => {
+        //         console.log(response);
+        //         console.log(response.data);
 
-                chatDataCallback(response.data);
-                setFiles([]);
-                setFilesSelected(false);
-                setIsUploadInProgress(false);
-                // Use the below line of code instead if button is disabling too quick
-                // setTimeout(() => { setFilesSelected(false) }, 2000)
-            })
-            .catch(function (error) {
-                console.log(error);
-                setFiles([]);
-                setFilesSelected(false);
-            });
+        //         chatDataCallback(response.data);
+        //         setFiles([]);
+        //         setFilesSelected(false);
+        //         setIsUploadInProgress(false);
+        //         // Use the below line of code instead if button is disabling too quick
+        //         // setTimeout(() => { setFilesSelected(false) }, 2000)
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //         setFiles([]);
+        //         setFilesSelected(false);
+        //     });
     };
 
     const selectFileHandler = (e: any) => {
