@@ -1,14 +1,14 @@
 import { log } from "console";
-import { Request } from "express";
-import { getChatDataFromFile } from "../chat/src/services";
-import { Message } from "../cdk-common/layers/logic/nodejs/types";
-import { getAllMessages, getFormattedDate } from "../cdk-common/layers/logic/nodejs/services";
+// import { Request } from "express";
+import { getChatDataFromFile } from "../../chat/src/services";
+import { Message } from "../../cdk-common/layers/logic/nodejs/types";
+import { getAllMessages, getFormattedDate } from "../../cdk-common/layers/logic/nodejs/services";
 // import { promisify } from "util";
 // import * as fs from "fs"; // TODO: only import what is being used
 import { MultipartFile } from "lambda-multipart-parser";
 
-export const getConversationDateFromRequest = (request: Request): string => {
-    return request.body.date;
+export const getConversationDateFromRequest = (request: any): string => {
+    return request.date;
 };
 
 export const logConversationInserted = (numConversations: number): void => {

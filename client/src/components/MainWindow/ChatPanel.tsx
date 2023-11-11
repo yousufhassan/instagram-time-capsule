@@ -3,7 +3,7 @@ import "./ChatPanel.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Buffer } from "buffer";
-import { LAMBDA_DELETE_CHAT_URL } from "../../constants";
+import { LAMBDA_DELETE_CHAT_URL, LAMBDA_GET_CONVERSATION_ON_DATE_URL } from "../../constants";
 
 function ChatTitle({ chatTitle, bgColor }: { chatTitle: string; bgColor: string }) {
     return (
@@ -160,9 +160,11 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
             // let dateObj = new Date(date);
             // dateObj.setDate(dateObj.getDate() + 1)
             // setSelectedDate(dateObj);
+            console.log(selectedDate);
+            console.log(activeChat.chat_id);
 
             axios
-                .post("http://localhost:8000/conversations/getConversationOnDate", {
+                .post(LAMBDA_GET_CONVERSATION_ON_DATE_URL, {
                     date: selectedDate,
                     chatId: activeChat.chat_id,
                 })

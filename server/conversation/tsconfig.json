@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig.json",
+    "include": ["src", "cdk", "src/database.ts"],
+    "exclude": ["cdk.out"],
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "./opt/nodejs/node_modules/database": [
+                "../../cdk-common/layers/business-logic/nodejs/node_modules/database.js"
+            ]
+        }
+    }
+}
