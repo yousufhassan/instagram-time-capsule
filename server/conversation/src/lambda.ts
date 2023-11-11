@@ -1,7 +1,5 @@
-// import { Request, Response, Router } from "express";
 import { getConversationOnDate } from "./getConversation";
 import { Pool } from "pg";
-// import { pool } from "../../app";
 
 let pool: Pool;
 
@@ -14,9 +12,3 @@ export const getConversationOnDateHandler: Handler = async (event, context) => {
     const response = await getConversationOnDate(pool, eventBody);
     return response;
 };
-
-// export const conversationsRouter = Router();
-
-// conversationsRouter.post("/getConversationOnDate", async (request: Request, response: Response) => {
-//     getConversationOnDate(pool, request, response);
-// });
