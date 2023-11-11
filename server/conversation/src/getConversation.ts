@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import { Pool, PoolClient } from "pg";
 
 import { getConversationDateFromRequest, logConversationDoesNotExist, logConversationFound } from "./services";
-import { getChatIdFromRequest } from "../chat/src/services";
-import { Conversation, Message } from "../cdk-common/layers/logic/nodejs/types";
+import { getChatIdFromRequest } from "../../chat/src/services";
+import { Conversation, Message } from "../../cdk-common/layers/logic/nodejs/types";
 
-export const getConversationOnDate = async (pool: Pool, request: Request, response: Response) => {
+export const getConversationOnDate = async (pool: Pool, request: Request): Promise<Object> => {
     const conversationDate = getConversationDateFromRequest(request);
     const chatId = getChatIdFromRequest(request);
     const getConversationQuery = `SELECT messages
@@ -15,10 +15,10 @@ export const getConversationOnDate = async (pool: Pool, request: Request, respon
     const conversation: Conversation = queryResult.rows[0];
     if (queryResult.rowCount === 0) {
         logConversationDoesNotExist();
-        response.json({});
+        return { statusCode: 404 };
     } else {
         logConversationFound();
-        response.json(JSON.parse(conversation.messages));
+        return JSON.parse(conversation.messages);
     }
 };
 
