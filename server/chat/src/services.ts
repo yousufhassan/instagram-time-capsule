@@ -1,26 +1,28 @@
 import { Request } from "express";
 import { ChatData } from "../../cdk-common/layers/logic/nodejs/types";
 import { log } from "console";
-import fs from "fs";
+// import fs from "fs";
+import { MultipartFile } from "lambda-multipart-parser";
 
 export const getUsernameFromRequest = (request: any): string => {
     return request.username;
 };
 
-export const getFilesFromRequest = (request: Request) => {
+export const getFilesFromRequest = (request: any) => {
     return request.files;
 };
 
-export const getChatOwnerFromRequest = (request: Request): string => {
-    return request.body.user;
+export const getChatOwnerFromRequest = (request: any): string => {
+    return request.user;
 };
 
 export const getChatIdFromRequest = (request: any) => {
     return request.chatId;
 };
 
-export const getChatDataFromFile = (file: Express.Multer.File): ChatData => {
-    return JSON.parse(fs.readFileSync(file.path, "utf-8"));
+export const getChatDataFromFile = (file: MultipartFile): ChatData => {
+    return JSON.parse(file.content.toString());
+    // return JSON.parse(fs.readFileSync(file.path, "utf-8"));
 };
 
 export const getChatTitleFromChatData = (chatData: ChatData) => {

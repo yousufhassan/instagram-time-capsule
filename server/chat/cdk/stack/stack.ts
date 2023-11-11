@@ -43,7 +43,7 @@ export class ChatStack extends Stack {
             // TODO: Change to website url once a proper "www" is available
             cors: {
                 allowCredentials: true,
-                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedOrigins: ["https://*", "http://192.168.0.23:3000"],
                 allowedHeaders: ["content-type"],
             },
         });
@@ -70,7 +70,34 @@ export class ChatStack extends Stack {
             // TODO: Change to website url once a proper "www" is available
             cors: {
                 allowCredentials: true,
-                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedOrigins: ["https://*", "http://192.168.0.23:3000"],
+                allowedHeaders: ["content-type"],
+            },
+        });
+
+        // --- UPLOAD FILES ---
+        const uploadFilesLambdaId = "uploadFilesLambda";
+        const uploadFiles = new NodejsFunction(this, uploadFilesLambdaId, {
+            entry: "src/lambda.ts",
+            handler: "uploadFilesHandler",
+            runtime: Runtime.NODEJS_18_X,
+            timeout: Duration.seconds(120),
+            memorySize: 3008,
+            layers: [utilsLayer, logicLayer],
+            environment: {
+                DATABASE_URL: PROD_DATABASE_URL,
+            },
+            bundling: {
+                externalModules: ["opt/nodejs/database", "opt/nodejs/services"],
+            },
+        });
+
+        uploadFiles.addFunctionUrl({
+            authType: FunctionUrlAuthType.NONE,
+            // TODO: Change to website url once a proper "www" is available
+            cors: {
+                allowCredentials: true,
+                allowedOrigins: ["https://*", "http://192.168.0.23:3000"],
                 allowedHeaders: ["content-type"],
             },
         });

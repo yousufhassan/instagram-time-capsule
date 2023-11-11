@@ -1,9 +1,11 @@
 import { Router } from "express";
 // import { uploadFiles } from "./uploadFiles";
 // import multer from "multer";
+import parser from "lambda-multipart-parser";
 import { Handler } from "aws-cdk-lib/aws-lambda";
 import { Pool } from "pg";
 import { getChatList } from "./chatList";
+import { uploadFiles } from "./uploadFiles";
 import { deleteChat } from "./deleteChat";
 export const chatsRouter = Router();
 
@@ -17,6 +19,17 @@ export const getChatListHandler: Handler = async (event, context) => {
     const eventBody = JSON.parse(event.body);
     const response = await getChatList(pool, eventBody);
     return response;
+};
+
+// @ts-ignore  remove later!!! (just like other similar TODOs)
+export const uploadFilesHandler: Handler = async (event, context) => {
+    if (!pool) {
+        pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 1 });
+    }
+    const eventBody = await parser.parse(event);
+    const response = await uploadFiles(pool, eventBody);
+    return response;
+    // return eventBody.files[0].content.toString();
 };
 
 // @ts-ignore  remove later!!! (just like other similar TODOs)

@@ -43,7 +43,7 @@ export class AuthStack extends Stack {
             // TODO: Change to website url once a proper "www" is available
             cors: {
                 allowCredentials: true,
-                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedOrigins: ["https://*", "http://192.168.0.23:3000"],
                 allowedHeaders: ["content-type"],
             },
         });
@@ -70,7 +70,7 @@ export class AuthStack extends Stack {
             // TODO: Change to website url once a proper "www" is available
             cors: {
                 allowCredentials: true,
-                allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
+                allowedOrigins: ["https://*", "http://192.168.0.23:3000"],
                 allowedHeaders: ["content-type"],
             },
         });
