@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import { Code, FunctionUrlAuthType, LayerVersion, Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { PROD_DATABASE_URL } from "../../../env";
+import { BlockPublicAccess, Bucket, BucketEncryption } from "aws-cdk-lib/aws-s3";
 
 export class ChatStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -100,6 +101,16 @@ export class ChatStack extends Stack {
                 allowedOrigins: ["https://*", "http://192.168.0.58:3000"],
                 allowedHeaders: ["content-type"],
             },
+        });
+
+        // --- FILE UPLOAD S3 BUCKET ---
+        const fileUploadS3BucketId = "fileUploadS3Bucket";
+        // @ts-ignore That `fileUploadS3Bucket` is not being used (it still gets created on cdk deploy)
+        const fileUploadS3Bucket = new Bucket(this, fileUploadS3BucketId, {
+            bucketName: "itc-file-uploads",
+            blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+            encryption: BucketEncryption.S3_MANAGED,
+            enforceSSL: true,
         });
     }
 }
