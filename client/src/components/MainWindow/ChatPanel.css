@@ -34,7 +34,7 @@ hr {
     margin: 0 8px;
     height: 20px;
     width: 0;
-    border: 0.3px solid #342E34;
+    border: 0.3px solid #342e34;
 }
 
 #select-date {
@@ -52,13 +52,13 @@ hr {
     margin: 0 6px;
 }
 
-
 /* Chat Area Styles */
 #chat-area {
     position: absolute;
     top: 51.5px;
     padding: 8px 16px;
-    height: 600px;
+    height: 100%;
+    width: 100%;
     overflow-y: auto;
 }
 
@@ -66,8 +66,6 @@ hr {
     margin: 0;
     padding: 0;
     list-style: none;
-    /* background-color: red; */
-    width: 700px;
 }
 
 .no-active-chat {
@@ -91,11 +89,11 @@ hr {
     display: none;
 }
 
-.message-bubble-container:hover+.message-timestamp {
+.message-bubble-container:hover + .message-timestamp,
+.message-timestamp:hover {
     font-size: 10px;
-    margin: 0 6px;
+    padding: 6px;
     display: inline;
-    /* background-color: red; */
 }
 
 .error-message {

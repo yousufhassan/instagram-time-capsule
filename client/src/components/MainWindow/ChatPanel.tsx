@@ -275,7 +275,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
     }
 
     return (
-        <div>
+        <>
             <div id="chat-panel-header" className="flex-row space-btwn">
                 <div className="flex-row center">
                     <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
@@ -314,7 +314,7 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
             <div id="chat-area">
                 <ul>{messageList}</ul>
             </div>
-        </div>
+        </>
     );
 }
 
