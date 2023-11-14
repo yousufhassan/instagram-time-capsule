@@ -4,7 +4,7 @@
 
 #header {
     padding-right: 30px;
-    height: 10vh;
+    min-height: 8vh;
 }
 
 /* #logout {
