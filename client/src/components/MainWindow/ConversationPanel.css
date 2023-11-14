@@ -1,3 +1,18 @@
+#conversation-panel-container,
+#conversation-panel-container-closed {
+    position: relative;
+    flex: 2;
+}
+
+#conversation-panel-container {
+    transition: 0.3s ease-in;
+}
+
+#conversation-panel-container-closed {
+    flex: 0;
+    transition: 0.3s ease-out;
+}
+
 #conversation-panel-header {
     padding: 0px 18px 0 18px;
     border-bottom: solid;
@@ -6,12 +21,18 @@
     position: absolute;
     width: 100%;
     top: 0;
-
+    align-items: center;
+    justify-content: space-between;
 }
 
-#conversation-panel-header h3 {
+#conversation-panel-header h3,
+#sidebar-btn-close {
     font-size: 1rem;
     font-weight: lighter;
+}
+
+#sidebar-btn-close {
+    padding: 4px;
 }
 
 #conversation-list {
@@ -34,14 +55,13 @@
     border-top-width: 1px;
 }
 
-
 .chat-item-container {
     padding: 10px 10px 10px 18px;
 }
 
 .chat-item-container:hover {
     cursor: pointer;
-    background-color: #4A414A;
+    background-color: #4a414a;
 }
 
 .chat-item-container:first-of-type {
