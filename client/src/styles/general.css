@@ -1,9 +1,14 @@
 /* General CSS */
+html,
 body {
-    background-color: #586E52;
+    height: 100%;
+}
+
+body {
+    background-color: #586e52;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 h1 {
@@ -24,7 +29,8 @@ a {
     box-sizing: border-box;
 }
 
-*, *:focus {
+*,
+*:focus {
     outline: 0;
 }
 
@@ -117,9 +123,8 @@ a {
 }
 
 .hyperlink {
-    color: #1DA1F2;
+    color: #1da1f2;
 }
-
 
 /* Colours */
 .white-text {
@@ -131,11 +136,11 @@ a {
 }
 
 .main-sage-text {
-    color: #586E52
+    color: #586e52;
 }
 
 .main-sage-bg {
-    background-color: #586E52
+    background-color: #586e52;
 }
 
 .light-sage-text {
@@ -147,17 +152,17 @@ a {
 }
 
 .light-grey-text {
-    color: #D9D9D9
+    color: #d9d9d9;
 }
 
 .light-grey-bg {
-    background-color: #D9D9D9;
+    background-color: #d9d9d9;
 }
 
 .dark-grey-text {
-    color: #342E34;
+    color: #342e34;
 }
 
 .dark-grey-bg {
-    background-color: #342E34;
+    background-color: #342e34;
 }

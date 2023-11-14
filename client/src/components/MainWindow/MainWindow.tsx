@@ -10,14 +10,12 @@ function MainWindow() {
     const [activeChat, setActiveChat] = useState(Object());
 
     return (
-        <div>
-            <div id="main-container" className="flex-row">
-                <div id="conversation-panel-container" className="flex-col dark-grey-bg">
-                    <ConversationPanel activeChat={activeChat} setActiveChat={setActiveChat} />
-                </div>
-                <div id="chat-panel-container" className="flex-col light-grey-bg">
-                    <ChatPanel activeChat={activeChat} />
-                </div>
+        <div id="main-container" className="flex-row">
+            <div id="conversation-panel-container" className="flex-col dark-grey-bg">
+                <ConversationPanel activeChat={activeChat} setActiveChat={setActiveChat} />
+            </div>
+            <div id="chat-panel-container" className="flex-col light-grey-bg">
+                <ChatPanel activeChat={activeChat} />
             </div>
         </div>
     );

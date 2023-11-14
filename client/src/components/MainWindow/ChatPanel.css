@@ -1,7 +1,4 @@
 #chat-panel-header {
-    position: absolute;
-    top: 0;
-    width: 100%;
     height: 51.5px;
     border-bottom: solid;
     border-color: rgba(0, 0, 0, 0.35);
@@ -11,7 +8,6 @@
 /* Chat Title Styles */
 .chat-title-container {
     padding: 8px 0px 8px 36px;
-    height: 51.5px;
 }
 
 .chat-title-container h3 {
@@ -34,7 +30,7 @@ hr {
     margin: 0 8px;
     height: 20px;
     width: 0;
-    border: 0.3px solid #342E34;
+    border: 0.3px solid #342e34;
 }
 
 #select-date {
@@ -44,7 +40,6 @@ hr {
 
 /* Chat Icons Styles */
 .icons-container {
-    height: 51.5px;
     padding: 0 32px;
 }
 
@@ -52,13 +47,13 @@ hr {
     margin: 0 6px;
 }
 
-
 /* Chat Area Styles */
 #chat-area {
     position: absolute;
     top: 51.5px;
     padding: 8px 16px;
-    height: 600px;
+    height: calc(100% - 51.5px);
+    width: 100%;
     overflow-y: auto;
 }
 
@@ -66,8 +61,6 @@ hr {
     margin: 0;
     padding: 0;
     list-style: none;
-    /* background-color: red; */
-    width: 700px;
 }
 
 .no-active-chat {
@@ -91,11 +84,11 @@ hr {
     display: none;
 }
 
-.message-bubble-container:hover+.message-timestamp {
+.message-bubble-container:hover + .message-timestamp,
+.message-timestamp:hover {
     font-size: 10px;
-    margin: 0 6px;
+    padding: 6px;
     display: inline;
-    /* background-color: red; */
 }
 
 .error-message {
@@ -108,6 +101,5 @@ hr {
 } */
 
 .user-message {
-    /* background-color: #342E34; */
     margin-left: auto;
 }
