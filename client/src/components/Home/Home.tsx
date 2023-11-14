@@ -1,10 +1,10 @@
 // import React, { useState } from 'react';
 // import axios from 'axios';
-import '../../styles/general.css';
-import './Home.css';
+import "../../styles/general.css";
+import "./Home.css";
 import { useNavigate } from "react-router-dom";
-import AppTitle from '../Header/AppTitle';
-import MainWindow from '../MainWindow/MainWindow';
+import AppTitle from "../Header/AppTitle";
+import MainWindow from "../MainWindow/MainWindow";
 
 function Home() {
     const navigate = useNavigate();
@@ -22,24 +22,22 @@ function Home() {
 
     const handleLogout = () => {
         localStorage.clear();
-        navigate('/login');
+        navigate("/login");
     };
 
     return (
-        <div>
-            <div id='page-container' className='flex-col'>
-                <div id="header" className='flex-row'>
-                    <div style={{ flex: 1 }}>
-                        <AppTitle username={user.username} />
-                    </div>
-                    <p id='logout' className='btn white-text regular-text flex-row center' onClick={handleLogout}>Log out</p>
+        <div id="page-container" className="flex-col">
+            <div id="header" className="flex-row">
+                <div style={{ flex: 1 }}>
+                    <AppTitle username={user.username} />
                 </div>
-                <div id='main-window-container' className='flex-row center'>
-                    <MainWindow />
-                </div>
+                <p id="logout" className="btn white-text regular-text flex-row center" onClick={handleLogout}>
+                    Log out
+                </p>
             </div>
+            <MainWindow />
         </div>
-    )
+    );
 }
 
 export default Home;

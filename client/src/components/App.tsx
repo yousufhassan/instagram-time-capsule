@@ -7,7 +7,7 @@ import Home from "./Home/Home";
 
 function App() {
     return (
-        <div>
+        <>
             <BrowserRouter>
                 <Routes>
                     {/* <Route index element={} /> */}
@@ -16,7 +16,7 @@ function App() {
                     <Route path="home" element={<Home />} />
                 </Routes>
             </BrowserRouter>
-        </div>
+        </>
     );
 }
 

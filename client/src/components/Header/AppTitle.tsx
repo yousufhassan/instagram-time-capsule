@@ -1,8 +1,8 @@
-import './AppTitle.css';
+import "./AppTitle.css";
 
-function AppTitle({username}:{username: string}) {
+function AppTitle({ username }: { username: string }) {
     // console.log(username);
-    
+
     if (username !== "") {
         // A username was passed in
         username = username.charAt(0).toUpperCase() + username.slice(1);
@@ -10,10 +10,10 @@ function AppTitle({username}:{username: string}) {
     }
 
     return (
-        <div>
+        <>
             <div id="app-name">{username} Instagram Time Capsule</div>
-        </div>
-    )
+        </>
+    );
 }
 
 export default AppTitle;
