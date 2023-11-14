@@ -1,13 +1,5 @@
 #main-container {
     flex: 1;
-    /* border-radius: 12px; */
-    /* overflow: hidden; */
-    /* min-width: 900px; */
-}
-
-#conversation-panel-container {
-    position: relative;
-    flex: 2;
 }
 
 #chat-panel-container {

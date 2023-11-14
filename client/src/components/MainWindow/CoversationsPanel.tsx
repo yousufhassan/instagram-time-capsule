@@ -18,7 +18,17 @@ function ChatItem({ chatTitle, numMessages, bgColor }: { chatTitle: string; numM
     );
 }
 
-function ConversationPanel({ activeChat, setActiveChat }: { activeChat: any; setActiveChat: Function }) {
+function ConversationPanel({
+    activeChat,
+    setActiveChat,
+    isPanelOpen,
+    setPanelOpen,
+}: {
+    activeChat: any;
+    setActiveChat: Function;
+    isPanelOpen: boolean;
+    setPanelOpen: Function;
+}) {
     const user = JSON.parse(localStorage.getItem("user")!);
     const [chatList, setChatList] = useState(Array<JSX.Element>());
     // console.log(activeChat);
@@ -124,18 +134,27 @@ function ConversationPanel({ activeChat, setActiveChat }: { activeChat: any; set
         window.location.reload();
     };
 
+    const hideConversationPanel = () => {
+        setPanelOpen(false);
+    };
+
     return (
-        <div>
-            <div id="conversation-panel-header">
-                <h3 className="light-grey-text">Conversations</h3>
+        <>
+            <div id={`conversation-panel-container${isPanelOpen ? "" : "-closed"}`} className="flex-col dark-grey-bg">
+                <div id="conversation-panel-header" className="flex-row">
+                    <h3 className="light-grey-text">Conversations</h3>
+                    <span id="sidebar-btn-close" className="light-grey-text btn" onClick={hideConversationPanel}>
+                        {"<"}
+                    </span>
+                </div>
+                <div id="conversation-list">
+                    <ul>{chatList}</ul>
+                </div>
+                <div id="conversation-panel-footer">
+                    <UploadFile chatDataCallback={addChatToChatList} />
+                </div>
             </div>
-            <div id="conversation-list">
-                <ul>{chatList}</ul>
-            </div>
-            <div id="conversation-panel-footer">
-                <UploadFile chatDataCallback={addChatToChatList} />
-            </div>
-        </div>
+        </>
     );
 }
 

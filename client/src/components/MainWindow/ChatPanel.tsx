@@ -107,7 +107,15 @@ function MessageBubble({ activeChatTitle, message }: { activeChatTitle: string; 
     }
 }
 
-function ChatPanel({ activeChat }: { activeChat: any }) {
+function ChatPanel({
+    activeChat,
+    isPanelOpen,
+    setPanelOpen,
+}: {
+    activeChat: any;
+    isPanelOpen: boolean;
+    setPanelOpen: Function;
+}) {
     const [messageList, setMessageList] = useState(Array<JSX.Element>());
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [calendarDisplayed, setCalendarDisplayed] = useState(false);
@@ -151,6 +159,10 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
                 alert("Something went wrong when trying to delete the chat.");
                 console.log(response);
             });
+    };
+
+    const showConversationPanel = () => {
+        setPanelOpen(true);
     };
 
     useEffect(() => {
@@ -217,7 +229,15 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
         // TODO: Display something in the chat panel to signify this
         return (
             <div>
-                <div id="chat-panel-header" className="flex-row space-btwn"></div>
+                <div id="chat-panel-header" className="flex-row space-btwn">
+                    <span
+                        id="sidebar-btn-open"
+                        className={`btn ${isPanelOpen ? "hide" : ""}`}
+                        onClick={showConversationPanel}
+                    >
+                        {">"}
+                    </span>
+                </div>
                 <div id="chat-area" className="no-active-chat">
                     {/* TODO: Center this in the chat area */}
                     <h3>Select a chat to view from the list or add a new one.</h3>
@@ -229,9 +249,18 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
             <div>
                 <div id="chat-panel-header" className="flex-row space-btwn">
                     <div className="flex-row center">
-                        <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
-                        <hr />
-                        <p style={{ fontSize: "14px" }}>{convertDateToString(selectedDate)}</p>
+                        <span
+                            id="sidebar-btn-open"
+                            className={`btn ${isPanelOpen ? "hide" : ""}`}
+                            onClick={showConversationPanel}
+                        >
+                            {">"}
+                        </span>
+                        <div className="flex-row center">
+                            <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
+                            <hr />
+                            <p style={{ fontSize: "14px" }}>{convertDateToString(selectedDate)}</p>
+                        </div>
                     </div>
                     <div className="icons-container flex-row center">
                         <div id="select-date-form-container">
@@ -278,9 +307,18 @@ function ChatPanel({ activeChat }: { activeChat: any }) {
         <>
             <div id="chat-panel-header" className="flex-row space-btwn">
                 <div className="flex-row center">
-                    <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
-                    <hr />
-                    <p style={{ fontSize: "14px" }}>{convertDateToString(selectedDate)}</p>
+                    <span
+                        id="sidebar-btn-open"
+                        className={`btn ${isPanelOpen ? "hide" : ""}`}
+                        onClick={showConversationPanel}
+                    >
+                        {">"}
+                    </span>
+                    <div className="flex-row center">
+                        <ChatTitle chatTitle={activeChat.title} bgColor={activeChat.bg_color} />
+                        <hr />
+                        <p style={{ fontSize: "14px" }}>{convertDateToString(selectedDate)}</p>
+                    </div>
                 </div>
                 <div className="icons-container flex-row center">
                     <div id="select-date-form-container">
