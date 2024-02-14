@@ -1,31 +1,30 @@
 #form-container {
-    background-color: #D9D9D9;
-    margin: auto;
-    margin-top: 90px;
-    padding: 30px 50px;
+    background-color: #d9d9d9;
+    margin: 90px auto;
+    padding: 30px 20px;
     width: 720px;
     height: 500px;
     border-radius: 2px;
-    align-items: center;
 }
 
-#form-container h2 {
-    margin-top: 30px;
+form {
+    width: 100%;
 }
 
 #submit-btn {
     border-radius: 44px;
-    width: 190px;
+    width: 100%;
+    max-width: 190px;
     padding: 10px 0;
     font-size: 14px;
     border: none;
 }
 
 #submit-btn:hover {
-    background-color: rgba(88, 110, 82, 0.80);
+    background-color: rgba(88, 110, 82, 0.8);
 }
 
-@media screen and (max-width: 740px){
+@media screen and (max-width: 740px) {
     #form-container {
         width: 80%;
     }

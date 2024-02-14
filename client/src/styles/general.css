@@ -105,6 +105,10 @@ a {
     line-height: 0;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .light-text {
     font-size: 14px;
     color: rgba(42, 40, 37, 0.65);

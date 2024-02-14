@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/general.css";
-import "./SignUp-Login.css";
 import "../../styles/form.css";
+import "./SignUp-Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import AppTitle from "../Header/AppTitle";
 import { LAMBDA_CREATE_USER_URL } from "../../constants";
@@ -51,9 +51,9 @@ function SignUp() {
             <div className="container">
                 <AppTitle username={user} />
             </div>
-            <div id="form-container" className="flex-col">
-                <h2 className="main-sage-text">Create an account</h2>
-                <form onSubmit={submitForm} className="flex-col regular-spacing">
+            <div id="form-container" className="flex-col center">
+                <h2 className="main-sage-text text-center">Create an account</h2>
+                <form onSubmit={submitForm} className="flex-col regular-spacing center">
                     <div className="form-section">
                         <label className="main-sage-text" htmlFor="username">
                             Username
@@ -88,7 +88,7 @@ function SignUp() {
                         </button>
                     </div>
                 </form>
-                <p>
+                <p className="text-center">
                     Already have an account?
                     <Link to="/login" className="no-underline main-sage-text">
                         {" "}
